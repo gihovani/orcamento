@@ -53,6 +53,13 @@ export class HTMLListaDeProduto {
         return this.ultimaPagina > 1;
     }
 
+    paginaNumero(numero: number) {
+        if (this.ultimaPagina >= numero && numero > 0) {
+            this.paginaAtual = numero;
+        }
+        this.renderizar();
+    }
+
     produtosPaginado(): IProduto[] {
         if (!this.temPaginacao()) {
             return this.produtos;
@@ -175,6 +182,14 @@ export class HTMLListaDeProduto {
         li.appendChild(botao);
         return li;
     }
+    htmlPaginacaoBotaoNumero(numero: number): HTMLElement {
+        const li = this.criarElementoHtml('li', ['page-item', 'disabled']);
+        const botao = this.criarElementoHtml('a', ['page-link'], [{nome: 'href', valor: '#'}], String(numero));
+        li.classList.remove('disabled');
+        botao.addEventListener('click', () => this.paginaNumero(numero));
+        li.appendChild(botao);
+        return li;
+    }
     htmlPaginacao(): HTMLElement {
         const divPaginacao = this.criarElementoHtml('div', ['lista-de-produtos-paginacao', 'row']);
         if (!this.temPaginacao()) {
@@ -184,6 +199,7 @@ export class HTMLListaDeProduto {
         const divNav = this.criarElementoHtml('nav', [], [{'nome': 'aria-label', 'valor': 'Page navigation example'}]);
         const ul = this.criarElementoHtml('ul', ['pagination', 'justify-content-center']);
         ul.appendChild(this.htmlPaginacaoBotaoVoltar());
+        ul.appendChild(this.htmlPaginacaoBotaoNumero(3));
         ul.appendChild(this.htmlPaginacaoBotaoAvancar());
         divNav.appendChild(ul);
         divPaginacao.appendChild(divNav);
