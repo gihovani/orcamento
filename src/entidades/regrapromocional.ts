@@ -15,7 +15,8 @@ export class Regrapromocional implements IRegraPromocional {
         public condicoes: IRegraPromocionalCondicao[],
         public acao: IRegraPromocionalAcao,
         public descricao?: string
-    ) {}
+    ) {
+    }
 
     atendeCriteriosDaPromocao(produtos: ICarrinhoProduto[]) {
         if (!this.situacao) {
@@ -69,27 +70,30 @@ export class Regrapromocional implements IRegraPromocional {
         if (this.produtos.length === 0) {
             return;
         }
-        // let total_desconto = 0;
-        let desconto = 0;
+        switch (this.acao.tipo) {
+            case 'desconto_porcentagem':
+                    this.regraDescontoPorcentagem();
+                break;
+            case 'desconto_fixo':
+                // Implemente a lógica para adicionar um produto brinde com valor zerado
+                break;
+            case 'valor_unitario':
+                // Implemente a lógica para adicionar um produto brinde com valor zerado
+                break;
+            case 'brinde_unico':
+                // Implemente a lógica para adicionar um produto brinde com valor zerado
+                break;
+        }
+    }
+
+    regraDescontoPorcentagem() {
         this.produtos.forEach(produto => {
-            switch (this.acao.tipo) {
-                case 'desconto_porcentagem':
-                    desconto = (produto.preco_unitario * (this.acao.valor / 100));
-                    break;
-                case 'desconto_fixo':
-                    desconto = this.acao.valor;
-                    break;
-                case 'valor_unitario':
-                    desconto = produto.preco_unitario - this.acao.valor;
-                    break;
-                case 'brinde_unico':
-                    // Implemente a lógica para adicionar um produto brinde com valor zerado
-                    break;
-            }
+            let desconto = (produto.preco_unitario * (this.acao.valor / 100));
             desconto = this.verificaValorMaximoDeDesconto(desconto * produto.quantidade);
             this.atualizaValorUnitario(produto, desconto);
         });
     }
+
     verificaValorMaximoDeDesconto(valor: number) {
         if (!this.acao.valor_maximo) {
             return valor;

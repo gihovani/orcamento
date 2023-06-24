@@ -122,7 +122,7 @@ const produto3 = new Produto(
     carrinho.adicionarProduto(produto1, 10);
     carrinho.adicionarProduto(produto2, 20);
     carrinho.adicionarProduto(produto3, 30);
-    carrinho.totalizar();
+    carrinho.totalizar(true);
     console.log(carrinho);
     return;
     console.log('Adicionar produtos [3 itens na lista]: ', carrinho.produtos.length === 3);
@@ -131,13 +131,13 @@ const produto3 = new Produto(
 
 
     carrinho.adicionarProduto(produto3, 1);
-    carrinho.totalizar();
+    carrinho.totalizar(true);
     console.log('Atualizar quantidade de Produtos: ', carrinho.totalizador.quantidade_produtos === 4);
     console.log('Valor total atualizado [80]: ', carrinho.totalizador.valor_total === 80);
 
 
     carrinho.removerProduto(produto2);
-    carrinho.totalizar();
+    carrinho.totalizar(true);
     console.log('Remover produto [2 itens na lista]: ', carrinho.produtos.length === 2);
     console.log('Atualizada quantidade de Produtos: ', carrinho.totalizador.quantidade_produtos === 2);
     console.log('Valor total atualizado [40]: ', carrinho.totalizador.valor_total === 40);

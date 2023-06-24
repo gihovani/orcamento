@@ -38,4 +38,5 @@ pegaDadosGoogleMerchant('xml/google.xml', (data) => {
     );
     const carrinho = new Carrinho([regra10PorcentoDeDescontoProduto]);
     new HTMLListaDeProduto(appListaDeProduto, listaDeProduto, carrinho).renderizar();
+    window['listaDeProduto'] = listaDeProduto;
 });

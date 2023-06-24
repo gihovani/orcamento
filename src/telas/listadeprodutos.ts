@@ -4,7 +4,8 @@ import {IProduto} from "../contratos/produto";
 import {ICarrinho} from "../contratos/carrinho";
 
 export class HTMLListaDeProduto {
-    public numeroItensPorPagina = 12;
+    private temFiltro = false;
+    public numeroItensPorPagina = 15;
     public paginaAtual = 1;
     public ultimaPagina = 1;
     private produtos: IProduto[] = [];
@@ -14,10 +15,14 @@ export class HTMLListaDeProduto {
     }
 
     adicionar(produto: IProduto) {
-        this.carrinho.adicionarProduto(produto);
+        const inputQuantidade = document.getElementById( `quantidade-${produto.id}`) as HTMLInputElement;
+        let quantidade = 1;
+        if (inputQuantidade) {
+            quantidade = parseInt(inputQuantidade.value);
+        }
+        this.carrinho.adicionarProduto(produto, quantidade);
         alert(`Produto ${produto.id} foi adicionado com sucesso!`);
-
-        this.carrinho.totalizar();
+        this.carrinho.totalizar(true);
         console.log(this.carrinho);
     }
 
@@ -64,26 +69,37 @@ export class HTMLListaDeProduto {
         }
         return paginacao;
     }
+
+    criarElementoHtml(tag: string, clazz: string[] = [], atributos = [], text: string = ''): HTMLElement {
+        const elemento = document.createElement(tag);
+        if (clazz.length) {
+            elemento.classList.add(...clazz);
+        }
+        for (let atributo of atributos) {
+            elemento.setAttribute(atributo.nome, atributo.valor);
+        }
+        if (text) {
+            elemento.innerText = text;
+        }
+        return elemento;
+    }
+
     htmlFiltroDoProdutoPorAtributo(atributo: string, titulo: string): HTMLElement {
-        const select = document.createElement('select');
-        select.setAttribute('name', `filtro-${atributo}`);
-        const option = document.createElement('option');
-        option.setAttribute('value', '');
-        option.setAttribute('label', titulo);
+        const select = this.criarElementoHtml('select', [], [{nome: 'name', valor: `filtro-${atributo}`}]);
+        const option = this.criarElementoHtml('option', [], [{nome: 'value', valor: ''}, {nome: 'label', valor: titulo}]);
         select.appendChild(option);
         this.listaDeProdutos.filtros.get(atributo).map(valor => {
-            const option = document.createElement('option');
-            option.setAttribute('value', valor);
-            option.setAttribute('label', valor);
+            const option = this.criarElementoHtml('option', [], [{nome: 'value', valor}, {nome: 'label', valor}]);
             select.appendChild(option);
         });
         return select;
     }
+
     htmlFiltroDosProdutos(): HTMLElement {
-        const divFiltro = document.createElement('div');
-        divFiltro.classList.add('lista-de-produtos-filtros');
+        const divFiltro = this.criarElementoHtml('div', ['lista-de-produtos-filtros', 'row', 'g-3', 'align-items-center']);
         const filtroMarca = this.htmlFiltroDoProdutoPorAtributo('marca', 'Marca');
         filtroMarca.addEventListener('change', (event) => {
+            this.temFiltro = true;
             this.produtos = this.listaDeProdutos.filtrarPorMarca((event.target as HTMLInputElement).value);
             this.renderizar();
         });
@@ -91,21 +107,32 @@ export class HTMLListaDeProduto {
 
         const filtroCategoria = this.htmlFiltroDoProdutoPorAtributo('categorias', 'Categoria');
         filtroCategoria.addEventListener('change', (event) => {
+            this.temFiltro = true;
             this.produtos = this.listaDeProdutos.filtrarPorCategoria((event.target as HTMLInputElement).value);
             this.renderizar();
         });
         divFiltro.appendChild(filtroCategoria);
+
+        const removerFiltro = this.criarElementoHtml('button', ['btn', 'btn-info'], [], 'Todos');
+        if (!this.temFiltro) {
+            removerFiltro.setAttribute('disabled', 'disabled');
+        }
+        removerFiltro.addEventListener('click', () => {
+            this.temFiltro = false;
+            this.produtos = this.listaDeProdutos.produtos;
+            this.renderizar();
+        });
+        divFiltro.appendChild(removerFiltro);
+
         return divFiltro;
     }
+
     htmlListaDeProdutos(): HTMLElement {
-        const self = this;
-        const divListagem = document.createElement('div');
-        divListagem.classList.add("lista-de-produtos");
+        const divListagem = this.criarElementoHtml('div', ['lista-de-produtos', 'row']);
         this.produtosPaginado().map(produto => {
             // let search = basket.find((x) => x.id === id) || [];
             let precoFormatado = formataNumeroEmDinheiro(produto.preco);
-            const divProduto = document.createElement('div');
-            divProduto.classList.add('produto');
+            const divProduto = this.criarElementoHtml('div', ['col', 'produto', 'text-center']);
             divProduto.setAttribute('id', `produto-id-${produto.id}`);
             divProduto.innerHTML = `
         <img width="220" src="${produto.imagem}" alt="${produto.nome}" />
@@ -123,38 +150,43 @@ export class HTMLListaDeProduto {
         </div>
     `;
             divProduto.querySelector('.botao-adicionar')
-                .addEventListener('click', () => self.adicionar(produto));
+                .addEventListener('click', () => this.adicionar(produto));
             divListagem.appendChild(divProduto);
         });
         return divListagem;
     };
-
+    htmlPaginacaoBotaoVoltar(): HTMLElement {
+        const li = this.criarElementoHtml('li', ['page-item', 'disabled']);
+        const botao = this.criarElementoHtml('a', ['page-link'], [{nome: 'href', valor: '#'}], 'Voltar');
+        if (this.temPaginaAnterior()) {
+            li.classList.remove('disabled');
+            botao.addEventListener('click', () => this.paginaAnterior());
+        }
+        li.appendChild(botao);
+        return li;
+    }
+    htmlPaginacaoBotaoAvancar(): HTMLElement {
+        const li = this.criarElementoHtml('li', ['page-item', 'disabled']);
+        const botao = this.criarElementoHtml('a', ['page-link'], [{nome: 'href', valor: '#'}], 'Avançar');
+        if (this.temProximaPagina()) {
+            li.classList.remove('disabled');
+            botao.addEventListener('click', () => this.proximaPagina());
+        }
+        li.appendChild(botao);
+        return li;
+    }
     htmlPaginacao(): HTMLElement {
-        const divPaginacao = document.createElement('div');
-        divPaginacao.classList.add('lista-de-produtos-paginacao');
+        const divPaginacao = this.criarElementoHtml('div', ['lista-de-produtos-paginacao', 'row']);
         if (!this.temPaginacao()) {
             return divPaginacao;
         }
 
-        const botaoVoltar = document.createElement('button');
-        botaoVoltar.classList.add('botao-voltar');
-        botaoVoltar.setAttribute('disabled', 'disabled');
-        botaoVoltar.innerText = 'Voltar';
-        if (this.temPaginaAnterior()) {
-            botaoVoltar.removeAttribute('disabled');
-            botaoVoltar.addEventListener('click', () => this.paginaAnterior());
-        }
-
-        const botaoAvancar = document.createElement('button');
-        botaoAvancar.classList.add('botao-avancar');
-        botaoAvancar.setAttribute('disabled', 'disabled');
-        botaoAvancar.innerText = 'Avançar';
-        if (this.temProximaPagina()) {
-            botaoAvancar.removeAttribute('disabled');
-            botaoAvancar.addEventListener('click', () => this.proximaPagina());
-        }
-        divPaginacao.appendChild(botaoVoltar);
-        divPaginacao.appendChild(botaoAvancar);
+        const divNav = this.criarElementoHtml('nav', [], [{'nome': 'aria-label', 'valor': 'Page navigation example'}]);
+        const ul = this.criarElementoHtml('ul', ['pagination', 'justify-content-center']);
+        ul.appendChild(this.htmlPaginacaoBotaoVoltar());
+        ul.appendChild(this.htmlPaginacaoBotaoAvancar());
+        divNav.appendChild(ul);
+        divPaginacao.appendChild(divNav);
         return divPaginacao;
     }
 
@@ -162,7 +194,7 @@ export class HTMLListaDeProduto {
         if (this.elemento.firstChild) {
             this.elemento.firstChild.remove();
         }
-        const divListaDeProdutos = document.createElement('div');
+        const divListaDeProdutos = this.criarElementoHtml('div');
         divListaDeProdutos.appendChild(this.htmlFiltroDosProdutos());
         divListaDeProdutos.appendChild(this.htmlListaDeProdutos());
         divListaDeProdutos.appendChild(this.htmlPaginacao());

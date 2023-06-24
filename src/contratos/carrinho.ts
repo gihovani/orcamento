@@ -14,6 +14,7 @@ export interface ICarrinhoProduto {
     preco_unitario: number;
     desconto: number;
     produto: IProduto;
+    e_brinde: boolean;
 }
 
 export interface ICarrinho {
@@ -23,5 +24,5 @@ export interface ICarrinho {
     adicionarProduto: (produto: IProduto, quantidade?: number) => void;
     removerProduto: (produto: IProduto) => void;
     aplicarPromocoes: () => void;
-    totalizar: () => void;
+    totalizar: (calcular_promocoes: boolean) => void;
 }
