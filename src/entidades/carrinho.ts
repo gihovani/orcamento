@@ -1,12 +1,13 @@
 import {IProduto} from "../contratos/produto";
 import {arredondarValor} from "../util/helper";
 import {
+    ICarrinho,
     ICarrinhoProduto,
     ICarrinhoTotalizador
 } from "../contratos/carrinho";
 import {IRegraPromocional} from "../contratos/regrapromocional";
 
-export class Carrinho {
+export class Carrinho implements ICarrinho {
     produtos: ICarrinhoProduto[];
     promocoes: IRegraPromocional[];
     totalizador: ICarrinhoTotalizador;
@@ -16,7 +17,7 @@ export class Carrinho {
         this.promocoes = promocoes;
     }
 
-    adicionarProduto(produto: IProduto, quantidade: number) {
+    adicionarProduto(produto: IProduto, quantidade?: number) {
         if (!quantidade || isNaN(quantidade)) {
             quantidade = 1;
         }
@@ -55,7 +56,7 @@ export class Carrinho {
             valor_desconto: 0,
             detalhes_decontos: []
         };
-        this.totalizador.detalhes_decontos.push(['produto', 'preco_original', 'quantidade', 'preco_unitario', 'desconto', 'valor'].join(' - '));
+        this.totalizador.detalhes_decontos.push(['produto', 'preco_original', 'quantidade', 'preco_unitario', 'desconto', 'valor'].join(';'));
         this.aplicarPromocoes();
         for (const item of this.produtos) {
             const valor = arredondarValor(item.quantidade * item.preco_unitario);
@@ -73,7 +74,7 @@ export class Carrinho {
                 item.preco_unitario,
                 item.desconto,
                 valor
-            ].join(' - '));
+            ].join(';'));
         }
     }
 }

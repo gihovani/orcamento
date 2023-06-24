@@ -21,3 +21,6 @@ export const pegaDadosGoogleMerchant = (arquivo: string, callback: (data: string
         .then(callback)
         .catch(error => console.error('Erro ao carregar o arquivo XML:', error));
 };
+export const formataNumeroEmDinheiro = (numero: number | null): string => {
+    return numero ? numero.toLocaleString('pt-br', {minimumFractionDigits: 2}) : '0,00';
+};

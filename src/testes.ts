@@ -36,15 +36,12 @@ const produto3 = new Produto(
     'https://gg2.com.br/',
     'Nome da Categoria',
     'GG',
-    '1234567890',
+    '1234567891',
 );
 (() => {
     const listaDeProduto = new ListaDeProduto();
     const inicializaListaDeProduto = () => {
-        listaDeProduto.produtos = [];
-        listaDeProduto.adicionarProduto(produto1);
-        listaDeProduto.adicionarProduto(produto2);
-        listaDeProduto.adicionarProduto(produto3);
+        listaDeProduto.produtos = [produto1,produto2,produto3];
     };
     console.log('-------------------------------------------');
     console.log('---------- Lista De Produtos --------------');
@@ -66,9 +63,14 @@ const produto3 = new Produto(
 
 
     inicializaListaDeProduto();
+    listaDeProduto.filtrarPorCodigoBarra('0123456789');
+    console.log('Filtro por codigo de barra 0123456789: [1 produto]: ', listaDeProduto.produtos.length === 1);
+
+    inicializaListaDeProduto();
     listaDeProduto.filtrarPorPreco(10, 24);
     console.log('Filtro por preco > 10 e < 24: [2 produto]: ', listaDeProduto.produtos.length === 2);
 
+    console.log('-------------------------------------------');
     inicializaListaDeProduto();
     console.log('Pegar dados do produto por sku: ', listaDeProduto.dadosProduto('SKU3') === produto3);
     console.log('-------------------------------------------');

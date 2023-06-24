@@ -1,4 +1,6 @@
 import {IProduto} from "./produto";
+import {IRegraPromocional} from "./regrapromocional";
+
 export interface ICarrinhoTotalizador {
     quantidade_produtos: number;
     valor_total: number;
@@ -12,4 +14,14 @@ export interface ICarrinhoProduto {
     preco_unitario: number;
     desconto: number;
     produto: IProduto;
+}
+
+export interface ICarrinho {
+    produtos: ICarrinhoProduto[];
+    promocoes: IRegraPromocional[];
+    totalizador: ICarrinhoTotalizador;
+    adicionarProduto: (produto: IProduto, quantidade?: number) => void;
+    removerProduto: (produto: IProduto) => void;
+    aplicarPromocoes: () => void;
+    totalizar: () => void;
 }

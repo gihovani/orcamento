@@ -1,53 +1,66 @@
 import {IProduto} from "../contratos/produto";
+import {IListaDeProduto} from "../contratos/listadeprodutos";
 
-export class ListaDeProduto {
-    filtros: Map<string, string[]>;
-    produtos: IProduto[];
+export class ListaDeProduto implements IListaDeProduto {
+    private _filtros: Map<string, string[]>;
+    private _produtos: IProduto[];
 
-    constructor() {
-        this.produtos = [];
-        this.filtros = new Map();
+    constructor(produtos: IProduto[] = []) {
+        this.produtos = produtos;
     }
 
-    adicionarProduto(produto: IProduto) {
-        this.produtos.push(produto);
+    set produtos(produtos: IProduto[]) {
+        this._produtos = produtos;
+        this.atualizaFiltros();
     }
 
-    adicionarFiltro(atributo: string, valor: string) {
+    get produtos(): IProduto[] {
+        return this._produtos;
+    }
+
+    get filtros(): Map<string, string[]> {
+        return this._filtros;
+    }
+
+    private adicionarFiltro(atributo: string, valor: string) {
         if (!valor) return;
-        if (this.filtros.has(atributo)) {
-            const filtro = this.filtros.get(atributo);
+        if (this._filtros.has(atributo)) {
+            const filtro = this._filtros.get(atributo);
             const item = filtro.find(filtroValor => filtroValor === valor);
             if (!item) {
                 filtro.push(valor);
             }
         } else {
-            this.filtros.set(atributo, [valor]);
+            this._filtros.set(atributo, [valor]);
         }
     }
 
-    filtraProdutos(atributo: string, valor: string) {
-        this.produtos = this.produtos.filter(item => item[atributo] === valor);
+    private filtraProdutos(atributo: string, valor: string): IProduto[] {
+        return this.produtos.filter(item => item[atributo] === valor);
     }
 
-    filtrarPorCategoria(nome: string) {
-        this.filtraProdutos('categorias', nome);
+    filtrarPorCategoria(nome: string): IProduto[] {
+        return this.filtraProdutos('categorias', nome);
     }
 
-    filtrarPorMarca(nome: string) {
-        this.filtraProdutos('marca', nome);
+    filtrarPorMarca(nome: string): IProduto[] {
+        return this.filtraProdutos('marca', nome);
     }
 
-    filtrarPorPreco(valorMinimo: number, valorMaximo: number) {
-        this.produtos = this.produtos.filter(item => item.preco >= valorMinimo && item.preco <= valorMaximo);
+    filtrarPorCodigoBarra(codigoBarra: string): IProduto[] {
+        return this.filtraProdutos('codigo_barras', codigoBarra);
     }
 
-    dadosProduto(id: string): IProduto {
-        return this.produtos.find(produto => produto.id === id);
+    filtrarPorPreco(valorMinimo: number, valorMaximo: number): IProduto[] {
+        return this.produtos.filter(item => item.preco >= valorMinimo && item.preco <= valorMaximo);
+    }
+
+    dadosProduto(id: string): IProduto | undefined {
+        return this._produtos.find(produto => produto.id === id);
     }
 
     atualizaFiltros() {
-        this.filtros = new Map();
+        this._filtros = new Map();
         for (const produto of this.produtos) {
             this.adicionarFiltro('categorias', produto.categorias);
             this.adicionarFiltro('marca', produto.marca);

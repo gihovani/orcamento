@@ -14,4 +14,6 @@
 - Fazer o calculo das regras promocionais corretamente
 - Criar os testes para validar as regras
 - Adicionar uma biblioteca de testes unitarios para facilitar o dev
-- Adicionar layout da aplicação
+- Melhorar layout da aplicação
+- Refatorar tela de filtros diminuir responsabilidade
+- Criar layout para carrinho
