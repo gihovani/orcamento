@@ -142,20 +142,20 @@ export class HTMLListaDeProduto {
             const divProduto = this.criarElementoHtml('div', ['col', 'produto', 'text-center']);
             divProduto.setAttribute('id', `produto-id-${produto.id}`);
             divProduto.innerHTML = `
-                <img width="220" src="${produto.imagem}" alt="${produto.nome}" />
-                <div class="detalhes">
-                <h3>${produto.nome}</h3>
-                <p>${produto.descricao}</p>
-                <div class="preco-quantidade">
-                    <h2>R$ ${precoFormatado} </h2>
-                    <div class="botoes">
-                    <label for="quantidade-${produto.id}" class="sr-only">Quantidade</label>
-                    <input id="quantidade-${produto.id}" class="quantidade" type="number" step="1" min="1" max="100" value="1" />
-                    <button class="botao-adicionar"><i class="bi bi-plus-lg"></i></button>
-                    </div>
-                </div>
-                </div>
-            `;
+        <img width="220" src="${produto.imagem}" alt="${produto.nome}" />
+        <div class="detalhes">
+          <h3>${produto.nome}</h3>
+          <p>${produto.descricao}</p>
+          <div class="preco-quantidade">
+            <h2>R$ ${precoFormatado} </h2>
+            <div class="botoes">
+              <label for="quantidade-${produto.id}" class="sr-only">Quantidade</label>
+              <input id="quantidade-${produto.id}" class="quantidade" type="number" step="1" min="1" max="100" value="1" />
+              <button class="botao-adicionar"><i class="bi bi-plus-lg"></i></button>
+            </div>
+          </div>
+        </div>
+    `;
             divProduto.querySelector('.botao-adicionar')
                 .addEventListener('click', () => this.adicionar(produto));
             divListagem.appendChild(divProduto);
