@@ -61,6 +61,9 @@ export class App extends ILayout {
             this.barraDeNavegacao.adicionaMenu('Carrinho', () => {
                 this.tela = new ListaDeCompras(carrinho);
             });
+            this.barraDeNavegacao.adicionaMenu('Logout', () => {
+                window.location.reload();
+            });
             this.renderizar();
         });
     }

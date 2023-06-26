@@ -89,10 +89,10 @@ export class ListagemDeProdutos extends TelaComPaginacao {
             divProduto.innerHTML = `<div class="card shadow-sm ${produtoEstaNoCarrinho ? 'bg-success' : ''}">
         <img height="200" src="${produto.imagem}" alt="${produto.nome}" class="card-img-top img-fluid img-thumbnail" />
         <div class="card-body">
-          <h2 class="card-title">${produto.nome}</h2>
-          <p class="card-text">${produto.descricao}</p>
+          <h2 class="card-title fs-5">${produto.nome}</h2>
+          <p class="card-text fs-6">${produto.descricao}</p>
           <div class="card-footer">
-            <h3 class="text-center">R$ ${precoFormatado} </h3>
+            <h3 class="text-center fs-5">R$ ${precoFormatado} </h3>
             <form class="row row-cols-lg-auto g-3 align-items-center">
             <div class="input-group mb-3">
               <input id="quantidade-${produto.id}"

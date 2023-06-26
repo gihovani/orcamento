@@ -35,7 +35,7 @@ export class ListaDeCompras implements ITela {
   </div>`;
             return div;
         }
-        const h1Total = criarElementoHtml('h1', ['total', 'col-12']);
+        const h1Total = criarElementoHtml('h1', ['text-center', 'col-12']);
         h1Total.innerHTML = `Total: R$ ${formataNumeroEmDinheiro(this.carrinho.totalizador.valor_total)}`;
         div.appendChild(h1Total);
         produtos.map(item => {
@@ -52,10 +52,10 @@ export class ListaDeCompras implements ITela {
     </div>
     <div class="col-sm-8 col-md-10">
         <div class="card-body">
-          <h2 class="card-title">${produto.nome}</h2>
-          <p class="card-text">${produto.descricao}</p>
+          <h2 class="card-title fs-5">${produto.nome}</h2>
+          <p class="card-text fs-6">${produto.descricao}</p>
           <div class="card-footer">
-            <h3 class="text-center">${(produto.preco > item.preco_unitario) ? 'De: R$ ' + precoDeFormatado + ' Por:' : ''}R$ ${precoPorFormatado}</h3>
+            <h3 class="text-center fs-5">${(produto.preco > item.preco_unitario) ? 'De: R$ ' + precoDeFormatado + ' / Por:' : ''} R$ ${precoPorFormatado}</h3>
             <form class="row row-cols-lg-auto g-3 align-items-center">
             <div class="input-group mb-3">
               <input id="quantidade-${produto.id}" class="form-control" type="number" step="1" min="1" max="100" value="${item.quantidade}" aria-label="Quantidade" />
