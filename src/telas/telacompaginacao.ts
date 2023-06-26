@@ -90,7 +90,7 @@ export abstract class TelaComPaginacao implements ITela {
     }
 
     htmlPaginacao(): HTMLElement {
-        const div = criarElementoHtml('div', ['lista-de-produtos-paginacao', 'row']);
+        const div = criarElementoHtml('div', ['lista-de-produtos-paginacao', 'row', 'pt-3', 'pb-3']);
         if (!this.temPaginacao()) {
             return div;
         }
