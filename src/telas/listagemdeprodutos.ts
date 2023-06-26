@@ -1,19 +1,22 @@
-import {IListaDeProduto} from "../contratos/listadeprodutos";
 import {criarElementoHtml, formataNumeroEmDinheiro} from "../util/helper";
-import {IProduto} from "../contratos/produto";
 import {ICarrinho} from "../contratos/carrinho";
 import {Tela} from "../contratos/tela";
+import {IProduto} from "../contratos/entidades/produto";
+import {IApiProduto} from "../contratos/servicos/apiproduto";
 
-export class HTMLListaDeProduto extends Tela {
+export class ListagemDeProdutos extends Tela {
     private temFiltro = false;
-    public numeroItensPorPagina = 15;
+    public numeroItensPorPagina = 16;
     public paginaAtual = 1;
     public ultimaPagina = 1;
     private produtos: IProduto[] = [];
 
-    constructor(public elemento: HTMLElement, public listaDeProdutos: IListaDeProduto, public carrinho: ICarrinho) {
+    constructor(public elemento: HTMLElement, public apiProduto: IApiProduto, public carrinho: ICarrinho) {
         super();
-        this.produtos = this.listaDeProdutos.produtos;
+        this.apiProduto.listar().then((produtos) => {
+            this.produtos = produtos;
+            this.renderizar();
+        });
     }
 
     adicionar(produto: IProduto) {
@@ -83,7 +86,8 @@ export class HTMLListaDeProduto extends Tela {
         const select = criarElementoHtml('select', ['form-select'], [{nome: 'name', valor: `filtro-${atributo}`}]);
         const option = criarElementoHtml('option', [], [{nome: 'value', valor: ''}, {nome: 'label', valor: titulo}]);
         select.appendChild(option);
-        this.listaDeProdutos.filtros.get(atributo).map(valor => {
+        const filtros = this.apiProduto.filtros();
+        filtros.has(atributo) && filtros.get(atributo).map(valor => {
             const option = criarElementoHtml('option', [], [{nome: 'value', valor}, {nome: 'label', valor}]);
             select.appendChild(option);
         });
@@ -95,7 +99,7 @@ export class HTMLListaDeProduto extends Tela {
         const filtroMarca = this.htmlFiltroDoProdutoPorAtributo('marca', 'Marca');
         filtroMarca.addEventListener('change', (event) => {
             this.temFiltro = true;
-            this.produtos = this.listaDeProdutos.filtrarPorMarca((event.target as HTMLInputElement).value);
+            this.produtos = this.apiProduto.filtrarPorMarca((event.target as HTMLInputElement).value);
             this.renderizar();
         });
         divFiltro.appendChild(filtroMarca);
@@ -103,7 +107,7 @@ export class HTMLListaDeProduto extends Tela {
         const filtroCategoria = this.htmlFiltroDoProdutoPorAtributo('categorias', 'Categoria');
         filtroCategoria.addEventListener('change', (event) => {
             this.temFiltro = true;
-            this.produtos = this.listaDeProdutos.filtrarPorCategoria((event.target as HTMLInputElement).value);
+            this.produtos = this.apiProduto.filtrarPorCategoria((event.target as HTMLInputElement).value);
             this.renderizar();
         });
         divFiltro.appendChild(filtroCategoria);
@@ -114,8 +118,10 @@ export class HTMLListaDeProduto extends Tela {
         }
         removerFiltro.addEventListener('click', () => {
             this.temFiltro = false;
-            this.produtos = this.listaDeProdutos.produtos;
-            this.renderizar();
+            this.apiProduto.listar().then((produtos) => {
+                this.produtos = produtos;
+                this.renderizar();
+            });
         });
         divFiltro.appendChild(removerFiltro);
 
@@ -123,27 +129,28 @@ export class HTMLListaDeProduto extends Tela {
     }
 
     htmlListaDeProdutos(): HTMLElement {
-        const div = criarElementoHtml('div', ['lista-de-produtos', 'row']);
+        const div = criarElementoHtml('div', ['lista-de-produtos', 'row', 'row-cols-1', 'row-cols-sm-2', 'row-cols-md-4', 'g-4']);
         this.produtosPaginado().map(produto => {
             // let search = basket.find((x) => x.id === id) || [];
             let precoFormatado = formataNumeroEmDinheiro(produto.preco);
-            const divProduto = criarElementoHtml('div', ['col', 'produto', 'text-center']);
+            const divProduto = criarElementoHtml('div', ['col']);
             divProduto.setAttribute('id', `produto-id-${produto.id}`);
-            divProduto.innerHTML = `
-        <img width="220" src="${produto.imagem}" alt="${produto.nome}" />
-        <div class="detalhes">
-          <h3>${produto.nome}</h3>
-          <p>${produto.descricao}</p>
-          <div class="preco-quantidade">
-            <h2>R$ ${precoFormatado} </h2>
-            <div class="botoes">
-              <label for="quantidade-${produto.id}" class="sr-only">Quantidade</label>
-              <input id="quantidade-${produto.id}" class="quantidade" type="number" step="1" min="1" max="100" value="1" />
-              <button class="botao-adicionar"><i class="bi bi-plus-lg"></i></button>
+            divProduto.innerHTML = `<div class="card shadow-sm">
+        <img height="200" src="${produto.imagem}" alt="${produto.nome}" class="card-img-top img-fluid img-thumbnail" />
+        <div class="card-body">
+          <h2 class="card-title">${produto.nome}</h2>
+          <p class="card-text">${produto.descricao}</p>
+          <div class="card-footer">
+            <h3 class="text-center">R$ ${precoFormatado} </h3>
+            <form class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="input-group mb-3">
+              <input id="quantidade-${produto.id}" class="form-control" type="number" step="1" min="1" max="100" value="1" aria-label="Quantidade" />
+              <button class="input-group-text botao-adicionar"><i class="bi bi-plus-lg"></i></button>
             </div>
+            </form>
           </div>
         </div>
-    `;
+    </div>`;
             divProduto.querySelector('.botao-adicionar')
                 .addEventListener('click', () => this.adicionar(produto));
             div.appendChild(divProduto);
@@ -194,7 +201,7 @@ export class HTMLListaDeProduto extends Tela {
         return div;
     }
 
-    html(): HTMLElement {
+    conteudo(): HTMLElement {
         const div = criarElementoHtml('div');
         div.appendChild(this.htmlFiltroDosProdutos());
         div.appendChild(this.htmlListaDeProdutos());

@@ -1,7 +1,7 @@
 import {ICarrinhoProduto} from "../contratos/carrinho";
-import {IProduto} from "../contratos/produto";
 import {arredondarValor} from "../util/helper";
 import {IRegraPromocional, IRegraPromocionalAcao, IRegraPromocionalCondicao} from "../contratos/regrapromocional";
+import {IProduto} from "../contratos/entidades/produto";
 
 export class Regrapromocional implements IRegraPromocional {
     private produtos: ICarrinhoProduto[];

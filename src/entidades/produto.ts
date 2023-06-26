@@ -1,4 +1,4 @@
-import {IProduto} from "../contratos/produto";
+import {IProduto} from "../contratos/entidades/produto";
 
 export class Produto implements IProduto {
     private _id: string;

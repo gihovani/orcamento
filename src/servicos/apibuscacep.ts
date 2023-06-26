@@ -1,10 +1,7 @@
 import {validarCEP} from "../util/validacoes";
 import {Endereco} from "../entidades/endereco";
-import {IEndereco} from "../contratos/endereco";
-
-export interface IApiCep {
-    consultar(cep: string): Promise<IEndereco>;
-}
+import {IEndereco} from "../contratos/entidades/endereco";
+import {IApiCep} from "../contratos/servicos/apicep";
 
 export class ApiCepMock implements IApiCep {
     consultar(cep: string): Promise<IEndereco> {

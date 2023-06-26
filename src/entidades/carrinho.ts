@@ -1,4 +1,4 @@
-import {IProduto} from "../contratos/produto";
+
 import {arredondarValor} from "../util/helper";
 import {
     ICarrinho,
@@ -6,6 +6,7 @@ import {
     ICarrinhoTotalizador
 } from "../contratos/carrinho";
 import {IRegraPromocional} from "../contratos/regrapromocional";
+import {IProduto} from "../contratos/entidades/produto";
 
 export class Carrinho implements ICarrinho {
     produtos: ICarrinhoProduto[];

@@ -1,5 +1,5 @@
 import {validarCEP, validarTelefone, validarUF} from "../util/validacoes";
-import {IEndereco} from "../contratos/endereco";
+import {IEndereco} from "../contratos/entidades/endereco";
 
 export class Endereco implements IEndereco {
     private _cep: string;

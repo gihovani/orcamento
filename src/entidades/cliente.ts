@@ -1,5 +1,5 @@
 import {validarCPF, validarDataDeNascimento, validarEmail, validarTelefone, validarUF} from "../util/validacoes";
-import {ICliente} from "../contratos/cliente";
+import {ICliente} from "../contratos/entidades/cliente";
 
 export class Cliente implements ICliente {
     private _documento: string;

@@ -1,4 +1,4 @@
-import {IProduto} from "./produto";
+import {IProduto} from "./entidades/produto";
 import {IRegraPromocional} from "./regrapromocional";
 
 export interface ICarrinhoTotalizador {

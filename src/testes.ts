@@ -1,9 +1,9 @@
-import {ListaDeProduto} from "./entidades/listadeproduto";
 import {Carrinho} from "./entidades/carrinho";
 import {Produto} from "./entidades/produto";
 import {ApiCepViaCep} from "./servicos/apibuscacep";
 import {ApiClienteMock} from "./servicos/apicliente";
 import {Regrapromocional} from "./entidades/regrapromocional";
+import {ApiProduto} from "./servicos/apiproduto";
 
 const produto1 = new Produto(
     'SKU',
@@ -38,7 +38,7 @@ const produto3 = new Produto(
     '1234567891',
 );
 (() => {
-    const listaDeProduto = new ListaDeProduto();
+    const listaDeProduto = new ApiProduto();
     const inicializaListaDeProduto = () => {
         listaDeProduto.produtos = [produto1,produto2,produto3];
     };
@@ -46,10 +46,10 @@ const produto3 = new Produto(
     console.log('---------- Lista De Produtos --------------');
 
     inicializaListaDeProduto();
-    listaDeProduto.atualizaFiltros();
+    const filtros = listaDeProduto.filtros();
     console.log('Quantidade de produtos [3 itens na lista]: ', listaDeProduto.produtos.length === 3);
-    console.log('Filtro dos produtos [1 Categoria]: ', listaDeProduto.filtros.get('categorias').length === 1);
-    console.log('Filtro dos produtos [2 Marcas]: ', listaDeProduto.filtros.get('marca').length === 2);
+    console.log('Filtro dos produtos [1 Categoria]: ', filtros.get('categorias').length === 1);
+    console.log('Filtro dos produtos [2 Marcas]: ', filtros.get('marca').length === 2);
 
     inicializaListaDeProduto();
     listaDeProduto.filtrarPorCategoria('Nome da Categoria');
@@ -71,7 +71,7 @@ const produto3 = new Produto(
 
     console.log('-------------------------------------------');
     inicializaListaDeProduto();
-    console.log('Pegar dados do produto por sku: ', listaDeProduto.dadosProduto('SKU3') === produto3);
+    console.log('Pegar dados do produto por sku: ', listaDeProduto.consultar('SKU3') === produto3);
     console.log('-------------------------------------------');
 })();
 
