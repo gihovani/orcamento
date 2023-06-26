@@ -2,9 +2,16 @@ import {ITela} from "../contratos/tela";
 import {criarElementoHtml} from "../util/helper";
 import {IConfiguracoes} from "../contratos/entidades/configuracoes";
 import {IApiProduto} from "../contratos/servicos/apiproduto";
+import {INotificacao} from "../contratos/componentes/notificacao";
+import {ICarregando} from "../contratos/componentes/carregando";
 
 export class FormularioConfiguracoes implements ITela {
-    constructor(public configuracoes: IConfiguracoes, public apiProduto: IApiProduto) {}
+    constructor(
+        public configuracoes: IConfiguracoes,
+        public apiProduto: IApiProduto,
+        public notificacao: INotificacao,
+        public carregando: ICarregando
+    ) {}
 
     public pegaDadosDoFormulario(form: HTMLFormElement): IConfiguracoes {
         this.configuracoes.url_google_merchant = (form.querySelector('#url_google_merchant') as HTMLInputElement)?.value;
@@ -40,10 +47,11 @@ export class FormularioConfiguracoes implements ITela {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             this.pegaDadosDoFormulario(form);
+            this.carregando.mostrar();
             this.apiProduto.listar(true).then(() => {
-                alert('Suas Confiruações Foram Atualizadas!');
+                this.notificacao.mostrar('Sucesso', 'Suas Confiruações Foram Atualizadas!');
                 document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
-            });
+            }).finally(() => this.carregando.esconder());
         });
         return main;
     }

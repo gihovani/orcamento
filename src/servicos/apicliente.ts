@@ -10,7 +10,6 @@ export class ApiClienteMock implements IApiCliente {
                 reject('O cliente não pode ser salvo!');
                 return;
             }
-            alert(`Cliente ${cliente.nome} salvo com sucesso!`);
             resolve(cliente)
         });
     }
@@ -47,7 +46,6 @@ export class ApiClienteMagento implements IApiCliente {
                 reject('O cliente não pode ser salvo!');
                 return;
             }
-            alert(`Cliente ${cliente.nome} salvo com sucesso!`);
             resolve(cliente)
         });
     }

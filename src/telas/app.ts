@@ -14,18 +14,33 @@ import {ListaDeCompras} from "./listadecompras";
 import {MensagemBoasVindas} from "./mensagemboasvindas";
 import {IConfiguracoes} from "../contratos/entidades/configuracoes";
 import {FormularioConfiguracoes} from "./formularioconfiguracoes";
+import {ApiVendedorMock} from "../servicos/apivendedor";
+import {FormularioLogin} from "./formulariologin";
+import {INotificacao} from "../contratos/componentes/notificacao";
+import {Notificacao} from "./componentes/notificacao";
+import {ICarregando} from "../contratos/componentes/carregando";
+import {Carregando} from "./componentes/carregando";
 
 export class App extends ILayout {
     private _tela: ITela;
+    private _notificacao: INotificacao;
+    private _carregando: ICarregando;
 
     constructor(
         public elemento: HTMLElement,
         public configuracoes: IConfiguracoes,
-        tela: ITela,
         public barraDeNavegacao: BarraDeNavegacao
     ) {
         super();
-        this.tela = tela;
+        this.inicializar();
+    }
+
+    inicializar() {
+        const apiVendedor = new ApiVendedorMock();
+        this._notificacao = new Notificacao(document.querySelector('body'));
+        this._carregando = new Carregando(document.querySelector('body'));
+        this.tela = new FormularioLogin(apiVendedor, this._notificacao);
+
         this.inicializaEventos();
     }
 
@@ -53,19 +68,19 @@ export class App extends ILayout {
             const apiProduto = new ApiProduto(this.configuracoes);
             this.tela = new MensagemBoasVindas(e.detail);
             this.barraDeNavegacao.adicionaMenu('Configurações', () => {
-                this.tela = new FormularioConfiguracoes(this.configuracoes, apiProduto);
+                this.tela = new FormularioConfiguracoes(this.configuracoes, apiProduto, this._notificacao, this._carregando);
             });
             this.barraDeNavegacao.adicionaMenu('Cliente', () => {
-                this.tela = new FormularioCliente(apiCliente);
+                this.tela = new FormularioCliente(apiCliente, this._notificacao);
             });
             this.barraDeNavegacao.adicionaMenu('Endereço de Entrega', () => {
-                this.tela = new FormularioEndereco(apiCep);
+                this.tela = new FormularioEndereco(apiCep, this._notificacao);
             });
             this.barraDeNavegacao.adicionaMenu('Lista de Produtos', () => {
-                this.tela = new ListagemDeProdutos(apiProduto, carrinho);
+                this.tela = new ListagemDeProdutos(apiProduto, carrinho, this._notificacao, this._carregando);
             });
             this.barraDeNavegacao.adicionaMenu('Carrinho', () => {
-                this.tela = new ListaDeCompras(carrinho);
+                this.tela = new ListaDeCompras(carrinho, this._notificacao);
             });
             this.barraDeNavegacao.adicionaMenu('Logout', () => {
                 window.location.reload();

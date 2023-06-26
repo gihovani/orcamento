@@ -1,9 +1,10 @@
 import {ITela} from "../contratos/tela";
 import {criarElementoHtml} from "../util/helper";
 import {IApiVendedor} from "../contratos/servicos/apivendedor";
+import {INotificacao} from "../contratos/componentes/notificacao";
 
 export class FormularioLogin implements ITela {
-    constructor(public apiVendedor: IApiVendedor) {}
+    constructor(public apiVendedor: IApiVendedor, public notificacao: INotificacao) {}
 
     conteudo(): HTMLElement {
         const main = criarElementoHtml('main');
@@ -33,7 +34,7 @@ export class FormularioLogin implements ITela {
                 this.apiVendedor.autenticar(login, senha).then((vendedor) => {
                     document.dispatchEvent(new CustomEvent('autenticacao',  { detail: vendedor }));
                 }).catch(error => {
-                    alert(error);
+                    this.notificacao.mostrar('Error', error, 'error');
                 });
             }
         });

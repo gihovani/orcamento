@@ -3,9 +3,10 @@ import {Endereco} from "../entidades/endereco";
 import {IEndereco} from "../contratos/entidades/endereco";
 import {IApiCep} from "../contratos/servicos/apicep";
 import {ITela} from "../contratos/tela";
+import {INotificacao} from "../contratos/componentes/notificacao";
 
 export class FormularioEndereco implements ITela {
-    constructor(public apiCep: IApiCep) {}
+    constructor(public apiCep: IApiCep, public notificacao: INotificacao) {}
 
     public preencheFormularioDados(form: HTMLFormElement, endereco: IEndereco): void {
         (form.querySelector('#cep') as HTMLInputElement).value = endereco.cep;
@@ -81,6 +82,7 @@ export class FormularioEndereco implements ITela {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             // this.apiCep.salvar();
+            this.notificacao.mostrar('Sucesso', 'Os Dados do Endereço Foram Salvos!');
         });
         return main;
     }

@@ -3,20 +3,28 @@ import {ICarrinho} from "../contratos/carrinho";
 import {IProduto} from "../contratos/entidades/produto";
 import {IApiProduto} from "../contratos/servicos/apiproduto";
 import {TelaComPaginacao} from "./telacompaginacao";
+import {INotificacao} from "../contratos/componentes/notificacao";
+import {ICarregando} from "../contratos/componentes/carregando";
 
 export class ListagemDeProdutos extends TelaComPaginacao {
     private temFiltro = false;
 
-    constructor(public apiProduto: IApiProduto, public carrinho: ICarrinho) {
+    constructor(
+        public apiProduto: IApiProduto,
+        public carrinho: ICarrinho,
+        public notificacao: INotificacao,
+        public carregando: ICarregando
+    ) {
         super();
         this.pegaDadosDosProdutos();
     }
 
     pegaDadosDosProdutos () {
+        this.carregando.mostrar()
         this.apiProduto.listar(false).then((produtos) => {
             this.itens = produtos;
             document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
-        });
+        }).finally(() => this.carregando.esconder());
     }
 
     adicionar(produto: IProduto) {
@@ -25,12 +33,12 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         if (inputQuantidade) {
             quantidade = parseInt(inputQuantidade.value);
         }
-        alert(`Produto ${produto.id} foi adicionado com sucesso!`);
-        if (quantidade === 3) produto.preco = 20;
+        this.notificacao.mostrar('Sucesso', `Produto ${produto.id} foi adicionado com sucesso!`);
         const cardProduto = document.querySelector(`#produto-id-${produto.id} .card`);
         cardProduto.classList.add('bg-success');
         this.carrinho.adicionarProduto(produto, quantidade);
         this.carrinho.totalizar(true);
+        // document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
     }
 
     htmlFiltroDoProdutoPorAtributo(atributo: string, titulo: string): HTMLElement {

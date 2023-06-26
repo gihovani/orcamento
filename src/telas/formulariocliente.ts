@@ -3,9 +3,10 @@ import {Cliente} from "../entidades/cliente";
 import {criarElementoHtml} from "../util/helper";
 import {IApiCliente} from "../contratos/servicos/apicliente";
 import {ICliente} from "../contratos/entidades/cliente";
+import {INotificacao} from "../contratos/componentes/notificacao";
 
 export class FormularioCliente implements ITela {
-    constructor(public apiCliente: IApiCliente) {}
+    constructor(public apiCliente: IApiCliente, public notificacao: INotificacao) {}
 
     public preencheFormularioDados(form: HTMLFormElement, cliente: ICliente): void {
         (form.querySelector('#documento') as HTMLInputElement).value = cliente.documento;
@@ -112,6 +113,7 @@ export class FormularioCliente implements ITela {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             const cliente = this.pegaDadosDoFormulario(form);
+            this.notificacao.mostrar('Sucesso', 'Os Dados do Cliente Foram Salvos!');
             this.apiCliente.salvar(cliente);
         });
         return main;
