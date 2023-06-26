@@ -1,12 +1,10 @@
 import {criarElementoHtml, formataNumeroEmDinheiro} from "../util/helper";
 import {ICarrinho} from "../contratos/carrinho";
-import {Tela} from "../contratos/tela";
+import {ITela} from "../contratos/tela";
 import {IProduto} from "../contratos/entidades/produto";
 
-export class ListaDeCompras extends Tela {
-    constructor(public elemento: HTMLElement, public carrinho: ICarrinho) {
-        super();
-    }
+export class ListaDeCompras implements ITela {
+    constructor(public carrinho: ICarrinho) {}
 
     atualizar(produto: IProduto) {
         const inputQuantidade = document.getElementById(`quantidade-${produto.id}`) as HTMLInputElement;
@@ -15,16 +13,16 @@ export class ListaDeCompras extends Tela {
             quantidade = parseInt(inputQuantidade.value);
         }
         this.carrinho.adicionarProduto(produto, quantidade, true);
-        alert(`Produto ${produto.id} foi adicionado com sucesso!`);
         this.carrinho.totalizar(true);
-        this.renderizar();
+        alert(`Produto ${produto.id} foi adicionado com sucesso!`);
+        document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
     }
 
     remover(produto: IProduto) {
         this.carrinho.removerProduto(produto);
-        alert(`Produto ${produto.id} foi removido do carrinho!`);
         this.carrinho.totalizar(true);
-        this.renderizar();
+        alert(`Produto ${produto.id} foi removido do carrinho!`);
+        document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
     }
 
     htmlListaDeProdutos(): HTMLElement {

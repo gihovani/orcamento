@@ -1,11 +1,9 @@
-import {Tela} from "../contratos/tela";
+import {ITela} from "../contratos/tela";
 import {criarElementoHtml} from "../util/helper";
 import {IApiVendedor} from "../contratos/servicos/apivendedor";
 
-export class FormularioLogin extends Tela {
-    constructor(public elemento: HTMLElement, public apiVendedor: IApiVendedor) {
-        super();
-    }
+export class FormularioLogin implements ITela {
+    constructor(public apiVendedor: IApiVendedor) {}
 
     conteudo(): HTMLElement {
         const div = criarElementoHtml('div');
@@ -33,7 +31,7 @@ export class FormularioLogin extends Tela {
             const senha = (form.querySelector('#senha') as HTMLInputElement)?.value;
             if (login.length && senha.length) {
                 this.apiVendedor.autenticar(login, senha).then((vendedor) => {
-                    this.elemento.dispatchEvent(new CustomEvent('autenticacao',  { detail: vendedor }));
+                    document.dispatchEvent(new CustomEvent('autenticacao',  { detail: vendedor }));
                 }).catch(error => {
                     alert(error);
                 });

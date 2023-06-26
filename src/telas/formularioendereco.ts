@@ -1,13 +1,11 @@
-import {Tela} from "../contratos/tela";
 import {criarElementoHtml} from "../util/helper";
 import {Endereco} from "../entidades/endereco";
 import {IEndereco} from "../contratos/entidades/endereco";
 import {IApiCep} from "../contratos/servicos/apicep";
+import {ITela} from "../contratos/tela";
 
-export class FormularioEndereco extends Tela {
-    constructor(public elemento: HTMLElement, public apiCep: IApiCep) {
-        super();
-    }
+export class FormularioEndereco implements ITela {
+    constructor(public apiCep: IApiCep) {}
 
     public preencheFormularioDados(form: HTMLFormElement, endereco: IEndereco): void {
         (form.querySelector('#cep') as HTMLInputElement).value = endereco.cep;

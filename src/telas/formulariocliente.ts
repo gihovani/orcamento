@@ -1,13 +1,11 @@
-import {Tela} from "../contratos/tela";
+import {ITela} from "../contratos/tela";
 import {Cliente} from "../entidades/cliente";
 import {criarElementoHtml} from "../util/helper";
 import {IApiCliente} from "../contratos/servicos/apicliente";
 import {ICliente} from "../contratos/entidades/cliente";
 
-export class FormularioCliente extends Tela {
-    constructor(public elemento: HTMLElement, public apiCliente: IApiCliente) {
-        super();
-    }
+export class FormularioCliente implements ITela {
+    constructor(public apiCliente: IApiCliente) {}
 
     public preencheFormularioDados(form: HTMLFormElement, cliente: ICliente): void {
         (form.querySelector('#documento') as HTMLInputElement).value = cliente.documento;
