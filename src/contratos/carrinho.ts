@@ -21,7 +21,7 @@ export interface ICarrinho {
     produtos: ICarrinhoProduto[];
     promocoes: IRegraPromocional[];
     totalizador: ICarrinhoTotalizador;
-    adicionarProduto: (produto: IProduto, quantidade?: number) => void;
+    adicionarProduto: (produto: IProduto, quantidade?: number, update?: boolean) => void;
     removerProduto: (produto: IProduto) => void;
     aplicarPromocoes: () => void;
     totalizar: (calcular_promocoes: boolean) => void;

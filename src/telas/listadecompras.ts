@@ -8,13 +8,13 @@ export class ListaDeCompras extends Tela {
         super();
     }
 
-    adicionar(produto: IProduto) {
+    atualizar(produto: IProduto) {
         const inputQuantidade = document.getElementById(`quantidade-${produto.id}`) as HTMLInputElement;
         let quantidade = 1;
         if (inputQuantidade) {
             quantidade = parseInt(inputQuantidade.value);
         }
-        this.carrinho.adicionarProduto(produto, quantidade);
+        this.carrinho.adicionarProduto(produto, quantidade, true);
         alert(`Produto ${produto.id} foi adicionado com sucesso!`);
         this.carrinho.totalizar(true);
         this.renderizar();
@@ -61,7 +61,7 @@ export class ListaDeCompras extends Tela {
             <form class="row row-cols-lg-auto g-3 align-items-center">
             <div class="input-group mb-3">
               <input id="quantidade-${produto.id}" class="form-control" type="number" step="1" min="1" max="100" value="${item.quantidade}" aria-label="Quantidade" />
-              <button class="input-group-text botao-adicionar"><i class="bi bi-arrow-clockwise"></i></button>
+              <button class="input-group-text botao-atualizar"><i class="bi bi-arrow-clockwise"></i></button>
               <button class="input-group-text botao-remover"><i class="bi bi-x-lg"></i></button>
             </div>
             </form>
@@ -69,8 +69,8 @@ export class ListaDeCompras extends Tela {
         </div>
     </div>
 </div>`;
-            divProduto.querySelector('.botao-adicionar')
-                .addEventListener('click', () => this.adicionar(produto));
+            divProduto.querySelector('.botao-atualizar')
+                .addEventListener('click', () => this.atualizar(produto));
             divProduto.querySelector('.botao-remover')
                 .addEventListener('click', () => this.remover(produto));
             div.appendChild(divProduto);

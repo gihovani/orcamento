@@ -1,4 +1,3 @@
-
 import {arredondarValor} from "../util/helper";
 import {
     ICarrinho,
@@ -18,13 +17,13 @@ export class Carrinho implements ICarrinho {
         this.promocoes = promocoes;
     }
 
-    adicionarProduto(produto: IProduto, quantidade?: number) {
+    adicionarProduto(produto: IProduto, quantidade?: number, update: boolean = false) {
         if (!quantidade || isNaN(quantidade)) {
             quantidade = 1;
         }
         const item = this.produtos.find(item => item.produto.id === produto.id);
         if (item) {
-            item.quantidade += quantidade;
+            item.quantidade = (update) ? quantidade : item.quantidade + quantidade;
         } else {
             this.produtos.push({
                 quantidade,
