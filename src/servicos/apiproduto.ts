@@ -2,6 +2,7 @@ import {IProduto} from "../contratos/entidades/produto";
 import {IApiProduto} from "../contratos/servicos/apiproduto";
 import {pegaDadosGoogleMerchant, pegaTextoDoElementoXml, transformaDinheiroEmNumero} from "../util/helper";
 import {Produto} from "../entidades/produto";
+import {IConfiguracoes} from "../contratos/entidades/configuracoes";
 
 type IApiProdutoFiltro = Map<string, string[]>;
 
@@ -12,14 +13,22 @@ export class ApiProduto implements IApiProduto {
     };
     private _produtos: IProduto[];
 
-    listar(): Promise<IProduto[]> {
+    constructor(public configuracoes: IConfiguracoes) {
+    }
+
+
+    listar(limparCache: boolean = false): Promise<IProduto[]> {
+        if (limparCache) {
+            this._cached.produtos = [];
+        }
+
         return new Promise<IProduto[]>(resolve => {
             if (this._cached.produtos.length > 0) {
                 this._produtos = this._cached.produtos;
                 resolve(this._produtos);
                 return;
             }
-            pegaDadosGoogleMerchant('xml/google.xml', (data) => {
+            pegaDadosGoogleMerchant(this.configuracoes.url_google_merchant, (data) => {
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(data, 'text/xml');
                 this._produtos = Array.from(xmlDoc.querySelectorAll('item')).map(item => {

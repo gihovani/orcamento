@@ -12,12 +12,15 @@ import {FormularioEndereco} from "./formularioendereco";
 import {ListagemDeProdutos} from "./listagemdeprodutos";
 import {ListaDeCompras} from "./listadecompras";
 import {MensagemBoasVindas} from "./mensagemboasvindas";
+import {IConfiguracoes} from "../contratos/entidades/configuracoes";
+import {FormularioConfiguracoes} from "./formularioconfiguracoes";
 
 export class App extends ILayout {
     private _tela: ITela;
 
     constructor(
         public elemento: HTMLElement,
+        public configuracoes: IConfiguracoes,
         tela: ITela,
         public barraDeNavegacao: BarraDeNavegacao
     ) {
@@ -47,8 +50,11 @@ export class App extends ILayout {
             const carrinho = this.criaCarrinho();
             const apiCliente = new ApiClienteMock();
             const apiCep = new ApiCepViaCep();
-            const apiProduto = new ApiProduto();
+            const apiProduto = new ApiProduto(this.configuracoes);
             this.tela = new MensagemBoasVindas(e.detail);
+            this.barraDeNavegacao.adicionaMenu('Configurações', () => {
+                this.tela = new FormularioConfiguracoes(this.configuracoes, apiProduto);
+            });
             this.barraDeNavegacao.adicionaMenu('Cliente', () => {
                 this.tela = new FormularioCliente(apiCliente);
             });

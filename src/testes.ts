@@ -4,7 +4,10 @@ import {ApiCepViaCep} from "./servicos/apibuscacep";
 import {ApiClienteMock} from "./servicos/apicliente";
 import {Regrapromocional} from "./entidades/regrapromocional";
 import {ApiProduto} from "./servicos/apiproduto";
+import {Configuracoes} from "./entidades/configuracoes";
 
+const configuracoes = new Configuracoes();
+configuracoes.url_google_merchant = 'xml/test.xml';
 const produto1 = new Produto(
     'SKU',
     'Nome do Produto',
@@ -38,9 +41,9 @@ const produto3 = new Produto(
     '1234567891',
 );
 (() => {
-    const listaDeProduto = new ApiProduto();
+    const listaDeProduto = new ApiProduto(configuracoes);
     const inicializaListaDeProduto = () => {
-        listaDeProduto.produtos = [produto1,produto2,produto3];
+        listaDeProduto.listar(true);
     };
     console.log('-------------------------------------------');
     console.log('---------- Lista De Produtos --------------');

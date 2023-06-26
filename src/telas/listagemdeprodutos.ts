@@ -9,7 +9,11 @@ export class ListagemDeProdutos extends TelaComPaginacao {
 
     constructor(public apiProduto: IApiProduto, public carrinho: ICarrinho) {
         super();
-        this.apiProduto.listar().then((produtos) => {
+        this.pegaDadosDosProdutos();
+    }
+
+    pegaDadosDosProdutos () {
+        this.apiProduto.listar(false).then((produtos) => {
             this.itens = produtos;
             document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
         });
@@ -66,10 +70,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         }
         removerFiltro.addEventListener('click', () => {
             this.temFiltro = false;
-            this.apiProduto.listar().then((produtos) => {
-                this.itens = produtos;
-                document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
-            });
+            this.pegaDadosDosProdutos();
         });
         div.appendChild(removerFiltro);
         form.appendChild(div);

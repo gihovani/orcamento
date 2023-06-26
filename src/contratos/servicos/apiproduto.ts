@@ -7,5 +7,5 @@ export interface IApiProduto {
     filtrarPorCodigoBarra: (codigoBarra: string) => IProduto[];
     filtros: () => Map<string, string[]>;
     consultar: (id: string) => IProduto | undefined;
-    listar: () => Promise<IProduto[]>;
+    listar: (limparCache: boolean) => Promise<IProduto[]>;
 }
