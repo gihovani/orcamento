@@ -39,9 +39,9 @@ export class FormularioCliente implements ITela {
     }
 
     conteudo(): HTMLElement {
-        const div = criarElementoHtml('div', ['row']);
-        div.innerHTML = `
-            <form class="bg-body-tertiary p-5 rounded mt-3 m-auto">
+        const main = criarElementoHtml('main', ['row']);
+        main.innerHTML = `
+            <form class="bg-body-tertiary p-5 rounded mt-3 mb-3 m-auto">
                 <h1 class="h3 mb-3 fw-normal">Cadastro de cliente</h1>
                 <div class="mb-3">
                     <label class="form-label" for="documento">Documento</label>
@@ -100,8 +100,8 @@ export class FormularioCliente implements ITela {
                 <button type="submit" class="btn btn-primary">SALVAR</button>
             </form>
         `;
-        const form = div.querySelector('form') as HTMLFormElement;
-        div.querySelector('#documento')?.addEventListener('change', (e) => {
+        const form = main.querySelector('form') as HTMLFormElement;
+        main.querySelector('#documento')?.addEventListener('change', (e) => {
             const documento = (e.target as HTMLInputElement).value;
             if (documento.length === 11) {
                 this.apiCliente.consultar(documento).then((cliente) => {
@@ -114,6 +114,6 @@ export class FormularioCliente implements ITela {
             const cliente = this.pegaDadosDoFormulario(form);
             this.apiCliente.salvar(cliente);
         });
-        return div;
+        return main;
     }
 }

@@ -14,13 +14,16 @@ export class FormularioConfiguracoes implements ITela {
     }
 
     conteudo(): HTMLElement {
-        const div = criarElementoHtml('div', ['row']);
-        div.innerHTML = `
-            <form class="bg-body-tertiary p-5 rounded mt-3 m-auto">
+        const main = criarElementoHtml('main', ['row']);
+        main.innerHTML = `
+            <form class="bg-body-tertiary p-5 rounded mt-3 mb-3 m-auto">
                 <h1 class="h3 mb-3 fw-normal">Configurações do Sistema</h1>
                 <div class="mb-3">
                     <label class="form-label" for="url_google_merchant">URL Google Merchant</label>
-                    <input class="form-control" type="text" id="url_google_merchant" value="${this.configuracoes.url_google_merchant}" />
+                    <select id="url_google_merchant" class="form-select">
+                        <option value="xml/google.xml" ${(this.configuracoes.url_google_merchant === 'xml/google.xml') ? 'selected' : ''}>UC</option>
+                        <option value="xml/googledc.xml" ${(this.configuracoes.url_google_merchant === 'xml/googledc.xml') ? 'selected' : ''}>DC</option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="nome_loja">Nome da Loja</label>
@@ -33,7 +36,7 @@ export class FormularioConfiguracoes implements ITela {
                 <button type="submit" class="btn btn-primary">SALVAR</button>
             </form>
         `;
-        const form = div.querySelector('form') as HTMLFormElement;
+        const form = main.querySelector('form') as HTMLFormElement;
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             this.pegaDadosDoFormulario(form);
@@ -42,6 +45,6 @@ export class FormularioConfiguracoes implements ITela {
                 document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
             });
         });
-        return div;
+        return main;
     }
 }

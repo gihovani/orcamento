@@ -77,8 +77,8 @@ export class ListaDeCompras implements ITela {
     };
 
     conteudo(): HTMLElement {
-        const div = criarElementoHtml('div');
-        div.appendChild(this.htmlListaDeProdutos());
-        return div;
+        const main = criarElementoHtml('main');
+        main.appendChild(this.htmlListaDeProdutos());
+        return main;
     }
 }

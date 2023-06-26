@@ -30,9 +30,9 @@ export class FormularioEndereco implements ITela {
     }
 
     conteudo(): HTMLElement {
-        const div = criarElementoHtml('div', ['row']);
-        div.innerHTML = `
-            <form class="bg-body-tertiary p-5 rounded mt-3 m-auto">
+        const main = criarElementoHtml('main', ['row']);
+        main.innerHTML = `
+            <form class="bg-body-tertiary p-5 rounded mt-3 mb-3 m-auto">
                 <h1 class="h3 mb-3 fw-normal">Endereço de Entrega</h1>
                 <div class="mb-3">
                     <label class="form-label" for="cep">CEP</label>
@@ -69,8 +69,8 @@ export class FormularioEndereco implements ITela {
                 <button type="submit" class="btn btn-primary">SALVAR</button>
             </form>
         `;
-        const form = div.querySelector('form') as HTMLFormElement;
-        div.querySelector('#cep')?.addEventListener('change', (e) => {
+        const form = main.querySelector('form') as HTMLFormElement;
+        main.querySelector('#cep')?.addEventListener('change', (e) => {
             const cep = (e.target as HTMLInputElement).value;
             if (cep.length === 8) {
                 this.apiCep.consultar(cep).then((endereco) => {
@@ -82,6 +82,6 @@ export class FormularioEndereco implements ITela {
             e.preventDefault();
             // this.apiCep.salvar();
         });
-        return div;
+        return main;
     }
 }

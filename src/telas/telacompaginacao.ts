@@ -31,6 +31,7 @@ export abstract class TelaComPaginacao implements ITela {
 
     temPaginacao(): boolean {
         this.ultimaPagina = Math.ceil(this.itens.length / this.numeroItensPorPagina);
+        console.log(this.ultimaPagina);
         return this.ultimaPagina > 1;
     }
 
@@ -108,9 +109,9 @@ export abstract class TelaComPaginacao implements ITela {
     abstract htmlItens(): HTMLElement;
 
     conteudo(): HTMLElement {
-        const div = criarElementoHtml('div');
-        div.appendChild(this.htmlItens());
-        div.appendChild(this.htmlPaginacao());
-        return div;
+        const main = criarElementoHtml('main');
+        main.appendChild(this.htmlItens());
+        main.appendChild(this.htmlPaginacao());
+        return main;
     }
 }

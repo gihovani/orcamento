@@ -6,9 +6,9 @@ export class FormularioLogin implements ITela {
     constructor(public apiVendedor: IApiVendedor) {}
 
     conteudo(): HTMLElement {
-        const div = criarElementoHtml('div');
-        div.innerHTML = `<form class="bg-body-tertiary p-5 rounded mt-3 m-auto text-center" style="width: 450px">
-    <h1 class="h3 mb-3 fw-normal">Por Favor Faça o Login</h1>
+        const main = criarElementoHtml('main');
+        main.innerHTML = `<form class="bg-body-tertiary p-5 rounded mt-3 mb-3 m-auto text-center" style="width: 450px">
+    <h1 class="h3 mb-3 fw-normal">FAÇA O LOGIN</h1>
     <div class="form-floating mb-3">
       <input type="text" class="form-control" id="login" placeholder="Login">
       <label for="login">Login</label>
@@ -24,7 +24,7 @@ export class FormularioLogin implements ITela {
     </div>
     <button class="btn btn-primary w-100 py-2" type="submit">ENTRAR</button>
   </form>`;
-        const form = div.querySelector('form') as HTMLFormElement;
+        const form = main.querySelector('form') as HTMLFormElement;
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             const login = (form.querySelector('#login') as HTMLInputElement)?.value;
@@ -37,6 +37,6 @@ export class FormularioLogin implements ITela {
                 });
             }
         });
-        return div;
+        return main;
     }
 }

@@ -26,7 +26,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
             quantidade = parseInt(inputQuantidade.value);
         }
         alert(`Produto ${produto.id} foi adicionado com sucesso!`);
-
+        if (quantidade === 3) produto.preco = 20;
         const cardProduto = document.querySelector(`#produto-id-${produto.id} .card`);
         cardProduto.classList.add('bg-success');
         this.carrinho.adicionarProduto(produto, quantidade);
@@ -78,8 +78,8 @@ export class ListagemDeProdutos extends TelaComPaginacao {
     }
 
     htmlItens(): HTMLElement {
-        const div = criarElementoHtml('div');
-        div.appendChild(this.htmlFiltroDosProdutos());
+        const main = criarElementoHtml('main');
+        main.appendChild(this.htmlFiltroDosProdutos());
 
         const divProdutos = criarElementoHtml('div', ['lista-de-produtos', 'row', 'row-cols-1', 'row-cols-sm-2', 'row-cols-md-4', 'g-4']);
         this.itensPaginado().map(produto => {
@@ -115,7 +115,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
                 });
             divProdutos.appendChild(divProduto);
         });
-        div.appendChild(divProdutos);
-        return div;
+        main.appendChild(divProdutos);
+        return main;
     };
 }

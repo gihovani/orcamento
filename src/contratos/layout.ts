@@ -10,10 +10,10 @@ export abstract class ILayout implements ITela {
         if (this.elemento.firstChild) {
             this.elemento.firstChild.remove();
         }
-        const div = criarElementoHtml('div');
-        div.appendChild(this.cabecalho());
-        div.appendChild(this.conteudo());
-        div.appendChild(this.rodape());
-        this.elemento.appendChild(div);
+        const app = criarElementoHtml('div', ['d-flex', 'flex-column', 'h-100', 'container']);
+        app.appendChild(this.cabecalho());
+        app.appendChild(this.conteudo());
+        app.appendChild(this.rodape());
+        this.elemento.appendChild(app);
     }
 }

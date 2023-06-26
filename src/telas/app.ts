@@ -76,12 +76,12 @@ export class App extends ILayout {
 
     private criaCarrinho() {
         const regra10PorcentoDeDescontoProduto = new Regrapromocional(
-            '10% de desconto - ACR8615A - Organizador de Gaveta - Preto - ACRIMET',
+            '10% de desconto - MARCA ALLPRIME',
             1,
             true,
             new Date(2023, 0, 1),
             new Date(2023, 11, 31),
-            [{'tipo': 'id', 'operacao': 'igual', 'valor': 'ACR8615A'}],
+            [{'tipo': 'marca', 'operacao': 'igual', 'valor': 'ALLPRIME'}],
             {'tipo': 'desconto_porcentagem', 'valor': 10},
         );
         return new Carrinho([regra10PorcentoDeDescontoProduto]);
@@ -92,6 +92,14 @@ export class App extends ILayout {
     }
 
     rodape(): HTMLElement {
-        return criarElementoHtml('div');
+        const footer = criarElementoHtml('footer', ['footer', 'mt-auto', 'py-3', 'bg-body-tertiary', 'row']);
+        const dataAtual = new Date();
+        footer.innerHTML = `<div class="container">
+            <span class="text-body-secondary">
+            © 1988–${dataAtual.getFullYear()} GG2 Soluções (v.:${this.configuracoes.versao}). 
+            Todos os direitos reservados.
+            </span>
+        </div>`;
+        return footer;
     }
 }
