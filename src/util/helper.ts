@@ -24,3 +24,18 @@ export const pegaDadosGoogleMerchant = (arquivo: string, callback: (data: string
 export const formataNumeroEmDinheiro = (numero: number | null): string => {
     return numero ? numero.toLocaleString('pt-br', {minimumFractionDigits: 2}) : '0,00';
 };
+
+
+export const criarElementoHtml = (tag: string, clazz: string[] = [], atributos = [], text: string = ''): HTMLElement => {
+    const elemento = document.createElement(tag);
+    if (clazz.length) {
+        elemento.classList.add(...clazz);
+    }
+    for (let atributo of atributos) {
+        elemento.setAttribute(atributo.nome, atributo.valor);
+    }
+    if (text) {
+        elemento.innerText = text;
+    }
+    return elemento;
+};

@@ -1,7 +1,6 @@
 import {ListaDeProduto} from "./entidades/listadeproduto";
 import {Carrinho} from "./entidades/carrinho";
 import {Produto} from "./entidades/produto";
-import {ClienteCadastro} from "./entidades/clientecadastro";
 import {ApiCepViaCep} from "./servicos/apibuscacep";
 import {ApiClienteMock} from "./servicos/apicliente";
 import {Regrapromocional} from "./entidades/regrapromocional";
@@ -147,10 +146,12 @@ const produto3 = new Produto(
 (() => {
     const apiCep = new ApiCepViaCep();
     const apiCliente = new ApiClienteMock();
-    const cadastroDeCliente = new ClienteCadastro(apiCep, apiCliente);
-    cadastroDeCliente.buscarEnderecoPorCep('88106-000');
-    console.log(cadastroDeCliente);
 
-    cadastroDeCliente.buscarClientePorDocumento('041.843.018-78');
-    console.log(cadastroDeCliente);
+    apiCep.consultar('88106-000').then((dados) => {
+        console.log(dados);
+    });
+
+    apiCliente.consultar('041.843.018-78').then((dados) => {
+        console.log(dados);
+    });
 })();

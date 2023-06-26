@@ -1,9 +1,10 @@
 import {IListaDeProduto} from "../contratos/listadeprodutos";
-import {formataNumeroEmDinheiro} from "../util/helper";
+import {criarElementoHtml, formataNumeroEmDinheiro} from "../util/helper";
 import {IProduto} from "../contratos/produto";
 import {ICarrinho} from "../contratos/carrinho";
+import {Tela} from "../contratos/tela";
 
-export class HTMLListaDeProduto {
+export class HTMLListaDeProduto extends Tela {
     private temFiltro = false;
     public numeroItensPorPagina = 15;
     public paginaAtual = 1;
@@ -11,6 +12,7 @@ export class HTMLListaDeProduto {
     private produtos: IProduto[] = [];
 
     constructor(public elemento: HTMLElement, public listaDeProdutos: IListaDeProduto, public carrinho: ICarrinho) {
+        super();
         this.produtos = this.listaDeProdutos.produtos;
     }
 
@@ -77,33 +79,19 @@ export class HTMLListaDeProduto {
         return paginacao;
     }
 
-    criarElementoHtml(tag: string, clazz: string[] = [], atributos = [], text: string = ''): HTMLElement {
-        const elemento = document.createElement(tag);
-        if (clazz.length) {
-            elemento.classList.add(...clazz);
-        }
-        for (let atributo of atributos) {
-            elemento.setAttribute(atributo.nome, atributo.valor);
-        }
-        if (text) {
-            elemento.innerText = text;
-        }
-        return elemento;
-    }
-
     htmlFiltroDoProdutoPorAtributo(atributo: string, titulo: string): HTMLElement {
-        const select = this.criarElementoHtml('select', [], [{nome: 'name', valor: `filtro-${atributo}`}]);
-        const option = this.criarElementoHtml('option', [], [{nome: 'value', valor: ''}, {nome: 'label', valor: titulo}]);
+        const select = criarElementoHtml('select', ['form-select'], [{nome: 'name', valor: `filtro-${atributo}`}]);
+        const option = criarElementoHtml('option', [], [{nome: 'value', valor: ''}, {nome: 'label', valor: titulo}]);
         select.appendChild(option);
         this.listaDeProdutos.filtros.get(atributo).map(valor => {
-            const option = this.criarElementoHtml('option', [], [{nome: 'value', valor}, {nome: 'label', valor}]);
+            const option = criarElementoHtml('option', [], [{nome: 'value', valor}, {nome: 'label', valor}]);
             select.appendChild(option);
         });
         return select;
     }
 
     htmlFiltroDosProdutos(): HTMLElement {
-        const divFiltro = this.criarElementoHtml('div', ['lista-de-produtos-filtros', 'row', 'g-3', 'align-items-center']);
+        const divFiltro = criarElementoHtml('div', ['lista-de-produtos-filtros', 'row', 'g-3', 'align-items-center']);
         const filtroMarca = this.htmlFiltroDoProdutoPorAtributo('marca', 'Marca');
         filtroMarca.addEventListener('change', (event) => {
             this.temFiltro = true;
@@ -120,7 +108,7 @@ export class HTMLListaDeProduto {
         });
         divFiltro.appendChild(filtroCategoria);
 
-        const removerFiltro = this.criarElementoHtml('button', ['btn', 'btn-info'], [], 'Todos');
+        const removerFiltro = criarElementoHtml('button', ['btn', 'btn-info'], [], 'Todos');
         if (!this.temFiltro) {
             removerFiltro.setAttribute('disabled', 'disabled');
         }
@@ -135,11 +123,11 @@ export class HTMLListaDeProduto {
     }
 
     htmlListaDeProdutos(): HTMLElement {
-        const divListagem = this.criarElementoHtml('div', ['lista-de-produtos', 'row']);
+        const div = criarElementoHtml('div', ['lista-de-produtos', 'row']);
         this.produtosPaginado().map(produto => {
             // let search = basket.find((x) => x.id === id) || [];
             let precoFormatado = formataNumeroEmDinheiro(produto.preco);
-            const divProduto = this.criarElementoHtml('div', ['col', 'produto', 'text-center']);
+            const divProduto = criarElementoHtml('div', ['col', 'produto', 'text-center']);
             divProduto.setAttribute('id', `produto-id-${produto.id}`);
             divProduto.innerHTML = `
         <img width="220" src="${produto.imagem}" alt="${produto.nome}" />
@@ -158,13 +146,13 @@ export class HTMLListaDeProduto {
     `;
             divProduto.querySelector('.botao-adicionar')
                 .addEventListener('click', () => this.adicionar(produto));
-            divListagem.appendChild(divProduto);
+            div.appendChild(divProduto);
         });
-        return divListagem;
+        return div;
     };
     htmlPaginacaoBotaoVoltar(): HTMLElement {
-        const li = this.criarElementoHtml('li', ['page-item', 'disabled']);
-        const botao = this.criarElementoHtml('a', ['page-link'], [{nome: 'href', valor: '#'}], 'Voltar');
+        const li = criarElementoHtml('li', ['page-item', 'disabled']);
+        const botao = criarElementoHtml('a', ['page-link'], [{nome: 'href', valor: '#'}], 'Voltar');
         if (this.temPaginaAnterior()) {
             li.classList.remove('disabled');
             botao.addEventListener('click', () => this.paginaAnterior());
@@ -173,8 +161,8 @@ export class HTMLListaDeProduto {
         return li;
     }
     htmlPaginacaoBotaoAvancar(): HTMLElement {
-        const li = this.criarElementoHtml('li', ['page-item', 'disabled']);
-        const botao = this.criarElementoHtml('a', ['page-link'], [{nome: 'href', valor: '#'}], 'Avançar');
+        const li = criarElementoHtml('li', ['page-item', 'disabled']);
+        const botao = criarElementoHtml('a', ['page-link'], [{nome: 'href', valor: '#'}], 'Avançar');
         if (this.temProximaPagina()) {
             li.classList.remove('disabled');
             botao.addEventListener('click', () => this.proximaPagina());
@@ -183,37 +171,34 @@ export class HTMLListaDeProduto {
         return li;
     }
     htmlPaginacaoBotaoNumero(numero: number): HTMLElement {
-        const li = this.criarElementoHtml('li', ['page-item', 'disabled']);
-        const botao = this.criarElementoHtml('a', ['page-link'], [{nome: 'href', valor: '#'}], String(numero));
+        const li = criarElementoHtml('li', ['page-item', 'disabled']);
+        const botao = criarElementoHtml('a', ['page-link'], [{nome: 'href', valor: '#'}], String(numero));
         li.classList.remove('disabled');
         botao.addEventListener('click', () => this.paginaNumero(numero));
         li.appendChild(botao);
         return li;
     }
     htmlPaginacao(): HTMLElement {
-        const divPaginacao = this.criarElementoHtml('div', ['lista-de-produtos-paginacao', 'row']);
+        const div = criarElementoHtml('div', ['lista-de-produtos-paginacao', 'row']);
         if (!this.temPaginacao()) {
-            return divPaginacao;
+            return div;
         }
 
-        const divNav = this.criarElementoHtml('nav', [], [{'nome': 'aria-label', 'valor': 'Page navigation example'}]);
-        const ul = this.criarElementoHtml('ul', ['pagination', 'justify-content-center']);
+        const nav = criarElementoHtml('nav', [], [{'nome': 'aria-label', 'valor': 'Page navigation example'}]);
+        const ul = criarElementoHtml('ul', ['pagination', 'justify-content-center']);
         ul.appendChild(this.htmlPaginacaoBotaoVoltar());
         ul.appendChild(this.htmlPaginacaoBotaoNumero(3));
         ul.appendChild(this.htmlPaginacaoBotaoAvancar());
-        divNav.appendChild(ul);
-        divPaginacao.appendChild(divNav);
-        return divPaginacao;
+        nav.appendChild(ul);
+        div.appendChild(nav);
+        return div;
     }
 
-    renderizar() {
-        if (this.elemento.firstChild) {
-            this.elemento.firstChild.remove();
-        }
-        const divListaDeProdutos = this.criarElementoHtml('div');
-        divListaDeProdutos.appendChild(this.htmlFiltroDosProdutos());
-        divListaDeProdutos.appendChild(this.htmlListaDeProdutos());
-        divListaDeProdutos.appendChild(this.htmlPaginacao());
-        this.elemento.appendChild(divListaDeProdutos);
+    html(): HTMLElement {
+        const div = criarElementoHtml('div');
+        div.appendChild(this.htmlFiltroDosProdutos());
+        div.appendChild(this.htmlListaDeProdutos());
+        div.appendChild(this.htmlPaginacao());
+        return div;
     }
 }
