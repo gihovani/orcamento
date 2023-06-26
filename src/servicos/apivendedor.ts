@@ -7,7 +7,7 @@ export class ApiVendedorMock implements IApiVendedor {
     private vendedor: Vendedor;
     autenticar(login: string, senha: string): Promise<IVendedor> {
         return new Promise<IVendedor>((resolve, reject) => {
-            if (login === 'gg2' && senha === 'gg2') {
+            if (login !== 'gg2' && senha !== 'gg2') {
                 reject('Login e Senha Inválidos!');
             }
             this.vendedor = new Vendedor('Dino da Silva Sauro', login, '', true);

@@ -37,6 +37,9 @@ export class ListaDeCompras extends Tela {
   </div>`;
             return div;
         }
+        const h1Total = criarElementoHtml('h1', ['total', 'col-12']);
+        h1Total.innerHTML = `Total: R$ ${formataNumeroEmDinheiro(this.carrinho.totalizador.valor_total)}`;
+        div.appendChild(h1Total);
         produtos.map(item => {
             const produto = item.produto;
             // let search = basket.find((x) => x.id === id) || [];
@@ -57,8 +60,8 @@ export class ListaDeCompras extends Tela {
             <h3 class="text-center">${(produto.preco > item.preco_unitario) ? 'De: R$ ' + precoDeFormatado + ' Por:' : ''}R$ ${precoPorFormatado}</h3>
             <form class="row row-cols-lg-auto g-3 align-items-center">
             <div class="input-group mb-3">
-              <input id="quantidade-${produto.id}" class="form-control" type="number" step="1" min="1" max="100" value="1" aria-label="Quantidade" />
-              <button class="input-group-text botao-adicionar"><i class="bi bi-plus-lg"></i></button>
+              <input id="quantidade-${produto.id}" class="form-control" type="number" step="1" min="1" max="100" value="${item.quantidade}" aria-label="Quantidade" />
+              <button class="input-group-text botao-adicionar"><i class="bi bi-arrow-clockwise"></i></button>
               <button class="input-group-text botao-remover"><i class="bi bi-x-lg"></i></button>
             </div>
             </form>

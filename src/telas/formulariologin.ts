@@ -8,14 +8,14 @@ export class FormularioLogin extends Tela {
     }
 
     conteudo(): HTMLElement {
-        const div = criarElementoHtml('div', ['row']);
-        div.innerHTML = `<form class="col-12">
+        const div = criarElementoHtml('div');
+        div.innerHTML = `<form class="bg-body-tertiary p-5 rounded mt-3 m-auto text-center" style="width: 450px">
     <h1 class="h3 mb-3 fw-normal">Por Favor Faça o Login</h1>
-    <div class="form-floating">
+    <div class="form-floating mb-3">
       <input type="text" class="form-control" id="login" placeholder="Login">
       <label for="login">Login</label>
     </div>
-    <div class="form-floating">
+    <div class="form-floating mb-3">
       <input type="password" class="form-control" id="senha" placeholder="Senha">
       <label for="senha">Senha</label>
     </div>
@@ -34,6 +34,8 @@ export class FormularioLogin extends Tela {
             if (login.length && senha.length) {
                 this.apiVendedor.autenticar(login, senha).then((vendedor) => {
                     this.elemento.dispatchEvent(new CustomEvent('autenticacao',  { detail: vendedor }));
+                }).catch(error => {
+                    alert(error);
                 });
             }
         });

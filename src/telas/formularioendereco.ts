@@ -34,8 +34,8 @@ export class FormularioEndereco extends Tela {
     conteudo(): HTMLElement {
         const div = criarElementoHtml('div', ['row']);
         div.innerHTML = `
-            <h1>Endereço de Entrega</h1>
-            <form>
+            <form class="bg-body-tertiary p-5 rounded mt-3 m-auto">
+                <h1 class="h3 mb-3 fw-normal">Endereço de Entrega</h1>
                 <div class="mb-3">
                     <label class="form-label" for="cep">CEP</label>
                     <input class="form-control" type="text" id="cep" maxlength="10" />

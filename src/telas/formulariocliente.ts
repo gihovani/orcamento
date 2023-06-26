@@ -43,8 +43,8 @@ export class FormularioCliente extends Tela {
     conteudo(): HTMLElement {
         const div = criarElementoHtml('div', ['row']);
         div.innerHTML = `
-            <h1>Cadastro de cliente</h1>
-            <form>
+            <form class="bg-body-tertiary p-5 rounded mt-3 m-auto">
+                <h1 class="h3 mb-3 fw-normal">Cadastro de cliente</h1>
                 <div class="mb-3">
                     <label class="form-label" for="documento">Documento</label>
                     <input class="form-control" type="text" id="documento" />
