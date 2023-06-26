@@ -22,6 +22,9 @@ export class ListagemDeProdutos extends TelaComPaginacao {
             quantidade = parseInt(inputQuantidade.value);
         }
         alert(`Produto ${produto.id} foi adicionado com sucesso!`);
+
+        const cardProduto = document.querySelector(`#produto-id-${produto.id} .card`);
+        cardProduto.classList.add('bg-success');
         this.carrinho.adicionarProduto(produto, quantidade);
         this.carrinho.totalizar(true);
     }
