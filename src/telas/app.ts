@@ -20,6 +20,11 @@ import {INotificacao} from "../contratos/componentes/notificacao";
 import {Notificacao} from "./componentes/notificacao";
 import {ICarregando} from "../contratos/componentes/carregando";
 import {Carregando} from "./componentes/carregando";
+import {FormularioPagamentoCartaoDeCredito} from "./formulariopagamentocartaodecredito";
+import {ApiBin} from "../servicos/apibin";
+import {Apiparcelamento} from "../servicos/apiparcelamento";
+import {FormularioPagamentoBoletoParcelado} from "./formulariopagamentoboletoparcelado";
+import {FormularioPagamentoCartaoDeCreditoMaquineta} from "./formulariopagamentocartaodecreditomaquineta";
 
 export class App extends ILayout {
     private _tela: ITela;
@@ -65,6 +70,8 @@ export class App extends ILayout {
             const carrinho = this.criaCarrinho();
             const apiCliente = new ApiClienteMock();
             const apiCep = new ApiCepViaCep();
+            const apiBin = new ApiBin();
+            const apiparcelamento = new Apiparcelamento();
             const apiProduto = new ApiProduto(this.configuracoes);
             this.tela = new MensagemBoasVindas(e.detail);
             this.barraDeNavegacao.adicionaMenu('Configurações', () => {
@@ -81,6 +88,15 @@ export class App extends ILayout {
             });
             this.barraDeNavegacao.adicionaMenu('Carrinho', () => {
                 this.tela = new ListaDeCompras(carrinho, this._notificacao);
+            });
+            this.barraDeNavegacao.adicionaMenu('Cartão de Crédito Maquineta', () => {
+                this.tela = new FormularioPagamentoCartaoDeCreditoMaquineta(carrinho, apiparcelamento, this._notificacao);
+            });
+            this.barraDeNavegacao.adicionaMenu('Cartão de Crédito', () => {
+                this.tela = new FormularioPagamentoCartaoDeCredito(carrinho, apiparcelamento, apiBin, this._notificacao);
+            });
+            this.barraDeNavegacao.adicionaMenu('Boleto Parcelado', () => {
+                this.tela = new FormularioPagamentoBoletoParcelado(carrinho, apiparcelamento, this._notificacao);
             });
             this.barraDeNavegacao.adicionaMenu('Logout', () => {
                 window.location.reload();
