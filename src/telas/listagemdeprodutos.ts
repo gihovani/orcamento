@@ -29,15 +29,24 @@ export class ListagemDeProdutos extends TelaComPaginacao {
 
     adicionar(produto: IProduto) {
         const inputQuantidade = document.getElementById(`quantidade-${produto.id}`) as HTMLInputElement;
+        const carrinhoMenu = document.querySelectorAll('.navbar-nav li');
+        const $carrinho = carrinhoMenu[carrinhoMenu.length- 2];
+        let quantidadeItensUnicos;
+        let labelCarrinho = document.createElement('span');
+        labelCarrinho.classList.add('label-quantidade');
         let quantidade = 1;
+        
         if (inputQuantidade) {
             quantidade = parseInt(inputQuantidade.value);
         }
-        this.notificacao.mostrar('Sucesso', `Produto ${produto.id} foi adicionado com sucesso!`);
+        this.notificacao.mostrar('Sucesso', `Produto ${produto.id} foi adicionado ao carrinho com sucesso!`,'success');
         const cardProduto = document.querySelector(`#produto-id-${produto.id} .card`);
         //cardProduto.classList.add('bg-success');
         this.carrinho.adicionarProduto(produto, quantidade);
         this.carrinho.totalizar(true);
+        quantidadeItensUnicos = this.carrinho.produtos.length;
+        labelCarrinho.innerHTML = `${quantidadeItensUnicos}`;
+        $carrinho.appendChild(labelCarrinho);
         //document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
     }
 
@@ -89,7 +98,6 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         main.appendChild(this.htmlFiltroDosProdutos());
         const divProdutos = criarElementoHtml('div', ['lista-de-produtos', 'row', 'row-cols-1', 'row-cols-sm-2', 'row-cols-md-3', 'row-cols-lg-4', 'row-cols-xl-5', 'g-5']);
         this.itensPaginado().map(produto => {
-            console.log(produto)
             let produtoEstaNoCarrinho = this.carrinho.produtos.find((item) => item.produto.id === produto.id);
             let precoFormatado = formataNumeroEmDinheiro(produto.preco);
             const divProduto = criarElementoHtml('div', ['col']);

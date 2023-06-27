@@ -39,15 +39,27 @@ export class App extends ILayout {
         super();
         this.inicializar();
     }
+    
+    defineTema(tema) {
+        const tagEstilosDoTema = document.createElement('link')
+        const head = document.querySelector('head');
+        Object.assign(tagEstilosDoTema, {
+            rel:'stylesheet',
+            href:'./'+tema+'.css'
+        });
+        head.appendChild(tagEstilosDoTema)
+    }
 
     inicializar() {
         const body = document.querySelector('body')
         const apiVendedor = new ApiVendedorMock();
+        const tema = 'tema-ds';
         this._notificacao = new Notificacao(body);
         this._carregando = new Carregando(body);
         this.tela = new FormularioLogin(apiVendedor, this._notificacao);
-        body.classList.add('tema-ds');
+        body.classList.add(tema);
         
+        this.defineTema(tema);
         this.inicializaEventos();
     }
 
@@ -88,9 +100,6 @@ export class App extends ILayout {
             this.barraDeNavegacao.adicionaMenu('Lista de Produtos', () => {
                 this.tela = new ListagemDeProdutos(apiProduto, carrinho, this._notificacao, this._carregando);
             });
-            this.barraDeNavegacao.adicionaMenu('Carrinho', () => {
-                this.tela = new ListaDeCompras(carrinho, this._notificacao);
-            });
             this.barraDeNavegacao.adicionaMenu('Cartão de Crédito Maquineta', () => {
                 this.tela = new FormularioPagamentoCartaoDeCreditoMaquineta(carrinho, apiparcelamento, this._notificacao);
             });
@@ -99,6 +108,9 @@ export class App extends ILayout {
             });
             this.barraDeNavegacao.adicionaMenu('Boleto Parcelado', () => {
                 this.tela = new FormularioPagamentoBoletoParcelado(carrinho, apiparcelamento, this._notificacao);
+            });
+            this.barraDeNavegacao.adicionaMenu('Carrinho', () => {
+                this.tela = new ListaDeCompras(carrinho, this._notificacao);
             });
             this.barraDeNavegacao.adicionaMenu('Logout', () => {
                 window.location.reload();
