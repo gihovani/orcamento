@@ -87,7 +87,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
     htmlItens(): HTMLElement {
         const main = criarElementoHtml('main');
         main.appendChild(this.htmlFiltroDosProdutos());
-        const divProdutos = criarElementoHtml('div', ['lista-de-produtos', 'row', 'row-cols-1', 'row-cols-sm-2', 'row-cols-md-5', 'g-5']);
+        const divProdutos = criarElementoHtml('div', ['lista-de-produtos', 'row', 'row-cols-1', 'row-cols-sm-2', 'row-cols-md-3', 'row-cols-lg-4', 'row-cols-xl-5', 'g-5']);
         this.itensPaginado().map(produto => {
             console.log(produto)
             let produtoEstaNoCarrinho = this.carrinho.produtos.find((item) => item.produto.id === produto.id);

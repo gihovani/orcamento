@@ -7,48 +7,6 @@ html{
 .nav-item {
     font-size: 1.8rem;
 }
-#tema DS
-.tema-ds #app {
-    background-color: #f9f9f9;
-}
-.tema-ds .card,
-.tema-ds .card .img-thumbnail {
-    border-radius:1rem;
-}
-.tema-ds .card .card-title {
-    color: #242c2f;
-    letter-spacing: .02em;
-}
-.tema-ds .card .card-footer .price {
-    color: #f09;
-    font-weight: 700;
-}
-.tema-ds .card button {
-    padding: .2rem 1.4rem;
-    line-height: 1;
-    box-shadow: none;
-    text-align: center;
-    font-size: 1.4rem;
-    height: 4rem;
-    border-radius: 12rem;
-}
-.tema-ds .botao-adicionar {
-    background: #66c925;
-    border-color: #66c925;
-    color: #fff;
-}
-.tema-ds .card .card-footer .linha-acao input {
-   font-size:1.4rem; 
-   border-radius: 12rem;
-   text-align: center;
-   background: #f9f9f9;
-   background-clip: padding-box;
-   border: .1rem solid #d2d2d2;
-   color: #0b1113;
-   padding: 0 .9rem;
-   vertical-align: baseline;
-   box-sizing: border-box;
-}
 
 input[type="number"] {
     -webkit-appearance: textfield;
