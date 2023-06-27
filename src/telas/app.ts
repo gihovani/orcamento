@@ -41,11 +41,13 @@ export class App extends ILayout {
     }
 
     inicializar() {
+        const body = document.querySelector('body')
         const apiVendedor = new ApiVendedorMock();
-        this._notificacao = new Notificacao(document.querySelector('body'));
-        this._carregando = new Carregando(document.querySelector('body'));
+        this._notificacao = new Notificacao(body);
+        this._carregando = new Carregando(body);
         this.tela = new FormularioLogin(apiVendedor, this._notificacao);
-
+        body.classList.add('tema-ds');
+        
         this.inicializaEventos();
     }
 

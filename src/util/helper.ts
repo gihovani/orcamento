@@ -25,7 +25,6 @@ export const formataNumeroEmDinheiro = (numero: number | null): string => {
     return numero ? numero.toLocaleString('pt-br', {minimumFractionDigits: 2}) : '0,00';
 };
 
-
 export const criarElementoHtml = (tag: string, clazz: string[] = [], atributos = [], text: string = ''): HTMLElement => {
     const elemento = document.createElement(tag);
     if (clazz.length) {

@@ -35,10 +35,10 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         }
         this.notificacao.mostrar('Sucesso', `Produto ${produto.id} foi adicionado com sucesso!`);
         const cardProduto = document.querySelector(`#produto-id-${produto.id} .card`);
-        cardProduto.classList.add('bg-success');
+        //cardProduto.classList.add('bg-success');
         this.carrinho.adicionarProduto(produto, quantidade);
         this.carrinho.totalizar(true);
-        // document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
+        //document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
     }
 
     htmlFiltroDoProdutoPorAtributo(atributo: string, titulo: string): HTMLElement {
@@ -84,34 +84,33 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         form.appendChild(div);
         return form;
     }
-
     htmlItens(): HTMLElement {
         const main = criarElementoHtml('main');
         main.appendChild(this.htmlFiltroDosProdutos());
-
-        const divProdutos = criarElementoHtml('div', ['lista-de-produtos', 'row', 'row-cols-1', 'row-cols-sm-2', 'row-cols-md-4', 'g-4']);
+        const divProdutos = criarElementoHtml('div', ['lista-de-produtos', 'row', 'row-cols-1', 'row-cols-sm-2', 'row-cols-md-5', 'g-5']);
         this.itensPaginado().map(produto => {
+            console.log(produto)
             let produtoEstaNoCarrinho = this.carrinho.produtos.find((item) => item.produto.id === produto.id);
             let precoFormatado = formataNumeroEmDinheiro(produto.preco);
             const divProduto = criarElementoHtml('div', ['col']);
             divProduto.setAttribute('id', `produto-id-${produto.id}`);
-            divProduto.innerHTML = `<div class="card shadow-sm ${produtoEstaNoCarrinho ? 'bg-success' : ''}">
+            divProduto.innerHTML = `<div class="card ">
         <img height="200" src="${produto.imagem}" alt="${produto.nome}" class="card-img-top img-fluid img-thumbnail" />
         <div class="card-body">
           <h2 class="card-title fs-5">${produto.nome}</h2>
           <p class="card-text fs-6">${produto.descricao}</p>
           <div class="card-footer">
-            <h3 class="text-center fs-5">R$ ${precoFormatado} </h3>
+            <h3 class="price">R$ ${precoFormatado} </h3>
             <form class="row row-cols-lg-auto g-3 align-items-center">
-            <div class="input-group mb-3">
-              <input id="quantidade-${produto.id}"
-                type="number" step="1" min="1" max="100"
-                aria-label="Quantidade" class="form-control"
-                value="${produtoEstaNoCarrinho?.quantidade || 1}" />
-              <button class="input-group-text botao-adicionar">
-                <i class="bi bi-plus-lg"></i>
-              </button>
-            </div>
+                <div class="linha-acao mb-3">
+                    <input id="quantidade-${produto.id}"
+                        type="number" step="1" min="1" max="100"
+                        aria-label="Quantidade" class="form-control"
+                        value="${produtoEstaNoCarrinho?.quantidade || 1}" />
+                    <button class="input-group-text botao-adicionar">
+                        Adicionar
+                    </button>
+                </div>
             </form>
           </div>
         </div>
