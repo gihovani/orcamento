@@ -100,10 +100,10 @@ export class App extends ILayout {
             this.barraDeNavegacao.adicionaMenu('Lista de Produtos', () => {
                 this.tela = new ListagemDeProdutos(apiProduto, carrinho, this._notificacao, this._carregando);
             });
-            this.barraDeNavegacao.adicionaMenu('Cartão de Crédito Maquineta', () => {
+            this.barraDeNavegacao.adicionaMenu('CC Maquineta', () => {
                 this.tela = new FormularioPagamentoCartaoDeCreditoMaquineta(carrinho, apiparcelamento, this._notificacao);
             });
-            this.barraDeNavegacao.adicionaMenu('Cartão de Crédito', () => {
+            this.barraDeNavegacao.adicionaMenu('CC', () => {
                 this.tela = new FormularioPagamentoCartaoDeCredito(carrinho, apiparcelamento, apiBin, this._notificacao);
             });
             this.barraDeNavegacao.adicionaMenu('Boleto Parcelado', () => {

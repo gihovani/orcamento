@@ -52,3 +52,9 @@
     color:#fff;
     background-color: #f09;
 }
+.tema-ds .nav-item:hover a {
+    color:#09f;
+}
+.tema-ds .nav-link.active {
+    color:#f09;
+}

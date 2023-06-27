@@ -33,9 +33,10 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         const $carrinho = carrinhoMenu[carrinhoMenu.length- 2];
         let quantidadeItensUnicos;
         let labelCarrinho = document.createElement('span');
-        labelCarrinho.classList.add('label-quantidade');
         let quantidade = 1;
         
+        $carrinho.classList.add('menu-carrinho');
+        labelCarrinho.classList.add('label-quantidade');
         if (inputQuantidade) {
             quantidade = parseInt(inputQuantidade.value);
         }
