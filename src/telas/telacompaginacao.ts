@@ -2,7 +2,7 @@ import {criarElementoHtml} from "../util/helper";
 import {ITela} from "../contratos/tela";
 
 export abstract class TelaComPaginacao implements ITela {
-    public numeroItensPorPagina = 16;
+    public numeroItensPorPagina = 20;
     public paginaAtual = 1;
     public ultimaPagina = 1;
     public itens: any[] = [];

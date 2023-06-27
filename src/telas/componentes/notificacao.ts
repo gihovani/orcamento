@@ -7,21 +7,18 @@ export class Notificacao implements INotificacao {
     }
 
     mostrar(titulo?: string, mensagem?: string, tipo?: string) {
-        const div = criarElementoHtml('div', ['toast-container', 'position-fixed', 'top-0', 'end-0', 'p-3'], [{nome: 'id', valor: this.ID}]);
+        const div = criarElementoHtml('div', ['toast-container', 'position-fixed', 'toast-h-center', 'p-3'], [{nome: 'id', valor: this.ID}]);
+        const tipoAcao = (tipo === 'success')? 'success' : ''
         div.innerHTML = `
-  <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
-      <strong class="me-auto">${titulo}</strong>
-      <small>1 sec ago</small>
-    </div>
-    <div class="toast-body">
-      ${mensagem}
-    </div>
-  </div>`;
+          <div class="toast show ${tipoAcao}" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+              ${mensagem}
+            </div>
+          </div>`;
         this.elemento.appendChild(div);
         setTimeout(() => {
             this.esconder();
-        }, 3000);
+        }, 4000);
     }
 
     esconder() {
