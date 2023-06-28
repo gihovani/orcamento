@@ -40,6 +40,7 @@ export class App extends ILayout {
         this.inicializar();
     }
     
+
     defineTema(tema) {
         const tagEstilosDoTema = document.createElement('link')
         const head = document.querySelector('head');

@@ -15,5 +15,14 @@ export abstract class ILayout implements ITela {
         app.appendChild(this.conteudo());
         app.appendChild(this.rodape());
         this.elemento.appendChild(app);
+        this.toggleMenu();
+    }
+
+    toggleMenu() {
+        const button = document.querySelector('button.navbar-toggler');
+        button.addEventListener('click', function(e) {
+            const menuMobile = document.querySelector(this.getAttribute('data-bs-target'));
+            menuMobile.classList.toggle('show');
+        })
     }
 }
