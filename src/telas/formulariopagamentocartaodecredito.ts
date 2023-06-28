@@ -44,7 +44,7 @@ export class FormularioPagamentoCartaoDeCredito implements ITela {
       <div class="invalid-feedback">O número do cartão de crédito é obrigatório.</div>
     </div>
     <div class="col-md-2 mb-3">
-      <label for="data_expiracao">Data de expiração</label>
+      <label for="data_expiracao_mes">Data de expiração</label>
       <div class="input-group">
         <div class="input-group-prepend">
           <select class="form-select" id="data_expiracao_mes" required>

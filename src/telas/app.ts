@@ -93,38 +93,38 @@ export class App extends ILayout {
             const formularioConfiguracoes = new FormularioConfiguracoes(apiProduto, this._notificacao, this._carregando);
             const formularioCliente = new FormularioCliente(apiCliente, this._notificacao, this._carregando);
             const formularioEndereco = new FormularioEndereco(apiEndereco, apiCep, this._notificacao, this._carregando);
-            const listagemDeProdutos = new ListagemDeProdutos(apiProduto, carrinho, this._notificacao, this._carregando);
+            const listagemDeProdutos = new ListagemDeProdutos(apiProduto, carrinho, this._carregando);
             const formularioPagamentoCartaoDeCreditoMaquineta = new FormularioPagamentoCartaoDeCreditoMaquineta(carrinho, apiparcelamento, this._notificacao);
             const formularioPagamentoCartaoDeCredito = new FormularioPagamentoCartaoDeCredito(carrinho, apiparcelamento, apiBin, this._notificacao);
             const formularioPagamentoBoletoParcelado = new FormularioPagamentoBoletoParcelado(carrinho, apiparcelamento, this._notificacao);
             const listaDeCompras = new ListaDeCompras(carrinho, this._notificacao);
 
             this.tela = mensagemBoasVindas;
-            this.barraDeNavegacao.adicionaMenu('Configurações', () => {
+            this.barraDeNavegacao.adicionaMenu('menu-configuracoes', 'Configurações', () => {
                 this.tela = formularioConfiguracoes;
             });
-            this.barraDeNavegacao.adicionaMenu('Cliente', () => {
+            this.barraDeNavegacao.adicionaMenu('menu-cliente', 'Cliente', () => {
                 this.tela = formularioCliente;
             });
-            this.barraDeNavegacao.adicionaMenu('Endereço de Entrega', () => {
+            this.barraDeNavegacao.adicionaMenu('menu-endereco', 'Endereço de Entrega', () => {
                 this.tela = formularioEndereco;
             });
-            this.barraDeNavegacao.adicionaMenu('Lista de Produtos', () => {
+            this.barraDeNavegacao.adicionaMenu('menu-lista-de-produtos', 'Lista de Produtos', () => {
                 this.tela = listagemDeProdutos;
             });
-            this.barraDeNavegacao.adicionaMenu('CC Maquineta', () => {
+            this.barraDeNavegacao.adicionaMenu('menu-cartao-de-credito-maquineta', 'CC Maquineta', () => {
                 this.tela = formularioPagamentoCartaoDeCreditoMaquineta;
             });
-            this.barraDeNavegacao.adicionaMenu('CC', () => {
+            this.barraDeNavegacao.adicionaMenu('menu-cartao-de-credito', 'CC', () => {
                 this.tela = formularioPagamentoCartaoDeCredito;
             });
-            this.barraDeNavegacao.adicionaMenu('Boleto Parcelado', () => {
+            this.barraDeNavegacao.adicionaMenu('menu-boleto-parcelado', 'Boleto Parcelado', () => {
                 this.tela = formularioPagamentoBoletoParcelado;
             });
-            this.barraDeNavegacao.adicionaMenu('Carrinho', () => {
+            this.barraDeNavegacao.adicionaMenu('menu-carrinho', 'Carrinho', () => {
                 this.tela = listaDeCompras;
             });
-            this.barraDeNavegacao.adicionaMenu('Logout', () => {
+            this.barraDeNavegacao.adicionaMenu('menu-deslogar', 'Logout', () => {
                 window.location.reload();
             });
             this.renderizar();
