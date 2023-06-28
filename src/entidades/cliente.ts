@@ -17,12 +17,12 @@ export class Cliente implements ICliente {
     rg?: string;
 
     constructor(
-        documento: string,
-        nome: string,
-        sexo: string,
-        data_nascimento: string,
-        profissao: string,
-        email: string,
+        documento?: string,
+        nome?: string,
+        sexo?: string,
+        data_nascimento?: string,
+        profissao?: string,
+        email?: string,
         registro?: string,
         registro_uf?: string,
         rg?: string,
@@ -30,18 +30,18 @@ export class Cliente implements ICliente {
         telefone?: string,
         celular?: string
     ) {
-        this.documento = documento;
-        this.nome = nome;
-        this.sexo = sexo;
-        this.data_nascimento = data_nascimento;
-        this.profissao = profissao;
-        this.email = email;
-        this.registro = registro;
-        this.registro_uf = registro_uf;
-        this.rg = rg;
-        this.rg_uf = rg_uf;
-        this.telefone = telefone;
-        this.celular = celular;
+        documento && (this.documento = documento);
+        nome && (this.nome = nome);
+        sexo && (this.sexo = sexo);
+        data_nascimento && (this.data_nascimento = data_nascimento);
+        profissao && (this.profissao = profissao);
+        email && (this.email = email);
+        registro && (this.registro = registro);
+        registro_uf && (this.registro_uf = registro_uf);
+        rg && (this.rg = rg);
+        rg_uf && (this.rg_uf = rg_uf);
+        telefone && (this.telefone = telefone);
+        celular && (this.celular = celular);
     }
 
     set documento(documento: string) {

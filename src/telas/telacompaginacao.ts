@@ -31,7 +31,6 @@ export abstract class TelaComPaginacao implements ITela {
 
     temPaginacao(): boolean {
         this.ultimaPagina = Math.ceil(this.itens.length / this.numeroItensPorPagina);
-        console.log(this.ultimaPagina);
         return this.ultimaPagina > 1;
     }
 
@@ -81,17 +80,37 @@ export abstract class TelaComPaginacao implements ITela {
         return li;
     }
 
-    htmlPaginacaoBotaoNumero(numero: number): HTMLElement {
-        const li = criarElementoHtml('li', ['page-item', 'disabled']);
-        const botao = criarElementoHtml('a', ['page-link'], [{nome: 'href', valor: '#'}], String(numero));
-        li.classList.remove('disabled');
-        botao.addEventListener('click', () => this.paginaNumero(numero));
-        li.appendChild(botao);
+    htmlPaginacaoPorNumero(): HTMLElement {
+        const li = criarElementoHtml('li', ['page-item']);
+        if (this.ultimaPagina < 2) {
+            return li;
+        }
+
+        const select = criarElementoHtml('select', ['page-link']);
+        for (let numero = 1; numero <= this.ultimaPagina; numero++) {
+            const atributos = [{nome: 'value', valor: String(numero)}];
+            if (numero === this.paginaAtual) {
+                atributos.push({nome: 'selected', valor: 'selected'});
+            }
+            const option = criarElementoHtml('option', [], atributos, String(numero));
+            select.appendChild(option);
+        }
+        select.addEventListener('change', (event) => this.paginaNumero(parseInt((event.target as HTMLSelectElement).value)));
+        li.appendChild(select);
         return li;
     }
 
     htmlPaginacao(): HTMLElement {
-        const div = criarElementoHtml('div', ['lista-de-produtos-paginacao', 'row', 'pt-3', 'pb-3']);
+        let div = document.getElementById('lista-de-produtos-paginacao');
+        if (!div) {
+            div = criarElementoHtml(
+                'div',
+                ['lista-de-produtos-paginacao', 'row', 'pt-3', 'pb-3'],
+                [{nome: 'id', valor: 'lista-de-produtos-paginacao'}]
+            );
+        } else {
+            div.innerHTML = '';
+        }
         if (!this.temPaginacao()) {
             return div;
         }
@@ -99,7 +118,7 @@ export abstract class TelaComPaginacao implements ITela {
         const nav = criarElementoHtml('nav', [], [{'nome': 'aria-label', 'valor': 'Page navigation example'}]);
         const ul = criarElementoHtml('ul', ['pagination', 'justify-content-center']);
         ul.appendChild(this.htmlPaginacaoBotaoVoltar());
-        ul.appendChild(this.htmlPaginacaoBotaoNumero(3));
+        ul.appendChild(this.htmlPaginacaoPorNumero());
         ul.appendChild(this.htmlPaginacaoBotaoAvancar());
         nav.appendChild(ul);
         div.appendChild(nav);

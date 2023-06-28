@@ -1,12 +1,12 @@
 import {ITela} from "../contratos/tela";
 import {criarElementoHtml} from "../util/helper";
-import {IConfiguracoes} from "../contratos/entidades/configuracoes";
+import {ApiConfiguracoes} from "../servicos/apiconfiguracoes";
 
 export class BarraDeNavegacao implements ITela {
     private menus: HTMLElement[] = [];
     private nav = criarElementoHtml('nav', ['navbar', 'navbar-expand-lg', 'bg-body-tertiary', 'row']);
 
-    constructor(public configuracoes: IConfiguracoes) {}
+    constructor() {}
 
     adicionaMenu(titulo: string, callback: () => void) {
         const a = criarElementoHtml('a', ['nav-link'], [{nome: 'href', valor: '#'}], titulo);
@@ -22,8 +22,9 @@ export class BarraDeNavegacao implements ITela {
     };
 
     conteudo(): HTMLElement {
+        const titulo = ApiConfiguracoes.instancia().loja.titulo;
         this.nav.innerHTML = `<div class="container">
-        <a class="navbar-brand" href="#">${this.configuracoes?.nome_loja}</a>
+        <a class="navbar-brand" href="#">${titulo}</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

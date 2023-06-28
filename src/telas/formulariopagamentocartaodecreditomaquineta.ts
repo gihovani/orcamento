@@ -63,7 +63,7 @@ export class FormularioPagamentoCartaoDeCreditoMaquineta implements ITela {
             const parcelamento = main.querySelector('#parcelamento');
             for (let parcelas = 1; parcelas <= maximoParcelas; parcelas++) {
                 const total = this.carrinho.totalizador?.valor_total || 0;
-                const options = criarElementoHtml('option', [], [{nome: 'value', valor: parcelas}, {
+                const options = criarElementoHtml('option', [], [{nome: 'value', valor: String(parcelas)}, {
                     nome: 'label',
                     valor: `${parcelas}x R$ ${formataNumeroEmDinheiro(total/parcelas)}`
                 }]);

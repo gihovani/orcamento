@@ -4,7 +4,9 @@ import {IApiCliente} from "../contratos/servicos/apicliente";
 import {ICliente} from "../contratos/entidades/cliente";
 
 export class ApiClienteMock implements IApiCliente {
+    dados: ICliente;
     salvar(cliente: ICliente): Promise<ICliente> {
+        this.dados = cliente;
         return new Promise<ICliente>((resolve, reject) => {
             if (!cliente.nome) {
                 reject('O cliente não pode ser salvo!');
@@ -40,7 +42,9 @@ export class ApiClienteMock implements IApiCliente {
 }
 
 export class ApiClienteMagento implements IApiCliente {
+    dados: ICliente;
     salvar(cliente: ICliente): Promise<ICliente> {
+        this.dados = cliente;
         return new Promise<ICliente>((resolve, reject) => {
             if (!cliente.nome) {
                 reject('O cliente não pode ser salvo!');
