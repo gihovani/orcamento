@@ -78,9 +78,15 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         const div = criarElementoHtml('div', ['col-12', 'input-filters', 'pt-3', 'pb-3']);
         const titleFilter = document.createElement('h2');
         const filtroMarca = this.htmlFiltroDoProdutoPorAtributo('marca', 'Marca');
+        const inputNome = criarElementoHtml('input',[],[{nome:'name',valor:'produtoNome'}, {nome: 'type',valor:'text'}, {nome:'placeholder',valor:'Digite o nome do produto'}]);
+        const codigoBarras = criarElementoHtml('input',[],[{nome:'name',valor:'codigoBarras'}, {nome: 'type',valor:'text'}, {nome:'placeholder',valor:'Digite o código de barras'}]);
+        const rangePrice = criarElementoHtml('input',[],[{nome:'name',valor:'priceRange'}, {nome: 'type',valor:'range'},{nome: 'min',valor:'1'},{nome: 'max',valor:'100'},{nome: 'value',valor:'1'}]);
+
         titleFilter.innerHTML = 'Filtros';
         titleFilter.classList.add('filtersTitle');
         div.appendChild(titleFilter);
+        div.appendChild(inputNome);
+        div.appendChild(codigoBarras);
         filtroMarca.addEventListener('change', (event) => {
             this.temFiltro = true;
             this.itens = this.apiProduto.filtrarPorMarca((event.target as HTMLInputElement).value);
@@ -104,6 +110,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
             this.temFiltro = false;
             this.pegaDadosDosProdutos();
         });
+        div.appendChild(rangePrice);
         div.appendChild(removerFiltro);
         form.appendChild(div);
         return form;

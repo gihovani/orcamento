@@ -63,6 +63,7 @@
     color:#f09;
 }
 .tema-ds .listagem-content .input-filters select,
-.tema-ds .listagem-content .input-filters button {
+.tema-ds .listagem-content .input-filters button,
+.tema-ds .listagem-content .input-filters input{
     border-radius:30px;
 }

@@ -121,9 +121,14 @@ input[type=number]::-webkit-outer-spin-button {
 .listagem-content .input-filters .filtersTitle {
     width: 100%;
 }
-.listagem-content .input-filters select{
+.listagem-content .input-filters select,
+.listagem-content .input-filters input{
     margin: 15px 0;
     font-size: 1.4rem;
+    border:1px solid #DEE2E6;
+    padding: 10px 15px;
+    width: 100%;
+    display: block;
 }
 
 .listagem-content .input-filters button {
