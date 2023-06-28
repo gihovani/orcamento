@@ -1,23 +1,27 @@
 import {ITela} from "../contratos/tela";
 import {criarElementoHtml} from "../util/helper";
-import {IConfiguracoes} from "../contratos/entidades/configuracoes";
 import {IApiProduto} from "../contratos/servicos/apiproduto";
 import {INotificacao} from "../contratos/componentes/notificacao";
 import {ICarregando} from "../contratos/componentes/carregando";
+import {IApiConfiguracoes} from "../contratos/servicos/apiconfiguracoes";
+import {ApiConfiguracoes} from "../servicos/apiconfiguracoes";
 
 export class FormularioConfiguracoes implements ITela {
+    private _configuracoes: IApiConfiguracoes;
+
     constructor(
-        public configuracoes: IConfiguracoes,
         public apiProduto: IApiProduto,
         public notificacao: INotificacao,
         public carregando: ICarregando
-    ) {}
+    ) {
+        this._configuracoes = ApiConfiguracoes.instancia();
+    }
 
-    public pegaDadosDoFormulario(form: HTMLFormElement): IConfiguracoes {
-        this.configuracoes.url_google_merchant = (form.querySelector('#url_google_merchant') as HTMLInputElement)?.value;
-        this.configuracoes.nome_loja = (form.querySelector('#nome_loja') as HTMLInputElement)?.value;
-        this.configuracoes.versao = (form.querySelector('#versao') as HTMLInputElement)?.value;
-        return this.configuracoes;
+    public pegaDadosDoFormulario(form: HTMLFormElement): IApiConfiguracoes {
+        const lojaSelecionada = (form.querySelector('#loja') as HTMLInputElement)?.value
+        this._configuracoes.loja = this._configuracoes.disponiveis()[lojaSelecionada];
+        this._configuracoes.versao = (form.querySelector('#versao') as HTMLInputElement)?.value;
+        return this._configuracoes;
     }
 
     conteudo(): HTMLElement {
@@ -26,23 +30,26 @@ export class FormularioConfiguracoes implements ITela {
             <form class="bg-body-tertiary p-5 rounded mt-3 mb-3 m-auto">
                 <h1 class="h3 mb-3 fw-normal">Configurações do Sistema</h1>
                 <div class="mb-3">
-                    <label class="form-label" for="url_google_merchant">URL Google Merchant</label>
-                    <select id="url_google_merchant" class="form-select">
-                        <option value="xml/google.xml" ${(this.configuracoes.url_google_merchant === 'xml/google.xml') ? 'selected' : ''}>UC</option>
-                        <option value="xml/googledc.xml" ${(this.configuracoes.url_google_merchant === 'xml/googledc.xml') ? 'selected' : ''}>DC</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="nome_loja">Nome da Loja</label>
-                    <input class="form-control" type="text" id="nome_loja" value="${this.configuracoes.nome_loja}" />
+                    <label class="form-label" for="loja">Loja</label>
+                    <select id="loja" class="form-select"></select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="versao">Versão</label>
-                    <input class="form-control" type="text" id="versao" maxlength="10" value="${this.configuracoes.versao}" />
+                    <input class="form-control" type="text" id="versao" maxlength="10" value="${this._configuracoes.versao}" />
                 </div>
                 <button type="submit" class="btn btn-primary">SALVAR</button>
             </form>
         `;
+        const seletorLoja = main.querySelector('#loja');
+        this._configuracoes.disponiveis().forEach((loja, index) => {
+            const options = criarElementoHtml('option', [], [{
+                nome: 'value', valor: String(index)
+            }, {
+                nome: 'label', valor: loja.titulo
+            }]);
+            seletorLoja.appendChild(options)
+        });
+
         const form = main.querySelector('form') as HTMLFormElement;
         form.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -50,7 +57,6 @@ export class FormularioConfiguracoes implements ITela {
             this.carregando.mostrar();
             this.apiProduto.listar(true).then(() => {
                 this.notificacao.mostrar('Sucesso', 'Suas Confiruações Foram Atualizadas!');
-                document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
             }).finally(() => this.carregando.esconder());
         });
         return main;

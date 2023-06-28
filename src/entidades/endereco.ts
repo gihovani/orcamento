@@ -12,23 +12,23 @@ export class Endereco implements IEndereco {
     complemento?: string;
 
     constructor(
-        cep: string,
-        rua: string,
-        bairro: string,
-        cidade: string,
-        uf: string,
+        cep?: string,
+        rua?: string,
+        bairro?: string,
+        cidade?: string,
+        uf?: string,
         numero?: string,
         telefone?: string,
         complemento?: string,
     ) {
-        this.cep = cep;
-        this.rua = rua;
-        this.bairro = bairro;
-        this.cidade = cidade;
-        this.uf = uf;
-        this.telefone = telefone;
-        this.numero = numero;
-        this.complemento = complemento;
+        cep && (this.cep = cep);
+        rua && (this.rua = rua);
+        bairro && (this.bairro = bairro);
+        cidade && (this.cidade = cidade);
+        uf && (this.uf = uf);
+        telefone && (this.telefone = telefone);
+        numero && (this.numero = numero);
+        complemento && (this.complemento = complemento);
     }
 
     set cep(cep: string) {

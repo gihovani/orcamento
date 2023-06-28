@@ -1,21 +1,21 @@
 import {IProduto} from "../contratos/entidades/produto";
-import {IApiProduto} from "../contratos/servicos/apiproduto";
+import {
+    IApiProduto,
+    IApiProdutoCache,
+    IApiProdutoFaixaPreco,
+    IApiProdutoFiltro
+} from "../contratos/servicos/apiproduto";
 import {pegaDadosGoogleMerchant, pegaTextoDoElementoXml, transformaDinheiroEmNumero} from "../util/helper";
 import {Produto} from "../entidades/produto";
-import {IConfiguracoes} from "../contratos/entidades/configuracoes";
-
-type IApiProdutoFiltro = Map<string, string[]>;
+import {ApiConfiguracoes} from "./apiconfiguracoes";
 
 export class ApiProduto implements IApiProduto {
-    private _cached: { produtos: IProduto[], filtros: IApiProdutoFiltro } = {
+    private _cached: IApiProdutoCache = {
         produtos: [],
         filtros: new Map<string, string[]>()
     };
-    private _produtos: IProduto[];
-
-    constructor(public configuracoes: IConfiguracoes) {
-    }
-
+    private _produtos: IProduto[] = [];
+    private _precos: IApiProdutoFaixaPreco = {minimo: 0, maximo: 0};
 
     listar(limparCache: boolean = false): Promise<IProduto[]> {
         if (limparCache) {
@@ -28,13 +28,15 @@ export class ApiProduto implements IApiProduto {
                 resolve(this._produtos);
                 return;
             }
-            pegaDadosGoogleMerchant(this.configuracoes.url_google_merchant, (data) => {
+            this._produtos = [];
+            const config = ApiConfiguracoes.instancia().loja;
+            pegaDadosGoogleMerchant(config.google_merchant.url, (data) => {
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(data, 'text/xml');
-                this._produtos = Array.from(xmlDoc.querySelectorAll('item')).map(item => {
+                Array.from(xmlDoc.querySelectorAll('item')).forEach(item => {
                     const price = pegaTextoDoElementoXml(item, 'price');
                     const sale_price = pegaTextoDoElementoXml(item, 'sale_price');
-                    return new Produto(
+                    const produto = new Produto(
                         pegaTextoDoElementoXml(item, 'id'),
                         pegaTextoDoElementoXml(item, 'title'),
                         transformaDinheiroEmNumero(price),
@@ -47,6 +49,14 @@ export class ApiProduto implements IApiProduto {
                         pegaTextoDoElementoXml(item, 'brand'),
                         pegaTextoDoElementoXml(item, 'gtin')
                     );
+                    if (config.google_merchant.filtros) {
+                        const [chave, valor] = config.google_merchant.filtros.split('=');
+                        if (produto[chave] == valor) {
+                            this._produtos.push(produto);
+                        }
+                    } else {
+                        this._produtos.push(produto);
+                    }
                 });
                 if (this._produtos.length) {
                     this._cached.produtos = this._produtos;
@@ -64,6 +74,10 @@ export class ApiProduto implements IApiProduto {
         return this._produtos;
     }
 
+    get faixaDePrecos(): IApiProdutoFaixaPreco {
+        return this._precos;
+    }
+
     private adicionarFiltro(filtros: IApiProdutoFiltro, atributo: string, valor: string) {
         if (!valor) return;
         if (filtros.has(atributo)) {
@@ -77,20 +91,32 @@ export class ApiProduto implements IApiProduto {
         }
     }
 
-    private filtraProdutos(atributo: string, valor: string): IProduto[] {
-        return this.produtos.filter(item => item[atributo] === valor);
+    private filtraProdutos(atributo: string, valor: string, operacao: string): IProduto[] {
+        return this.produtos.filter(item => {
+            if (operacao === '===') {
+                return item[atributo] === valor;
+            }
+            if (operacao === 'contem') {
+                return item[atributo].toLowerCase().includes(valor.toLowerCase());
+            }
+            return false;
+        });
     }
 
     filtrarPorCategoria(nome: string): IProduto[] {
-        return this.filtraProdutos('categorias', nome);
+        return this.filtraProdutos('categorias', nome, '===');
     }
 
     filtrarPorMarca(nome: string): IProduto[] {
-        return this.filtraProdutos('marca', nome);
+        return this.filtraProdutos('marca', nome, '===');
     }
 
     filtrarPorCodigoBarra(codigoBarra: string): IProduto[] {
-        return this.filtraProdutos('codigo_barras', codigoBarra);
+        return this.filtraProdutos('codigo_barras', codigoBarra, '===');
+    }
+
+    filtrarPorNome(nome: string): IProduto[] {
+        return this.filtraProdutos('nome', nome, 'contem');
     }
 
     filtrarPorPreco(valorMinimo: number, valorMaximo: number): IProduto[] {
@@ -106,6 +132,12 @@ export class ApiProduto implements IApiProduto {
         for (const produto of this._cached.produtos) {
             this.adicionarFiltro(filtros, 'categorias', produto.categorias);
             this.adicionarFiltro(filtros, 'marca', produto.marca);
+            if (this._precos.minimo > produto.preco) {
+                this._precos.minimo = produto.preco
+            }
+            if (this._precos.maximo < produto.preco) {
+                this._precos.maximo = produto.preco
+            }
         }
         this._cached.filtros = filtros;
         return filtros;

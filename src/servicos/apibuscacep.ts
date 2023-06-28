@@ -8,6 +8,7 @@ export class ApiCepMock implements IApiCep {
         return new Promise<IEndereco>((resolve, reject) => {
             if (!validarCEP(cep)) {
                 reject('O Cep deve ser um némero válido! Ex: 88100-000');
+                return;
             }
             const endereco = new Endereco(
                 '88100-000',
@@ -26,6 +27,7 @@ export class ApiCepViaCep implements IApiCep {
         return new Promise<IEndereco>((resolve, reject) => {
             if (!validarCEP(cep)) {
                 reject('O Cep deve ser um número válido! Ex: 88100-000');
+                return;
             }
             fetch(`https://viacep.com.br/ws/${cep}/json/`)
                 .then(response => response.json())

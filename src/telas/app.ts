@@ -12,7 +12,6 @@ import {FormularioEndereco} from "./formularioendereco";
 import {ListagemDeProdutos} from "./listagemdeprodutos";
 import {ListaDeCompras} from "./listadecompras";
 import {MensagemBoasVindas} from "./mensagemboasvindas";
-import {IConfiguracoes} from "../contratos/entidades/configuracoes";
 import {FormularioConfiguracoes} from "./formularioconfiguracoes";
 import {ApiVendedorMock} from "../servicos/apivendedor";
 import {FormularioLogin} from "./formulariologin";
@@ -25,6 +24,8 @@ import {ApiBin} from "../servicos/apibin";
 import {Apiparcelamento} from "../servicos/apiparcelamento";
 import {FormularioPagamentoBoletoParcelado} from "./formulariopagamentoboletoparcelado";
 import {FormularioPagamentoCartaoDeCreditoMaquineta} from "./formulariopagamentocartaodecreditomaquineta";
+import {ApiConfiguracoes} from "../servicos/apiconfiguracoes";
+import {ApiEnderecoMock} from "../servicos/apiendereco";
 
 export class App extends ILayout {
     private _tela: ITela;
@@ -33,21 +34,20 @@ export class App extends ILayout {
 
     constructor(
         public elemento: HTMLElement,
-        public configuracoes: IConfiguracoes,
         public barraDeNavegacao: BarraDeNavegacao
     ) {
         super();
         this.inicializar();
     }
-    
+
 
     defineTema(tema) {
-        const tagEstilosDoTema = document.createElement('link')
+        const tagEstilosDoTema = criarElementoHtml('link', [], [{
+            nome: 'rel', valor: 'stylesheet'
+        }, {
+            nome: 'href', valor: './' + tema + '.css'
+        }]);
         const head = document.querySelector('head');
-        Object.assign(tagEstilosDoTema, {
-            rel:'stylesheet',
-            href:'./'+tema+'.css'
-        });
         head.appendChild(tagEstilosDoTema)
     }
 
@@ -59,7 +59,7 @@ export class App extends ILayout {
         this._carregando = new Carregando(body);
         this.tela = new FormularioLogin(apiVendedor, this._notificacao);
         body.classList.add(tema);
-        
+
         this.defineTema(tema);
         this.inicializaEventos();
     }
@@ -84,34 +84,45 @@ export class App extends ILayout {
         document.addEventListener('autenticacao', (e: CustomEvent) => {
             const carrinho = this.criaCarrinho();
             const apiCliente = new ApiClienteMock();
+            const apiEndereco = new ApiEnderecoMock();
             const apiCep = new ApiCepViaCep();
             const apiBin = new ApiBin();
             const apiparcelamento = new Apiparcelamento();
-            const apiProduto = new ApiProduto(this.configuracoes);
-            this.tela = new MensagemBoasVindas(e.detail);
+            const apiProduto = new ApiProduto();
+            const mensagemBoasVindas = new MensagemBoasVindas(e.detail);
+            const formularioConfiguracoes = new FormularioConfiguracoes(apiProduto, this._notificacao, this._carregando);
+            const formularioCliente = new FormularioCliente(apiCliente, this._notificacao, this._carregando);
+            const formularioEndereco = new FormularioEndereco(apiEndereco, apiCep, this._notificacao, this._carregando);
+            const listagemDeProdutos = new ListagemDeProdutos(apiProduto, carrinho, this._notificacao, this._carregando);
+            const formularioPagamentoCartaoDeCreditoMaquineta = new FormularioPagamentoCartaoDeCreditoMaquineta(carrinho, apiparcelamento, this._notificacao);
+            const formularioPagamentoCartaoDeCredito = new FormularioPagamentoCartaoDeCredito(carrinho, apiparcelamento, apiBin, this._notificacao);
+            const formularioPagamentoBoletoParcelado = new FormularioPagamentoBoletoParcelado(carrinho, apiparcelamento, this._notificacao);
+            const listaDeCompras = new ListaDeCompras(carrinho, this._notificacao);
+
+            this.tela = mensagemBoasVindas;
             this.barraDeNavegacao.adicionaMenu('Configurações', () => {
-                this.tela = new FormularioConfiguracoes(this.configuracoes, apiProduto, this._notificacao, this._carregando);
+                this.tela = formularioConfiguracoes;
             });
             this.barraDeNavegacao.adicionaMenu('Cliente', () => {
-                this.tela = new FormularioCliente(apiCliente, this._notificacao);
+                this.tela = formularioCliente;
             });
             this.barraDeNavegacao.adicionaMenu('Endereço de Entrega', () => {
-                this.tela = new FormularioEndereco(apiCep, this._notificacao);
+                this.tela = formularioEndereco;
             });
             this.barraDeNavegacao.adicionaMenu('Lista de Produtos', () => {
-                this.tela = new ListagemDeProdutos(apiProduto, carrinho, this._notificacao, this._carregando);
+                this.tela = listagemDeProdutos;
             });
             this.barraDeNavegacao.adicionaMenu('CC Maquineta', () => {
-                this.tela = new FormularioPagamentoCartaoDeCreditoMaquineta(carrinho, apiparcelamento, this._notificacao);
+                this.tela = formularioPagamentoCartaoDeCreditoMaquineta;
             });
             this.barraDeNavegacao.adicionaMenu('CC', () => {
-                this.tela = new FormularioPagamentoCartaoDeCredito(carrinho, apiparcelamento, apiBin, this._notificacao);
+                this.tela = formularioPagamentoCartaoDeCredito;
             });
             this.barraDeNavegacao.adicionaMenu('Boleto Parcelado', () => {
-                this.tela = new FormularioPagamentoBoletoParcelado(carrinho, apiparcelamento, this._notificacao);
+                this.tela = formularioPagamentoBoletoParcelado;
             });
             this.barraDeNavegacao.adicionaMenu('Carrinho', () => {
-                this.tela = new ListaDeCompras(carrinho, this._notificacao);
+                this.tela = listaDeCompras;
             });
             this.barraDeNavegacao.adicionaMenu('Logout', () => {
                 window.location.reload();
@@ -138,11 +149,12 @@ export class App extends ILayout {
     }
 
     rodape(): HTMLElement {
+        const configuracoes = ApiConfiguracoes.instancia();
         const footer = criarElementoHtml('footer', ['footer', 'mt-auto', 'py-3', 'bg-body-tertiary', 'row']);
         const dataAtual = new Date();
         footer.innerHTML = `<div class="container">
-            <span class="text-body-secondary">
-            © 1988–${dataAtual.getFullYear()} GG2 Soluções (v.:${this.configuracoes.versao}). 
+            <span class="text-body-secondary text-center">
+            © 1988–${dataAtual.getFullYear()} GG2 Soluções (v.:${configuracoes.versao}). 
             Todos os direitos reservados.
             </span>
         </div>`;
