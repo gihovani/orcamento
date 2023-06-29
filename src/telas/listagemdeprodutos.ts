@@ -80,7 +80,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
 
     filtroPorNome(): HTMLElement {
         const filtro = criarElementoHtml('input', [], [
-            {nome: 'name', valor: 'produtoNome'},
+            {nome: 'name', valor: 'filtro-nome'},
             {nome: 'type', valor: 'text'},
             {nome: 'placeholder', valor: 'Digite o nome do produto'}
         ]);
@@ -100,7 +100,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
 
     filtroCodigoDeBarras(): HTMLElement {
         const filtro = criarElementoHtml('input', [], [
-            {nome: 'name', valor: 'codigoBarras'},
+            {nome: 'name', valor: 'filtro-codigo-barras'},
             {nome: 'type', valor: 'text'},
             {nome: 'placeholder', valor: 'Digite o código de barras'}
         ]);
@@ -122,7 +122,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         const faixaDePrecos = this.apiProduto.faixaDePrecos;
         const div = criarElementoHtml('div');
         const filtroPorPreco = criarElementoHtml('input', [], [
-            {nome: 'name', valor: 'faixaDePreco'},
+            {nome: 'name', valor: 'filtro-faixa-de-preco'},
             {nome: 'type', valor: 'range'},
             {nome: 'step', valor: '0.5'},
             {nome: 'min', valor: String(faixaDePrecos.minimo)},
@@ -161,9 +161,12 @@ export class ListagemDeProdutos extends TelaComPaginacao {
     }
 
     htmlFiltrosDosProdutos(): HTMLElement {
-        const form = criarElementoHtml('form', ['lista-de-produtos-filtros', 'row', 'g-3', 'align-items-center']);
-        const div = criarElementoHtml('div', ['col-12', 'input-filters', 'pt-3', 'pb-3']);
-        const titulo = criarElementoHtml('h2', ['filtersTitle'], [], 'Filtros');
+        const form = criarElementoHtml(
+            'form',
+            ['lista-de-produtos-filtros', 'row', 'g-3', 'align-items-center']
+        );
+        const div = criarElementoHtml('div', ['col-12', 'filtros-campo', 'pt-3', 'pb-3']);
+        const titulo = criarElementoHtml('h2', ['filtros-titulo'], [], 'Filtros');
         div.appendChild(titulo);
         div.appendChild(this.filtroCodigoDeBarras());
         div.appendChild(this.filtroPorNome());
@@ -233,7 +236,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
     }
 
     htmlItens(): HTMLElement {
-        const main = criarElementoHtml('main', ['listagem-content']);
+        const main = criarElementoHtml('main', ['listagem-de-produtos']);
         main.appendChild(this.htmlFiltrosDosProdutos());
         main.appendChild(this.htmlCartoesDosProdutos());
         return main;

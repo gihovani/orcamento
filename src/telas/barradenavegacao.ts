@@ -11,21 +11,24 @@ export class BarraDeNavegacao implements ITela {
 
     adicionaMenu(id: string, titulo: string, callback: () => void) {
         const a = criarElementoHtml('a', ['nav-link'], [{nome: 'href', valor: '#'}], titulo);
+        this.adicionaEventoNoMenu(a, callback);
+        const li = criarElementoHtml('li', ['nav-item', `item-${id}`], [{nome: 'id', valor: id}]);
+        li.appendChild(a);
+        this.menus.push(li);
+    };
+
+    private adicionaEventoNoMenu(a: HTMLElement, callback: () => void) {
         a.addEventListener('click', (e) => {
             e.preventDefault();
             this.nav.querySelector('.active')?.classList.remove('active');
             (e.target as HTMLElement).classList.add('active');
             callback();
         });
-        const li = criarElementoHtml('li', ['nav-item', `item-${id}`], [{nome: 'id', valor: id}]);
-        li.appendChild(a);
-        this.menus.push(li);
-    };
-
+    }
     conteudo(): HTMLElement {
         const titulo = ApiConfiguracoes.instancia().loja.titulo;
         this.nav.innerHTML = `<div class="container">
-        <a class="navbar-brand" href="#">${titulo}</a>
+        <a class="navbar-brand" href="#" id="nome-da-loja">${titulo}</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

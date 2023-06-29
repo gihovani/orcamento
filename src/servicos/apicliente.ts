@@ -5,6 +5,9 @@ import {ICliente} from "../contratos/entidades/cliente";
 
 export class ApiClienteMock implements IApiCliente {
     dados: ICliente;
+    constructor() {
+        this.dados = new Cliente();
+    }
     salvar(cliente: ICliente): Promise<ICliente> {
         this.dados = cliente;
         return new Promise<ICliente>((resolve, reject) => {

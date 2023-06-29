@@ -21,11 +21,11 @@ import {ICarregando} from "../contratos/componentes/carregando";
 import {Carregando} from "./componentes/carregando";
 import {FormularioPagamentoCartaoDeCredito} from "./formulariopagamentocartaodecredito";
 import {ApiBin} from "../servicos/apibin";
-import {Apiparcelamento} from "../servicos/apiparcelamento";
+import {ApiParcelamento} from "../servicos/apiparcelamento";
 import {FormularioPagamentoBoletoParcelado} from "./formulariopagamentoboletoparcelado";
 import {FormularioPagamentoCartaoDeCreditoMaquineta} from "./formulariopagamentocartaodecreditomaquineta";
 import {ApiConfiguracoes} from "../servicos/apiconfiguracoes";
-import {ApiEnderecoMock} from "../servicos/apiendereco";
+import {FormularioPagamento} from "./formulariopagamento";
 
 export class App extends ILayout {
     private _tela: ITela;
@@ -81,22 +81,23 @@ export class App extends ILayout {
         document.addEventListener('atualizar-tela', (e: CustomEvent) => {
             this.renderizar();
         });
+
         document.addEventListener('autenticacao', (e: CustomEvent) => {
             const carrinho = this.criaCarrinho();
             const apiCliente = new ApiClienteMock();
-            const apiEndereco = new ApiEnderecoMock();
             const apiCep = new ApiCepViaCep();
             const apiBin = new ApiBin();
-            const apiparcelamento = new Apiparcelamento();
+            const apiParcelamento = new ApiParcelamento();
             const apiProduto = new ApiProduto();
             const mensagemBoasVindas = new MensagemBoasVindas(e.detail);
             const formularioConfiguracoes = new FormularioConfiguracoes(apiProduto, this._notificacao, this._carregando);
             const formularioCliente = new FormularioCliente(apiCliente, this._notificacao, this._carregando);
-            const formularioEndereco = new FormularioEndereco(apiEndereco, apiCep, this._notificacao, this._carregando);
+            const formularioEndereco = new FormularioEndereco(apiCep, this._notificacao, this._carregando);
             const listagemDeProdutos = new ListagemDeProdutos(apiProduto, carrinho, this._carregando);
-            const formularioPagamentoCartaoDeCreditoMaquineta = new FormularioPagamentoCartaoDeCreditoMaquineta(carrinho, apiparcelamento, this._notificacao);
-            const formularioPagamentoCartaoDeCredito = new FormularioPagamentoCartaoDeCredito(carrinho, apiparcelamento, apiBin, this._notificacao);
-            const formularioPagamentoBoletoParcelado = new FormularioPagamentoBoletoParcelado(carrinho, apiparcelamento, this._notificacao);
+            const formularioPagamentoCartaoDeCreditoMaquineta = new FormularioPagamentoCartaoDeCreditoMaquineta(carrinho, apiParcelamento, this._notificacao);
+            const formularioPagamentoCartaoDeCredito = new FormularioPagamentoCartaoDeCredito(carrinho, apiParcelamento, apiBin, this._notificacao);
+            const formularioPagamentoBoletoParcelado = new FormularioPagamentoBoletoParcelado(carrinho, apiParcelamento, this._notificacao);
+            const formularioPagamento = new FormularioPagamento(carrinho, apiCliente, apiCep, apiParcelamento, apiBin, this._notificacao, this._carregando);
             const listaDeCompras = new ListaDeCompras(carrinho, this._notificacao);
 
             this.tela = mensagemBoasVindas;
@@ -120,6 +121,9 @@ export class App extends ILayout {
             });
             this.barraDeNavegacao.adicionaMenu('menu-boleto-parcelado', 'Boleto Parcelado', () => {
                 this.tela = formularioPagamentoBoletoParcelado;
+            });
+            this.barraDeNavegacao.adicionaMenu('menu-pagamento', 'Pagamento', () => {
+                this.tela = formularioPagamento;
             });
             this.barraDeNavegacao.adicionaMenu('menu-carrinho', 'Carrinho', () => {
                 this.tela = listaDeCompras;

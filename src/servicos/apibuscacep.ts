@@ -4,6 +4,10 @@ import {IEndereco} from "../contratos/entidades/endereco";
 import {IApiCep} from "../contratos/servicos/apicep";
 
 export class ApiCepMock implements IApiCep {
+    dados: IEndereco;
+    constructor() {
+        this.dados = new Endereco();
+    }
     consultar(cep: string): Promise<IEndereco> {
         return new Promise<IEndereco>((resolve, reject) => {
             if (!validarCEP(cep)) {
@@ -23,6 +27,10 @@ export class ApiCepMock implements IApiCep {
 }
 
 export class ApiCepViaCep implements IApiCep {
+    dados: IEndereco;
+    constructor() {
+        this.dados = new Endereco();
+    }
     consultar(cep: string): Promise<IEndereco> {
         return new Promise<IEndereco>((resolve, reject) => {
             if (!validarCEP(cep)) {

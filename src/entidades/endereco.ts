@@ -2,14 +2,14 @@ import {validarCEP, validarTelefone, validarUF} from "../util/validacoes";
 import {IEndereco} from "../contratos/entidades/endereco";
 
 export class Endereco implements IEndereco {
-    private _cep: string;
-    private _rua: string;
-    private _bairro: string;
-    private _cidade: string;
-    private _uf: string;
+    private _cep?: string;
+    private _rua?: string;
+    private _bairro?: string;
+    private _cidade?: string;
+    private _uf?: string;
     private _telefone?: string;
-    numero?: string;
-    complemento?: string;
+    private _numero?: string;
+    private _complemento?: string;
 
     constructor(
         cep?: string,
@@ -69,34 +69,50 @@ export class Endereco implements IEndereco {
         this._uf = uf;
     }
 
-    set telefone(telefone: string | null) {
+    set telefone(telefone: string) {
         if (telefone && !validarTelefone(telefone)) {
             throw Error("Endereço Inválido: o telefone deve ser um número válido!");
         }
         this._telefone = telefone;
     }
 
+    set numero(numero: string) {
+        this._numero = numero;
+    }
+
+    set complemento(complemento: string) {
+        this._complemento = complemento;
+    }
+
     get cep(): string {
-        return this._cep;
+        return this._cep ?? '';
     }
 
     get rua(): string {
-        return this._rua;
+        return this._rua ?? '';
     }
 
     get bairro(): string {
-        return this._bairro;
+        return this._bairro ?? '';
     }
 
     get cidade(): string {
-        return this._cidade;
+        return this._cidade ?? '';
     }
 
     get uf(): string {
-        return this._uf;
+        return this._uf ?? '';
     }
 
     get telefone(): string {
-        return this._telefone;
+        return this._telefone ?? '';
+    }
+
+    get numero(): string {
+        return this._numero ?? '';
+    }
+
+    get complemento(): string {
+        return this._complemento ?? '';
     }
 }

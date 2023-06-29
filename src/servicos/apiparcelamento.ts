@@ -1,7 +1,7 @@
 import {IApiParcelamento} from "../contratos/servicos/apiparcelamento";
 import {ICarrinho} from "../contratos/carrinho";
 
-export class Apiparcelamento implements IApiParcelamento {
+export class ApiParcelamento implements IApiParcelamento {
     consultar(tipo: string, carrinho: ICarrinho): Promise<number> {
         return new Promise<number>((resolve, reject) => {
             const max = Math.floor(carrinho.totalizador?.valor_total/200);

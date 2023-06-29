@@ -52,6 +52,11 @@
     background: #66c925;
     border:1px solid #55b814;
 }
+.tema-ds .toast-container .danger{
+    color: #7a1d20;
+    background: #f5d6d7;
+    border:1px solid #7a1d20;
+}
 .tema-ds .label-quantidade{
     color:#fff;
     background-color: #f09;
@@ -62,8 +67,8 @@
 .tema-ds .nav-link.active {
     color:#f09;
 }
-.tema-ds .listagem-content .input-filters select,
-.tema-ds .listagem-content .input-filters button,
-.tema-ds .listagem-content .input-filters input{
+.tema-ds .listagem-de-produtos .filtros-campo select,
+.tema-ds .listagem-de-produtos .filtros-campo button,
+.tema-ds .listagem-de-produtos .filtros-campo input{
     border-radius:30px;
 }

@@ -86,7 +86,7 @@ export abstract class TelaComPaginacao implements ITela {
             return li;
         }
 
-        const select = criarElementoHtml('select', ['page-link']);
+        const select = criarElementoHtml('select', ['page-link'], [{nome: 'name', valor: 'paginacao-por-numeros'}]);
         for (let numero = 1; numero <= this.ultimaPagina; numero++) {
             const atributos = [{nome: 'value', valor: String(numero)}];
             if (numero === this.paginaAtual) {
