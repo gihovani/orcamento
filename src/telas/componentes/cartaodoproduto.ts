@@ -49,10 +49,10 @@ export class CartaoDoProduto implements ICartaoDoProduto {
                 <div class="linha-acao mb-3">
                     <input id="${this.ID}quantidade-${produto.id}"
                         type="number" step="1" min="1" max="100"
-                        aria-label="Quantidade" class="form-control"
+                        aria-label="Quantidade" class="form-control ${produto.situacao ? '' : 'disabled'}"
                         value="1" />
-                    <button class="input-group-text botao-adicionar">
-                        Adicionar
+                    <button class="input-group-text botao-adicionar ${produto.situacao ? '' : 'disabled'}">
+                        ${produto.situacao ? 'Adicionar' : 'Esgotado :('}
                     </button>
                 </div>
             </form>

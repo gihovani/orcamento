@@ -127,14 +127,14 @@ export class App extends ILayout {
             ehAdministrador && this.barraDeNavegacao.adicionaMenu('menu-boleto-parcelado', 'Boleto Parcelado', () => {
                 this.tela = formularioPagamentoBoletoParcelado;
             });
-            ehAdministrador && this.barraDeNavegacao.adicionaMenu('menu-pagamento', 'Pagamento', () => {
-                this.tela = formularioPagamento;
-            });
             this.barraDeNavegacao.adicionaMenu('menu-pagamento', 'Promoções', () => {
                 this.tela = listaDePromocoes;
             });
             this.barraDeNavegacao.adicionaMenu('menu-carrinho', 'Carrinho', () => {
                 this.tela = listaDeCompras;
+            });
+            this.barraDeNavegacao.adicionaMenu('menu-pagamento', 'Pagamento', () => {
+                this.tela = formularioPagamento;
             });
             this.barraDeNavegacao.adicionaMenu('menu-deslogar', 'Logout', () => {
                 window.location.reload();

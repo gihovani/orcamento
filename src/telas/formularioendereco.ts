@@ -16,7 +16,7 @@ export class FormularioEndereco implements ITela {
 
     conteudo(): HTMLElement {
         const form = criarElementoHtml('form');
-        const dadosDoEndereco = new DadosDoEndereco(form, this.apiCep, this.carregando);
+        const dadosDoEndereco = new DadosDoEndereco(form, this.apiCep, this.notificacao, this.carregando);
         dadosDoEndereco.mostrar();
 
         const button = criarElementoHtml('button', ['btn', 'btn-primary'], [{nome: 'type', valor: 'submit'}], 'SALVAR');
@@ -28,8 +28,8 @@ export class FormularioEndereco implements ITela {
                 this.notificacao.mostrar('Sucesso', `Os Dados do Endereço ${dados.cep} Foram Salvos!`, 'success');
             } catch (error) {
                 this.notificacao.mostrar('Erro', error, 'danger');
-                this.carregando.esconder()
             }
+            this.carregando.esconder();
         });
         form.append(button);
         return form;

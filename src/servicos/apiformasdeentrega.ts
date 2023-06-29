@@ -3,6 +3,7 @@ import {IFormaDeEntrega} from "../contratos/entidades/formadeentrega";
 import {IApiFormasDeEntrega} from "../contratos/servicos/apiformasdeentrega";
 import {FormaDeEntrega} from "../entidades/formadeentrega";
 import {ICarrinho} from "../contratos/carrinho";
+import {ApiConfiguracoes} from "./apiconfiguracoes";
 
 export class ApiFormasDeEntregaMock implements IApiFormasDeEntrega {
     consultar(cep: string, carrinho: ICarrinho): Promise<IFormaDeEntrega[]> {
@@ -28,7 +29,7 @@ export class ApiFormasDeEntregaMock implements IApiFormasDeEntrega {
 
 export class ApiFormasDeEntregaMagento implements IApiFormasDeEntrega {
     consultar(cep: string, carrinho: ICarrinho): Promise<IFormaDeEntrega[]> {
-        const urlApi = `rest/V2/estimate/shipping/`;
+        const url_base = ApiConfiguracoes.instancia().loja.url_base;
         return new Promise<IFormaDeEntrega[]>(async (resolve, reject) => {
             if (!validarCEP(cep)) {
                 reject('O Cep deve ser um némero válido! Ex: 88100-000');
@@ -43,7 +44,7 @@ export class ApiFormasDeEntregaMagento implements IApiFormasDeEntrega {
             });
             try {
                 const postcode = cep;
-                const response = await fetch(urlApi, {
+                const response = await fetch(`${url_base}rest/V2/estimate/shipping/`, {
                     method: 'POST', // or 'PUT'
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({estimate_shipping: {postcode, items}})
@@ -58,7 +59,7 @@ export class ApiFormasDeEntregaMagento implements IApiFormasDeEntrega {
                 ));
                 resolve(formasDeEntrega);
             } catch (error) {
-                console.error("Error:", error);
+                reject(error);
             }
         });
     }

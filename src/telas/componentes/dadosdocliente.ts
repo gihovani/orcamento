@@ -3,6 +3,7 @@ import {ICliente} from "../../contratos/entidades/cliente";
 import {criarElementoHtml} from "../../util/helper";
 import {IApiCliente} from "../../contratos/servicos/apicliente";
 import {ICarregando} from "../../contratos/componentes/carregando";
+import {INotificacao} from "../../contratos/componentes/notificacao";
 
 export class DadosDoCliente implements IDadosDoCliente {
     readonly ID: string = 'dados-do-cliente';
@@ -10,6 +11,7 @@ export class DadosDoCliente implements IDadosDoCliente {
     constructor(
         public elemento: HTMLElement,
         public apiCliente: IApiCliente,
+        public notificacao: INotificacao,
         public carregando: ICarregando
     ) {
     }
@@ -114,7 +116,9 @@ export class DadosDoCliente implements IDadosDoCliente {
                 this.carregando.mostrar();
                 this.apiCliente.consultar(documento).then((cliente) => {
                     this.preencheDados(cliente);
-                }).finally(() => this.carregando.esconder());
+                })
+                    .catch(error => this.notificacao.mostrar('Erro', error, 'danger'))
+                    .finally(() => this.carregando.esconder());
             }
         });
         this.elemento.appendChild(div);

@@ -3,6 +3,7 @@ import {criarElementoHtml} from "../../util/helper";
 import {ICarregando} from "../../contratos/componentes/carregando";
 import {IApiCep} from "../../contratos/servicos/apicep";
 import {IEndereco} from "../../contratos/entidades/endereco";
+import {INotificacao} from "../../contratos/componentes/notificacao";
 
 export class DadosDoEndereco implements IDadosDoEndereco {
     readonly ID: string = 'dados-do-endereco';
@@ -10,6 +11,7 @@ export class DadosDoEndereco implements IDadosDoEndereco {
     constructor(
         public elemento: HTMLElement,
         public apiCep: IApiCep,
+        public notificacao: INotificacao,
         public carregando: ICarregando
     ) {
     }
@@ -82,7 +84,9 @@ export class DadosDoEndereco implements IDadosDoEndereco {
                 this.carregando.mostrar();
                 this.apiCep.consultar(cep).then((endereco) => {
                     this.preencheDados(endereco);
-                }).finally(() => this.carregando.esconder());
+                })
+                    .catch(error => this.notificacao.mostrar('Erro', error, 'danger'))
+                    .finally(() => this.carregando.esconder());
             }
         });
         this.elemento.appendChild(div);

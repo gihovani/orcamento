@@ -30,8 +30,10 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         let personalizacao = '';
         if (cartaoDoProduto.produto.personalizado) {
             personalizacao = window.prompt('Informe a personalizacao: ', 'Linha1: [] | Linha2: []');
+            if (!personalizacao) {
+                return;
+            }
         }
-        console.log(cartaoDoProduto.produto.personalizado, personalizacao);
         const quantidade = cartaoDoProduto.pegaQuantidade();
         this.carrinho.adicionarProduto(cartaoDoProduto.produto, quantidade, false, personalizacao);
         cartaoDoProduto.preencheQuantidade(quantidade);
