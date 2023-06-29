@@ -26,8 +26,10 @@ import {FormularioPagamentoBoletoParcelado} from "./formulariopagamentoboletopar
 import {FormularioPagamentoCartaoDeCreditoMaquineta} from "./formulariopagamentocartaodecreditomaquineta";
 import {ApiConfiguracoes} from "../servicos/apiconfiguracoes";
 import {FormularioPagamento} from "./formulariopagamento";
+import {IApiVendedor} from "../contratos/servicos/apivendedor";
 
 export class App extends ILayout {
+    private _apiVendedor: IApiVendedor;
     private _tela: ITela;
     private _notificacao: INotificacao;
     private _carregando: ICarregando;
@@ -39,7 +41,6 @@ export class App extends ILayout {
         super();
         this.inicializar();
     }
-
 
     defineTema(tema) {
         const tagEstilosDoTema = criarElementoHtml('link', [], [{
@@ -53,13 +54,12 @@ export class App extends ILayout {
 
     inicializar() {
         const body = document.querySelector('body')
-        const apiVendedor = new ApiVendedorMock();
         const tema = 'tema-ds';
+        this._apiVendedor = new ApiVendedorMock();
         this._notificacao = new Notificacao(body);
         this._carregando = new Carregando(body);
-        this.tela = new FormularioLogin(apiVendedor, this._notificacao);
+        this.tela = new FormularioLogin(this._apiVendedor, this._notificacao);
         body.classList.add(tema);
-
         this.defineTema(tema);
         this.inicializaEventos();
     }
@@ -83,6 +83,7 @@ export class App extends ILayout {
         });
 
         document.addEventListener('autenticacao', (e: CustomEvent) => {
+            const ehAdministrador = this._apiVendedor.ehAdministrador();
             const carrinho = this.criaCarrinho();
             const apiCliente = new ApiClienteMock();
             const apiCep = new ApiCepViaCep();
@@ -104,26 +105,26 @@ export class App extends ILayout {
             this.barraDeNavegacao.adicionaMenu('menu-configuracoes', 'Configurações', () => {
                 this.tela = formularioConfiguracoes;
             });
-            this.barraDeNavegacao.adicionaMenu('menu-cliente', 'Cliente', () => {
+            ehAdministrador && this.barraDeNavegacao.adicionaMenu('menu-cliente', 'Cliente', () => {
                 this.tela = formularioCliente;
             });
-            this.barraDeNavegacao.adicionaMenu('menu-endereco', 'Endereço de Entrega', () => {
+            ehAdministrador && this.barraDeNavegacao.adicionaMenu('menu-endereco', 'Endereço de Entrega', () => {
                 this.tela = formularioEndereco;
             });
             this.barraDeNavegacao.adicionaMenu('menu-lista-de-produtos', 'Lista de Produtos', () => {
                 listagemDeProdutos.pegaDadosDosProdutos();
                 this.tela = listagemDeProdutos;
             });
-            this.barraDeNavegacao.adicionaMenu('menu-cartao-de-credito-maquineta', 'CC Maquineta', () => {
+            ehAdministrador && this.barraDeNavegacao.adicionaMenu('menu-cartao-de-credito-maquineta', 'CC Maquineta', () => {
                 this.tela = formularioPagamentoCartaoDeCreditoMaquineta;
             });
-            this.barraDeNavegacao.adicionaMenu('menu-cartao-de-credito', 'CC', () => {
+            ehAdministrador && this.barraDeNavegacao.adicionaMenu('menu-cartao-de-credito', 'CC', () => {
                 this.tela = formularioPagamentoCartaoDeCredito;
             });
-            this.barraDeNavegacao.adicionaMenu('menu-boleto-parcelado', 'Boleto Parcelado', () => {
+            ehAdministrador && this.barraDeNavegacao.adicionaMenu('menu-boleto-parcelado', 'Boleto Parcelado', () => {
                 this.tela = formularioPagamentoBoletoParcelado;
             });
-            this.barraDeNavegacao.adicionaMenu('menu-pagamento', 'Pagamento', () => {
+            ehAdministrador && this.barraDeNavegacao.adicionaMenu('menu-pagamento', 'Pagamento', () => {
                 this.tela = formularioPagamento;
             });
             this.barraDeNavegacao.adicionaMenu('menu-carrinho', 'Carrinho', () => {

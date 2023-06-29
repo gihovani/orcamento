@@ -30,7 +30,6 @@ export class ApiProduto implements IApiProduto {
             }
             this._produtos = [];
             const config = ApiConfiguracoes.instancia().loja;
-            console.log(config);
             pegaDadosGoogleMerchant(config.google_merchant.url, (data) => {
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(data, 'text/xml');

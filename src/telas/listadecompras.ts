@@ -5,7 +5,8 @@ import {IProduto} from "../contratos/entidades/produto";
 import {INotificacao} from "../contratos/componentes/notificacao";
 
 export class ListaDeCompras implements ITela {
-    constructor(public carrinho: ICarrinho, public notificacao: INotificacao) {}
+    constructor(public carrinho: ICarrinho, public notificacao: INotificacao) {
+    }
 
     atualizar(produto: IProduto) {
         const inputQuantidade = document.getElementById(`quantidade-${produto.id}`) as HTMLInputElement;
@@ -15,20 +16,29 @@ export class ListaDeCompras implements ITela {
         }
         this.carrinho.adicionarProduto(produto, quantidade, true);
         this.carrinho.totalizar(true);
-        this.notificacao.mostrar('Sucesso', `Produto ${produto.id} foi atualizado com sucesso!`);
-        document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
+        this.notificacao.mostrar('Sucesso', `Produto ${produto.id} foi atualizado com sucesso!`, 'success');
+        this.htmlListaDeProdutos();
     }
 
     remover(produto: IProduto) {
         this.carrinho.removerProduto(produto);
         this.carrinho.totalizar(true);
-        this.notificacao.mostrar('Sucesso', `Produto ${produto.id} foi removido com sucesso!`);
-        document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
+        this.notificacao.mostrar('Sucesso', `Produto ${produto.id} foi removido com sucesso!`, 'success');
+        this.htmlListaDeProdutos();
     }
 
     htmlListaDeProdutos(): HTMLElement {
+        let div = document.getElementById('lista-de-compras');
+        if (!div) {
+            div = criarElementoHtml(
+                'div',
+                ['lista-de-compras', 'row'],
+                [{nome: 'id', valor: 'lista-de-compras'}]
+            );
+        } else {
+            div.innerHTML = '';
+        }
         const produtos = this.carrinho.produtos;
-        const div = criarElementoHtml('div', ['lista-de-produtos', 'row']);
         if (produtos.length < 1) {
             div.innerHTML = `<div class="bg-body-tertiary p-5 rounded mt-3">
     <h2>Seu carrinho de compras está vazio.</h2>

@@ -2,5 +2,6 @@ export interface IVendedor {
     nome?: string;
     login?: string;
     senha?: string;
-    estaAtivo?: boolean;
+    esta_ativo?: boolean;
+    administrador?: boolean;
 }

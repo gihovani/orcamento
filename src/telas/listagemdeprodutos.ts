@@ -22,6 +22,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         this.apiProduto.listar(false).then((produtos) => {
             this.itens = produtos;
             this.atualizaHtmlItens(1);
+            this.htmlFiltrosDosProdutos();
         }).finally(() => this.carregando.esconder());
     }
 
@@ -30,6 +31,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         this.carrinho.adicionarProduto(cartaoDoProduto.produto, quantidade);
         this.carrinho.totalizar(true);
         cartaoDoProduto.preencheQuantidade(quantidade);
+        this.atualizarQuantidadeDeItensNoCarrinho();
     }
 
 
@@ -38,7 +40,12 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         const option = criarElementoHtml('option', [], [{nome: 'value', valor: ''}, {nome: 'label', valor: titulo}]);
         select.appendChild(option);
         const filtros = this.apiProduto.filtros();
-        filtros.has(atributo) && filtros.get(atributo).map(valor => {
+        if (!filtros.has(atributo)) {
+            return select;
+        }
+        const opcoes = filtros.get(atributo);
+        opcoes.sort((a, b) => a.localeCompare(b));
+        opcoes.map(valor => {
             const option = criarElementoHtml('option', [], [{nome: 'value', valor}, {nome: 'label', valor}]);
             select.appendChild(option);
         });
@@ -148,10 +155,16 @@ export class ListagemDeProdutos extends TelaComPaginacao {
     }
 
     private htmlFiltrosDosProdutos(): HTMLElement {
-        const form = criarElementoHtml(
-            'form',
-            ['lista-de-produtos-filtros', 'row', 'g-3', 'align-items-center']
-        );
+        let form = document.getElementById('lista-de-produtos-filtros');
+        if (!form) {
+            form = criarElementoHtml(
+                'form',
+                ['lista-de-produtos-filtros', 'row', 'g-3', 'align-items-center'],
+                [{nome: 'id', valor: 'lista-de-produtos-filtros'}]
+            );
+        } else {
+            form.innerHTML = '';
+        }
         const div = criarElementoHtml('div', ['col-12', 'filtros-campo', 'pt-3', 'pb-3']);
         const titulo = criarElementoHtml('h2', ['filtros-titulo'], [], 'Filtros');
         div.appendChild(titulo);
@@ -202,6 +215,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         this.atualizarQuantidadeDeItensNoCarrinho();
         this.htmlPaginacao();
     }
+
     htmlItens(): HTMLElement {
         const main = criarElementoHtml('main', ['listagem-de-produtos']);
         main.appendChild(this.htmlFiltrosDosProdutos());
@@ -210,7 +224,12 @@ export class ListagemDeProdutos extends TelaComPaginacao {
     };
 
     private atualizarQuantidadeDeItensNoCarrinho() {
-        const informaQuantidadeNoCarrinho = criarElementoHtml('span', ['label-quantidade'], [], String(this.carrinho.produtos.length));
+        const informaQuantidadeNoCarrinho = criarElementoHtml(
+            'span',
+            ['label-quantidade'],
+            [],
+            String(this.carrinho.produtos.length)
+        );
         const menuCarrinho = document.getElementById('menu-carrinho');
         menuCarrinho.querySelector('.label-quantidade')?.remove();
         menuCarrinho.appendChild(informaQuantidadeNoCarrinho);
