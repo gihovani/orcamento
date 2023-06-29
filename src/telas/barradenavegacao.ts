@@ -23,6 +23,7 @@ export class BarraDeNavegacao implements ITela {
             this.nav.querySelector('.active')?.classList.remove('active');
             (e.target as HTMLElement).classList.add('active');
             callback();
+            document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
         });
     }
     conteudo(): HTMLElement {

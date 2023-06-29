@@ -10,7 +10,7 @@ import {Produto} from "../entidades/produto";
 import {ApiConfiguracoes} from "./apiconfiguracoes";
 
 export class ApiProduto implements IApiProduto {
-    private _cached: IApiProdutoCache = {
+    static CACHE: IApiProdutoCache = {
         produtos: [],
         filtros: new Map<string, string[]>()
     };
@@ -19,17 +19,18 @@ export class ApiProduto implements IApiProduto {
 
     listar(limparCache: boolean = false): Promise<IProduto[]> {
         if (limparCache) {
-            this._cached.produtos = [];
+            ApiProduto.CACHE.produtos = [];
         }
 
         return new Promise<IProduto[]>(resolve => {
-            if (this._cached.produtos.length > 0) {
-                this._produtos = this._cached.produtos;
+            if (ApiProduto.CACHE.produtos.length > 0) {
+                this._produtos = ApiProduto.CACHE.produtos;
                 resolve(this._produtos);
                 return;
             }
             this._produtos = [];
             const config = ApiConfiguracoes.instancia().loja;
+            console.log(config);
             pegaDadosGoogleMerchant(config.google_merchant.url, (data) => {
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(data, 'text/xml');
@@ -59,7 +60,7 @@ export class ApiProduto implements IApiProduto {
                     }
                 });
                 if (this._produtos.length) {
-                    this._cached.produtos = this._produtos;
+                    ApiProduto.CACHE.produtos = this._produtos;
                 }
                 resolve(this._produtos);
             });
@@ -124,12 +125,12 @@ export class ApiProduto implements IApiProduto {
     }
 
     consultar(id: string): IProduto | undefined {
-        return this._cached.produtos.find(produto => produto.id === id);
+        return ApiProduto.CACHE.produtos.find(produto => produto.id === id);
     }
 
     filtros(): IApiProdutoFiltro {
         const filtros = new Map<string, string[]>;
-        for (const produto of this._cached.produtos) {
+        for (const produto of ApiProduto.CACHE.produtos) {
             this.adicionarFiltro(filtros, 'categorias', produto.categorias);
             this.adicionarFiltro(filtros, 'marca', produto.marca);
             if (this._precos.minimo > produto.preco) {
@@ -139,7 +140,7 @@ export class ApiProduto implements IApiProduto {
                 this._precos.maximo = produto.preco
             }
         }
-        this._cached.filtros = filtros;
+        ApiProduto.CACHE.filtros = filtros;
         return filtros;
     }
 }

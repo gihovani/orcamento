@@ -1,9 +1,10 @@
 import {criarElementoHtml, formataNumeroEmDinheiro} from "../util/helper";
 import {ICarrinho} from "../contratos/carrinho";
-import {IProduto} from "../contratos/entidades/produto";
 import {IApiProduto} from "../contratos/servicos/apiproduto";
 import {TelaComPaginacao} from "./telacompaginacao";
 import {ICarregando} from "../contratos/componentes/carregando";
+import {CartaoDoProduto} from "./componentes/cartaodoproduto";
+import {ICartaoDoProduto} from "../contratos/componentes/cartaodoproduto";
 
 export class ListagemDeProdutos extends TelaComPaginacao {
     private _filtroAtraso = 500;
@@ -14,39 +15,25 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         public carregando: ICarregando
     ) {
         super();
-        this.pegaDadosDosProdutos();
     }
 
     pegaDadosDosProdutos() {
-        this.eventos();
         this.carregando.mostrar();
         this.apiProduto.listar(false).then((produtos) => {
             this.itens = produtos;
-            this.atualizarHtmlCartoesDosProdutos();
+            this.atualizaHtmlItens(1);
         }).finally(() => this.carregando.esconder());
     }
 
-    adicionar(produto: IProduto) {
-        const inputQuantidade = document.getElementById(`quantidade-${produto.id}`) as HTMLInputElement;
-        let quantidade = 1;
-        if (inputQuantidade) {
-            quantidade = parseInt(inputQuantidade.value);
-        }
-        this.carrinho.adicionarProduto(produto, quantidade);
+    adicionar(cartaoDoProduto: ICartaoDoProduto) {
+        const quantidade = cartaoDoProduto.pegaQuantidade();
+        this.carrinho.adicionarProduto(cartaoDoProduto.produto, quantidade);
         this.carrinho.totalizar(true);
-
-        this.atualizarQuantidadeDeItensNoCarrinho();
-
-        const divProduto = (document.querySelector(`#produto-id-${produto.id} .card`) as HTMLDivElement);
-        divProduto.querySelector('.label-item-adicionado')?.remove();
-        divProduto.append(this.htmlInformacaoProdutoAdicionadoNoCarrinho());
+        cartaoDoProduto.preencheQuantidade(quantidade);
     }
 
-    htmlInformacaoProdutoAdicionadoNoCarrinho(): HTMLElement {
-        return criarElementoHtml('span', ['label-item-adicionado'], [], 'Adicionado ao carrinho');
-    }
 
-    htmlFiltroDoProdutoPorAtributo(atributo: string, titulo: string): HTMLElement {
+    private htmlFiltroDoProdutoPorAtributo(atributo: string, titulo: string): HTMLElement {
         const select = criarElementoHtml('select', ['form-select'], [{nome: 'name', valor: `filtro-${atributo}`}]);
         const option = criarElementoHtml('option', [], [{nome: 'value', valor: ''}, {nome: 'label', valor: titulo}]);
         select.appendChild(option);
@@ -58,27 +45,27 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         return select;
     }
 
-    filtroPorMarca(): HTMLElement {
+    private filtroPorMarca(): HTMLElement {
         const filtroMarca = this.htmlFiltroDoProdutoPorAtributo('marca', 'Marca');
         filtroMarca.addEventListener('change', (event) => {
             event.preventDefault();
             this.itens = this.apiProduto.filtrarPorMarca((event.target as HTMLInputElement).value);
-            this.atualizarHtmlCartoesDosProdutos();
+            this.atualizaHtmlItens(1);
         });
         return filtroMarca;
     }
 
-    fitroPorCategoria(): HTMLElement {
+    private fitroPorCategoria(): HTMLElement {
         const filtro = this.htmlFiltroDoProdutoPorAtributo('categorias', 'Categoria');
         filtro.addEventListener('change', (event) => {
             event.preventDefault();
             this.itens = this.apiProduto.filtrarPorCategoria((event.target as HTMLInputElement).value);
-            this.atualizarHtmlCartoesDosProdutos();
+            this.atualizaHtmlItens(1);
         });
         return filtro;
     }
 
-    filtroPorNome(): HTMLElement {
+    private filtroPorNome(): HTMLElement {
         const filtro = criarElementoHtml('input', [], [
             {nome: 'name', valor: 'filtro-nome'},
             {nome: 'type', valor: 'text'},
@@ -92,13 +79,13 @@ export class ListagemDeProdutos extends TelaComPaginacao {
             }
             timeoutId = setTimeout(() => {
                 this.itens = this.apiProduto.filtrarPorNome((event.target as HTMLInputElement).value);
-                this.atualizarHtmlCartoesDosProdutos();
+                this.atualizaHtmlItens(1);
             }, this._filtroAtraso);
         });
         return filtro;
     }
 
-    filtroCodigoDeBarras(): HTMLElement {
+    private filtroCodigoDeBarras(): HTMLElement {
         const filtro = criarElementoHtml('input', [], [
             {nome: 'name', valor: 'filtro-codigo-barras'},
             {nome: 'type', valor: 'text'},
@@ -112,13 +99,13 @@ export class ListagemDeProdutos extends TelaComPaginacao {
             }
             timeoutId = setTimeout(() => {
                 this.itens = this.apiProduto.filtrarPorCodigoBarra((event.target as HTMLInputElement).value);
-                this.atualizarHtmlCartoesDosProdutos();
+                this.atualizaHtmlItens(1);
             }, this._filtroAtraso);
         });
         return filtro;
     }
 
-    filtroPorPreco(): HTMLElement {
+    private filtroPorPreco(): HTMLElement {
         const faixaDePrecos = this.apiProduto.faixaDePrecos;
         const div = criarElementoHtml('div');
         const filtroPorPreco = criarElementoHtml('input', [], [
@@ -141,7 +128,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
                 const valor = parseFloat((event.target as HTMLInputElement).value);
                 mostradorValor.textContent = 'Até: ' + formataNumeroEmDinheiro(valor);
                 this.itens = this.apiProduto.filtrarPorPreco(0, valor);
-                this.atualizarHtmlCartoesDosProdutos();
+                this.atualizaHtmlItens(1);
             }, this._filtroAtraso);
         });
         div.appendChild(filtroPorPreco);
@@ -149,7 +136,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         return div;
     }
 
-    botaoListarRemoverFiltro(): HTMLElement {
+    private botaoListarRemoverFiltro(): HTMLElement {
         const botaoListarTodos = criarElementoHtml('button', ['btn', 'btn-info'], [], 'Listar todos os produtos');
         botaoListarTodos.addEventListener('click', (event) => {
             event.preventDefault();
@@ -160,7 +147,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         return botaoListarTodos;
     }
 
-    htmlFiltrosDosProdutos(): HTMLElement {
+    private htmlFiltrosDosProdutos(): HTMLElement {
         const form = criarElementoHtml(
             'form',
             ['lista-de-produtos-filtros', 'row', 'g-3', 'align-items-center']
@@ -178,7 +165,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         return form;
     }
 
-    htmlCartoesDosProdutos(): HTMLElement {
+    private htmlCartoesDosProdutos(): HTMLElement {
         let div = document.getElementById('lista-de-produtos');
         if (!div) {
             div = criarElementoHtml('div', [
@@ -197,44 +184,24 @@ export class ListagemDeProdutos extends TelaComPaginacao {
 
         itens.map(produto => {
             let produtoEstaNoCarrinho = this.carrinho.produtos.find((item) => item.produto.id === produto.id);
-            let precoFormatado = formataNumeroEmDinheiro(produto.preco);
-            const divProduto = criarElementoHtml('div', ['col']);
-            divProduto.setAttribute('id', `produto-id-${produto.id}`);
-            divProduto.innerHTML = `<div class="card">
-        <img height="200" width="200" src="${produto.imagem}" alt="${produto.nome}" class="card-img-top img-fluid img-thumbnail" />
-        <div class="card-body">
-          <h2 class="card-title">${produto.nome}</h2>
-          <p class="card-text fs-6">${produto.descricao}</p>
-          <div class="card-footer">
-            <h3 class="price">R$ ${precoFormatado} </h3>
-            <form class="row row-cols-lg-auto g-3 align-items-center">
-                <div class="linha-acao mb-3">
-                    <input id="quantidade-${produto.id}"
-                        type="number" step="1" min="1" max="100"
-                        aria-label="Quantidade" class="form-control"
-                        value="${produtoEstaNoCarrinho?.quantidade || 1}" />
-                    <button class="input-group-text botao-adicionar">
-                        Adicionar
-                    </button>
-                </div>
-            </form>
-          </div>
-        </div>
-    </div>`;
+            const cartao = new CartaoDoProduto(div, produto);
+            cartao.mostrar((event) => {
+                event.preventDefault();
+                this.adicionar(cartao);
+            });
             if (produtoEstaNoCarrinho?.quantidade) {
-                divProduto.querySelector('.card')
-                    .append(this.htmlInformacaoProdutoAdicionadoNoCarrinho());
+                cartao.preencheQuantidade(produtoEstaNoCarrinho.quantidade);
             }
-            divProduto.querySelector('.botao-adicionar')
-                .addEventListener('click', (event) => {
-                    event.preventDefault();
-                    this.adicionar(produto);
-                });
-            div.appendChild(divProduto);
         });
         return div;
     }
 
+    atualizaHtmlItens(numeroPagina: number) {
+        this.paginaAtual = numeroPagina;
+        this.htmlCartoesDosProdutos();
+        this.atualizarQuantidadeDeItensNoCarrinho();
+        this.htmlPaginacao();
+    }
     htmlItens(): HTMLElement {
         const main = criarElementoHtml('main', ['listagem-de-produtos']);
         main.appendChild(this.htmlFiltrosDosProdutos());
@@ -242,23 +209,10 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         return main;
     };
 
-    atualizarQuantidadeDeItensNoCarrinho() {
+    private atualizarQuantidadeDeItensNoCarrinho() {
         const informaQuantidadeNoCarrinho = criarElementoHtml('span', ['label-quantidade'], [], String(this.carrinho.produtos.length));
         const menuCarrinho = document.getElementById('menu-carrinho');
         menuCarrinho.querySelector('.label-quantidade')?.remove();
         menuCarrinho.appendChild(informaQuantidadeNoCarrinho);
-    }
-
-    atualizarHtmlCartoesDosProdutos() {
-        this.paginaAtual = 1;
-        document.dispatchEvent(new CustomEvent('atualizar-produtos', {detail: 'conteudo'}));
-    }
-
-    eventos() {
-        document.addEventListener('atualizar-produtos', (event) => {
-            event.preventDefault();
-            this.htmlCartoesDosProdutos();
-            this.htmlPaginacao();
-        });
     }
 }

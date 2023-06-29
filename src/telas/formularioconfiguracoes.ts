@@ -41,23 +41,34 @@ export class FormularioConfiguracoes implements ITela {
             </form>
         `;
         const seletorLoja = main.querySelector('#loja');
+        const lojaSelecionada = this._configuracoes.loja;
         this._configuracoes.disponiveis().forEach((loja, index) => {
-            const options = criarElementoHtml('option', [], [{
+            const atributos = [{
                 nome: 'value', valor: String(index)
             }, {
                 nome: 'label', valor: loja.titulo
-            }]);
-            seletorLoja.appendChild(options)
+            }];
+            const options = criarElementoHtml('option', [], atributos);
+            if (lojaSelecionada.titulo === loja.titulo) {
+                options.setAttribute('selected', 'selected')
+            }
+            seletorLoja.appendChild(options);
         });
 
         const form = main.querySelector('form') as HTMLFormElement;
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            this.pegaDadosDoFormulario(form);
             this.carregando.mostrar();
-            this.apiProduto.listar(true).then(() => {
-                this.notificacao.mostrar('Sucesso', 'Suas Confiruações Foram Atualizadas!');
-            }).finally(() => this.carregando.esconder());
+            try {
+                this.pegaDadosDoFormulario(form);
+
+                this.apiProduto.listar(true).then(() => {
+                    this.notificacao.mostrar('Sucesso', 'Suas Confiruações Foram Atualizadas!', 'success');
+                }).finally(() => this.carregando.esconder());
+            } catch (error) {
+                this.notificacao.mostrar('Erro', `Não foi possivel salvar a configuração! ${error}`, 'danger');
+                this.carregando.esconder();
+            }
         });
         return main;
     }

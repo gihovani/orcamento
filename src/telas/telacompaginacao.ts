@@ -15,7 +15,7 @@ export abstract class TelaComPaginacao implements ITela {
         if (this.temProximaPagina()) {
             this.paginaAtual++;
         }
-        document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
+        this.atualizaHtmlItens(this.paginaAtual);
     }
 
     temPaginaAnterior(): boolean {
@@ -26,7 +26,7 @@ export abstract class TelaComPaginacao implements ITela {
         if (this.temPaginaAnterior()) {
             this.paginaAtual--;
         }
-        document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
+        this.atualizaHtmlItens(this.paginaAtual);
     }
 
     temPaginacao(): boolean {
@@ -38,7 +38,7 @@ export abstract class TelaComPaginacao implements ITela {
         if (this.ultimaPagina >= numero && numero > 0) {
             this.paginaAtual = numero;
         }
-        document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
+        this.atualizaHtmlItens(this.paginaAtual);
     }
 
     itensPaginado(): any[] {
@@ -89,10 +89,10 @@ export abstract class TelaComPaginacao implements ITela {
         const select = criarElementoHtml('select', ['page-link'], [{nome: 'name', valor: 'paginacao-por-numeros'}]);
         for (let numero = 1; numero <= this.ultimaPagina; numero++) {
             const atributos = [{nome: 'value', valor: String(numero)}];
-            if (numero === this.paginaAtual) {
-                atributos.push({nome: 'selected', valor: 'selected'});
-            }
             const option = criarElementoHtml('option', [], atributos, String(numero));
+            if (numero === this.paginaAtual) {
+                option.setAttribute('selected', 'selected');
+            }
             select.appendChild(option);
         }
         select.addEventListener('change', (event) => this.paginaNumero(parseInt((event.target as HTMLSelectElement).value)));
@@ -126,6 +126,7 @@ export abstract class TelaComPaginacao implements ITela {
     }
 
     abstract htmlItens(): HTMLElement;
+    abstract atualizaHtmlItens(numeroPagina: number);
 
     conteudo(): HTMLElement {
         const main = criarElementoHtml('main');

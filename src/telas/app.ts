@@ -111,6 +111,7 @@ export class App extends ILayout {
                 this.tela = formularioEndereco;
             });
             this.barraDeNavegacao.adicionaMenu('menu-lista-de-produtos', 'Lista de Produtos', () => {
+                listagemDeProdutos.pegaDadosDosProdutos();
                 this.tela = listagemDeProdutos;
             });
             this.barraDeNavegacao.adicionaMenu('menu-cartao-de-credito-maquineta', 'CC Maquineta', () => {

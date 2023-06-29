@@ -19,12 +19,12 @@ export class ApiConfiguracoes implements IApiConfiguracoes {
 
     disponiveis(): IApiConfiguracoesLoja[] {
         return [{
-            nome: 'local',
-            titulo: 'Local',
+            nome: 'teste',
+            titulo: 'Loja do GG2',
             url_base: 'https://www.utilidadesclinicas.com.br/',
             estilos: 'tema-ds.css',
             google_merchant: {
-                url: 'xml/google_feed.xml',
+                url: 'xml/teste.xml',
                 filtros: null
             }
         }, {
