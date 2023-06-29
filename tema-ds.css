@@ -1,21 +1,28 @@
 /* tema DS */
+:root {
+    --branco: #f9f9f9;
+    --verde: #66c925;
+    --texto-primario: #242c2f;
+    --enfase: #f09;
+    --primario: #09f;
+}
 .tema-ds #app {
-    background-color: #f9f9f9;
+    background-color: var(--branco);
 }
 .tema-ds .card,
 .tema-ds .card .img-thumbnail {
     border-radius:1rem;
 }
 .tema-ds .card .label-item-adicionado {
-	background-color: #66c925;
+	background-color: var(--verde);
     color: #fff;
 }
 .tema-ds .card .card-title {
-    color: #242c2f;
+    color: var(--texto-primario);
     letter-spacing: .02em;
 }
 .tema-ds .card .card-footer .price {
-    color: #f09;
+    color: var(--enfase);
     font-weight: 700;
 }
 .tema-ds .card button {
@@ -27,18 +34,19 @@
     border-radius: 12rem;
     padding: .2rem 1.4rem;
 }
+
 .tema-ds .botao-adicionar {
     color: #fff;
-    background: #66c925;
-    border-color: #66c925;
+    background: var(--verde);
+    border-color: var(--verde);
 }
 .tema-ds .card .card-footer .linha-acao input {
     font-size:1.4rem; 
     padding: 0 .9rem;
-    color: #0b1113;
+    color: var(--texto-primario);
     text-align: center;
     border-radius: 12rem;
-    background: #f9f9f9;
+    background: var(--branco);
     box-sizing: border-box;
     vertical-align: baseline;
     background-clip: padding-box;
@@ -49,8 +57,8 @@
 }
 .tema-ds .toast-container .success{
     color: #fff;
-    background: #66c925;
-    border:1px solid #55b814;
+    background: var(--verde);
+    border:1px solid var(--verde);
 }
 .tema-ds .toast-container .danger{
     color: #7a1d20;
@@ -59,16 +67,23 @@
 }
 .tema-ds .label-quantidade{
     color:#fff;
-    background-color: #f09;
+    background-color: var(--enfase);
 }
 .tema-ds .nav-item:hover a {
-    color:#09f;
+    color:var(--primario);
 }
 .tema-ds .nav-link.active {
-    color:#f09;
+    color:var(--enfase);
 }
 .tema-ds .listagem-de-produtos .filtros-campo select,
 .tema-ds .listagem-de-produtos .filtros-campo button,
-.tema-ds .listagem-de-produtos .filtros-campo input{
+.tema-ds .listagem-de-produtos .filtros-campo input,
+.tema-ds .listagem-de-produtos .filtros-campo span,
+.tema-ds .card input{
     border-radius:30px;
+}
+.tema-ds .lista-de-promocoes .regras .regra .regra-texto span {
+    border: 3px solid #09f;
+    font-weight: 600;
+    color: #09f;
 }

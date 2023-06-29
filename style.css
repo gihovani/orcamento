@@ -164,6 +164,28 @@ input[type=number]::-webkit-outer-spin-button {
 .form-login {
     width: 100%;
 }
+.lista-de-promocoes .regras .regra .regra-texto {
+    position: relative;
+}
+
+.lista-de-promocoes .regras .regra .regra-texto span {
+    top: 100%;
+    right: 0;
+    z-index: 2;
+    padding: 2px 15px;
+    border-radius: 30px;
+    position: absolute;
+    background-color: #fff;
+}
+
+.lista-de-promocoes .regras .regra img {
+    width: 100%;
+    filter: grayscale(1);
+}
+
+.lista-de-promocoes .regras .regra.regra-ativa img {
+    filter: grayscale(0);
+}
 
 @media screen and (max-width: 830px) {
     .listagem-de-produtos .filtros-campo {
