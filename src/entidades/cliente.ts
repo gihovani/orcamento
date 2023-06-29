@@ -12,9 +12,9 @@ export class Cliente implements ICliente {
     private _telefone?: string;
     private _celular?: string;
 
-    profissao: string;
-    registro?: string;
-    rg?: string;
+    private _profissao: string;
+    private _registro?: string;
+    private _rg?: string;
 
     constructor(
         documento?: string,
@@ -75,28 +75,28 @@ export class Cliente implements ICliente {
         this._data_nascimento = data_nascimento;
     }
 
-    set registro_uf(registro_uf: string | null) {
+    set registro_uf(registro_uf: string) {
         if (registro_uf && !validarUF(registro_uf)) {
             throw Error("Cliente Inválido: a uf do Registro deve ser uma sigla válida! Ex: SP, RJ, MG, etc.");
         }
         this._registro_uf = registro_uf;
     }
 
-    set rg_uf(rg_uf: string | null) {
+    set rg_uf(rg_uf: string) {
         if (rg_uf && !validarUF(rg_uf)) {
             throw Error("Cliente Inválido: a uf do RG deve ser uma sigla válida! Ex: SP, RJ, MG, etc.");
         }
         this._rg_uf = rg_uf;
     }
 
-    set telefone(telefone: string | null) {
+    set telefone(telefone: string) {
         if (telefone && !validarTelefone(telefone)) {
             throw Error("Cliente Inválido: o telefone deve ser um número válido! Ex: (99) 9999-9999");
         }
         this._telefone = telefone;
     }
 
-    set celular(celular: string | null) {
+    set celular(celular: string) {
         if (celular && !validarTelefone(celular)) {
             throw Error("Cliente Inválido: o celular deve ser um número válido! Ex: (99) 99999-9999");
         }
@@ -110,39 +110,63 @@ export class Cliente implements ICliente {
         this._email = email;
     }
 
+    set profissao(profissao: string) {
+        this._profissao = profissao;
+    }
+
+    set registro(registro: string) {
+        this._registro = registro;
+    }
+
+    set rg(rg: string) {
+        this._rg = rg;
+    }
+
     get documento(): string {
-        return this._documento;
+        return this._documento ?? '';
     }
 
     get nome(): string {
-        return this._nome;
+        return this._nome ?? '';
     }
 
     get sexo(): string {
-        return this._sexo;
+        return this._sexo ?? '';
     }
 
     get data_nascimento(): string {
-        return this._data_nascimento;
+        return this._data_nascimento ?? '';
     }
 
-    get registro_uf(): string | null {
-        return this._registro_uf;
+    get registro_uf(): string {
+        return this._registro_uf ?? '';
     }
 
-    get rg_uf(): string | null {
-        return this._rg_uf;
+    get rg_uf(): string {
+        return this._rg_uf ?? '';
     }
 
-    get telefone(): string | null {
-        return this._telefone;
+    get telefone(): string {
+        return this._telefone ?? '';
     }
 
-    get celular(): string | null {
-        return this._celular;
+    get celular(): string {
+        return this._celular ?? '';
     }
 
     get email(): string {
-        return this._email;
+        return this._email ?? '';
+    }
+
+    get profissao(): string {
+        return this._profissao ?? '';
+    }
+
+    get registro(): string {
+        return this._registro ?? '';
+    }
+
+    get rg(): string {
+        return this._rg ?? '';
     }
 }

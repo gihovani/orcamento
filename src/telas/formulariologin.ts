@@ -8,7 +8,7 @@ export class FormularioLogin implements ITela {
 
     conteudo(): HTMLElement {
         const main = criarElementoHtml('main');
-        main.innerHTML = `<form class="bg-body-tertiary p-5 rounded mt-3 mb-3 m-auto text-center" style="width: 450px" autocomplete="off">
+        main.innerHTML = `<form class="bg-body-tertiary p-5 rounded mt-3 mb-3 m-auto text-center form-login" autocomplete="off">
     <h1 class="h3 mb-3 fw-normal">FAÇA O LOGIN</h1>
     <div class="form-floating mb-3">
       <input type="text" class="form-control" id="login" placeholder="Login">
@@ -34,7 +34,7 @@ export class FormularioLogin implements ITela {
                 this.apiVendedor.autenticar(login, senha).then((vendedor) => {
                     document.dispatchEvent(new CustomEvent('autenticacao',  { detail: vendedor }));
                 }).catch(error => {
-                    this.notificacao.mostrar('Error', error, 'error');
+                    this.notificacao.mostrar('Error', error, 'danger');
                 });
             }
         });
