@@ -25,21 +25,25 @@ export class ApiClienteMock implements IApiCliente {
                 reject('O CPF deve ser um némero válido!');
                 return;
             }
-            const cliente = new Cliente(
-                '041.843.018-78',
-                'Dino da Silva Sauro',
-                'M',
-                '01/01/2000',
-                'Cirurgião-Dentista',
-                'dino@mt2015.com',
-                'CRO-1234',
-                'SC',
-                '0.000.001',
-                'SC',
-                '(48) 99999-9999',
-                '(48) 99999-9999'
-            );
-            resolve(cliente);
+            if (documento === '041.843.018-78') {
+                const cliente = new Cliente(
+                    '041.843.018-78',
+                    'Dino da Silva Sauro',
+                    'M',
+                    '01/01/2000',
+                    'Cirurgião-Dentista',
+                    'XXXXXXXXXXXXXXX',
+                    'CRO-1234',
+                    'SC',
+                    '0.000.001',
+                    'SC',
+                    '(48) 99999-9999',
+                    '(48) 99999-9999'
+                );
+                resolve(cliente);
+                return;
+            }
+            resolve(new Cliente());
         });
     }
 }

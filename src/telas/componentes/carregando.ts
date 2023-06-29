@@ -4,6 +4,7 @@ import {ICarregando} from "../../contratos/componentes/carregando";
 export class Carregando implements ICarregando {
     private mostrou = false;
     readonly ID: string = 'barra-de-carregamento';
+    readonly TEMPO_DE_ESPERA = 30000;
 
     constructor(public elemento: HTMLElement) {
     }
@@ -19,11 +20,11 @@ export class Carregando implements ICarregando {
         setTimeout(() => {
             if (this.mostrou) {
                 if (window.confirm(`Detectamos uma lentidão no sistema, verifique a conexao com a internet!
-Se for uma operação demorada pode cancelar este alerta!`)) {
+Se for uma operação demorada pode desconsiderar este alerta!`)) {
                     this.esconder();
                 }
             }
-        }, 10000);
+        }, this.TEMPO_DE_ESPERA);
     }
 
     esconder() {

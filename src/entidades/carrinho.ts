@@ -8,62 +8,72 @@ import {IRegraPromocional} from "../contratos/regrapromocional";
 import {IProduto} from "../contratos/entidades/produto";
 
 export class Carrinho implements ICarrinho {
-    produtos: ICarrinhoProduto[];
-    promocoes: IRegraPromocional[];
+    private _produtos: ICarrinhoProduto[] = [];
+    brindes: IProduto[] = [];
+    promocoes: IRegraPromocional[] = [];
     totalizador: ICarrinhoTotalizador;
 
     constructor(promocoes: IRegraPromocional[] = []) {
         this.produtos = [];
+        this.brindes = [];
         this.promocoes = promocoes;
     }
 
-    adicionarProduto(produto: IProduto, quantidade?: number, update: boolean = false) {
+    set produtos(produtos: ICarrinhoProduto[]) {
+        this._produtos = produtos;
+    }
+
+    get produtos(): ICarrinhoProduto[] {
+        return this._produtos;
+    }
+
+    adicionarProduto(produto: IProduto, quantidade?: number, update: boolean = false, personalizacao: string = ''): void {
         if (!quantidade || isNaN(quantidade)) {
             quantidade = 1;
         }
         const item = this.produtos.find(item => item.produto.id === produto.id);
         if (item) {
             item.quantidade = (update) ? quantidade : item.quantidade + quantidade;
+            if (personalizacao) {
+                item.personalizacao = personalizacao;
+            }
         } else {
             this.produtos.push({
                 quantidade,
                 preco_unitario: produto.preco,
                 desconto: 0,
                 produto,
-                e_brinde: false
+                personalizacao
             });
         }
+        this.totalizar();
     }
 
-    removerProduto(produto: IProduto) {
+    removerProduto(produto: IProduto): void {
         this.produtos = this.produtos.filter(item => item.produto.id !== produto.id);
+        this.totalizar();
     }
 
-    limparPromocoesProdutos() {
-        this.produtos.forEach(produto => {
-            if (produto.e_brinde) {
-                this.removerProduto(produto.produto);
-            }
+    limparPromocoesProdutos(): void {
+        this.brindes = [];
+        this._produtos.map(produto => {
             produto.desconto = 0;
             produto.preco_unitario = produto.produto.preco
         });
     }
 
-    aplicarPromocoes() {
+    aplicarPromocoes(): void {
         this.limparPromocoesProdutos();
-        this.promocoes.sort((a, b) => b.prioridade - a.prioridade);
+        this.promocoes.sort((a, b) => a.prioridade - b.prioridade);
         for (const promocao of this.promocoes) {
             if (promocao.atendeCriteriosDaPromocao(this.produtos)) {
-                promocao.aplicarPromocao();
+                promocao.aplicarPromocao(this);
             }
         }
     }
 
-    totalizar(calcular_promocoes: boolean) {
-        if (calcular_promocoes) {
-            this.aplicarPromocoes();
-        }
-
+    totalizar(): void {
+        this.aplicarPromocoes();
         this.totalizador = {
             quantidade_produtos: 0,
             valor_total: 0,
@@ -72,7 +82,7 @@ export class Carrinho implements ICarrinho {
             detalhes_decontos: []
         };
         this.totalizador.detalhes_decontos.push(['produto', 'preco_original', 'quantidade', 'preco_unitario', 'desconto', 'valor'].join(';'));
-        for (const item of this.produtos) {
+        for (const item of this._produtos) {
             const valor = arredondarValor(item.quantidade * item.preco_unitario);
             const desconto = arredondarValor(item.quantidade * item.desconto);
             const valor_subtotal = arredondarValor(item.quantidade * item.produto.preco);

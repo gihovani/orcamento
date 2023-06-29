@@ -40,7 +40,9 @@ export class CartaoDoProduto implements ICartaoDoProduto {
         <img height="200" width="200" src="${produto.imagem}" alt="${produto.nome}" class="card-img-top img-fluid img-thumbnail" />
         <div class="card-body">
           <h2 class="card-title">${produto.nome}</h2>
-          <p class="card-text fs-6">${produto.descricao}</p>
+          <p class="card-text fs-6">
+            SKU: ${produto.id}<br/>${produto.descricao}
+          </p>
           <div class="card-footer">
             <h3 class="price">R$ ${precoFormatado} </h3>
             <form class="row row-cols-lg-auto g-3 align-items-center">

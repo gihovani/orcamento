@@ -14,15 +14,16 @@ export interface ICarrinhoProduto {
     preco_unitario: number;
     desconto: number;
     produto: IProduto;
-    e_brinde: boolean;
+    personalizacao?: string;
 }
 
 export interface ICarrinho {
     produtos: ICarrinhoProduto[];
+    brindes: IProduto[];
     promocoes: IRegraPromocional[];
     totalizador: ICarrinhoTotalizador;
-    adicionarProduto: (produto: IProduto, quantidade?: number, update?: boolean) => void;
+    adicionarProduto: (produto: IProduto, quantidade?: number, update?: boolean, personalizacao?: string) => void;
     removerProduto: (produto: IProduto) => void;
     aplicarPromocoes: () => void;
-    totalizar: (calcular_promocoes: boolean) => void;
+    totalizar: () => void;
 }

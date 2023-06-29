@@ -1,6 +1,6 @@
 import {Carrinho} from "../entidades/carrinho";
 import {Produto} from "../entidades/produto";
-import {Regrapromocional} from "../entidades/regrapromocional";
+import {RegraPromocional} from "../entidades/regrapromocional";
 import {ApiConfiguracoes} from "../servicos/apiconfiguracoes";
 
 const configuracoes = ApiConfiguracoes.instancia();
@@ -38,7 +38,7 @@ const produto3 = new Produto(
     '1234567891',
 );
 const carrinho = new Carrinho();
-const regra1 = new Regrapromocional(
+const regra1 = new RegraPromocional(
     '10% de desconto - Produtos SKU,SKU2',
     1,
     true,
@@ -47,7 +47,7 @@ const regra1 = new Regrapromocional(
     [{'tipo': 'id', 'operacao': 'e_um_dos', 'valor': 'SKU,SKU2'}],
     {'tipo': 'desconto_porcentagem', 'valor': 10, 'valor_maximo': 4},
 );
-const regra2 = new Regrapromocional(
+const regra2 = new RegraPromocional(
     'Desconto na marca GG R$ 5,4',
     2,
     true,
@@ -56,7 +56,7 @@ const regra2 = new Regrapromocional(
     [{'tipo': 'marca', 'operacao': 'igual', 'valor': 'GG'}],
     {'tipo': 'desconto_fixo', 'valor': 5.4},
 );
-const regra3 = new Regrapromocional(
+const regra3 = new RegraPromocional(
     'Regra Vencida',
     99,
     true,
@@ -65,7 +65,7 @@ const regra3 = new Regrapromocional(
     [],
     {'tipo': 'desconto_fixo', 'valor': 1000},
 );
-const regra4 = new Regrapromocional(
+const regra4 = new RegraPromocional(
     'Regra Todos Produtos - 50',
     3,
     true,
@@ -81,7 +81,6 @@ carrinho.promocoes = [regra1, regra2, regra3, regra4];
 carrinho.adicionarProduto(produto1, 1);
 carrinho.adicionarProduto(produto2, 2);
 carrinho.adicionarProduto(produto3, 3);
-carrinho.totalizar(true);
 
 console.log('Adicionar produtos [3 itens na lista]: ', carrinho.produtos.length === 3);
 console.log('Total em Quantidade [6 itens]: ', carrinho.totalizador.quantidade_produtos === 6);
@@ -89,13 +88,11 @@ console.log('Total em Valor [135]: ', carrinho.totalizador.valor_total, carrinho
 
 
 carrinho.adicionarProduto(produto3, 1, true);
-carrinho.totalizar(true);
 console.log('Atualizar quantidade de Produtos: ', carrinho.totalizador.quantidade_produtos, carrinho.totalizador.quantidade_produtos === 4);
 console.log('Valor total atualizado [75]: ', carrinho.totalizador.valor_total, carrinho.totalizador.valor_total === 75);
 
 
 carrinho.removerProduto(produto2);
-carrinho.totalizar(true);
 console.log('Remover produto [2 itens na lista]: ', carrinho.produtos.length === 2);
 console.log('Atualizada quantidade de Produtos: ', carrinho.totalizador.quantidade_produtos === 2);
 console.log('Valor total atualizado [40]: ', carrinho.totalizador.valor_total, carrinho.totalizador.valor_total === 39);

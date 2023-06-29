@@ -115,6 +115,10 @@ export class ApiProduto implements IApiProduto {
         return this.filtraProdutos('codigo_barras', codigoBarra, '===');
     }
 
+    filtrarPorSku(sku: string): IProduto[] {
+        return this.filtraProdutos('id', sku, 'contem');
+    }
+
     filtrarPorNome(nome: string): IProduto[] {
         return this.filtraProdutos('nome', nome, 'contem');
     }

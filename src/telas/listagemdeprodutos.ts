@@ -27,15 +27,19 @@ export class ListagemDeProdutos extends TelaComPaginacao {
     }
 
     adicionar(cartaoDoProduto: ICartaoDoProduto) {
+        let personalizacao = '';
+        if (cartaoDoProduto.produto.personalizado) {
+            personalizacao = window.prompt('Informe a personalizacao: ', 'Linha1: [] | Linha2: []');
+        }
+        console.log(cartaoDoProduto.produto.personalizado, personalizacao);
         const quantidade = cartaoDoProduto.pegaQuantidade();
-        this.carrinho.adicionarProduto(cartaoDoProduto.produto, quantidade);
-        this.carrinho.totalizar(true);
+        this.carrinho.adicionarProduto(cartaoDoProduto.produto, quantidade, false, personalizacao);
         cartaoDoProduto.preencheQuantidade(quantidade);
         this.atualizarQuantidadeDeItensNoCarrinho();
     }
 
 
-    private htmlFiltroDoProdutoPorAtributo(atributo: string, titulo: string): HTMLElement {
+    private seletorFiltroDoProdutoPorAtributo(atributo: string, titulo: string, nomeFuncaoDoFiltro: string): HTMLElement {
         const select = criarElementoHtml('select', ['form-select'], [{nome: 'name', valor: `filtro-${atributo}`}]);
         const option = criarElementoHtml('option', [], [{nome: 'value', valor: ''}, {nome: 'label', valor: titulo}]);
         select.appendChild(option);
@@ -49,73 +53,37 @@ export class ListagemDeProdutos extends TelaComPaginacao {
             const option = criarElementoHtml('option', [], [{nome: 'value', valor}, {nome: 'label', valor}]);
             select.appendChild(option);
         });
+        select.addEventListener('change', (event) => {
+            event.preventDefault();
+            this.itens = this.apiProduto[nomeFuncaoDoFiltro]((event.target as HTMLInputElement).value);
+            this.atualizaHtmlItens(1);
+        });
         return select;
     }
-
-    private filtroPorMarca(): HTMLElement {
-        const filtroMarca = this.htmlFiltroDoProdutoPorAtributo('marca', 'Marca');
-        filtroMarca.addEventListener('change', (event) => {
-            event.preventDefault();
-            this.itens = this.apiProduto.filtrarPorMarca((event.target as HTMLInputElement).value);
-            this.atualizaHtmlItens(1);
-        });
-        return filtroMarca;
-    }
-
-    private fitroPorCategoria(): HTMLElement {
-        const filtro = this.htmlFiltroDoProdutoPorAtributo('categorias', 'Categoria');
-        filtro.addEventListener('change', (event) => {
-            event.preventDefault();
-            this.itens = this.apiProduto.filtrarPorCategoria((event.target as HTMLInputElement).value);
-            this.atualizaHtmlItens(1);
-        });
-        return filtro;
-    }
-
-    private filtroPorNome(): HTMLElement {
-        const filtro = criarElementoHtml('input', [], [
-            {nome: 'name', valor: 'filtro-nome'},
+    private campoFiltroDoProdutoPorAtributo(atributo: string, titulo: string, nomeFuncaoDoFiltro: string): HTMLElement {
+        const input = criarElementoHtml('input', [], [
+            {nome: 'name', valor: `filtro-${atributo}`},
             {nome: 'type', valor: 'text'},
-            {nome: 'placeholder', valor: 'Digite o nome do produto'}
+            {nome: 'placeholder', valor: `Digite o ${titulo} do produto`}
         ]);
         let timeoutId;
-        filtro.addEventListener('input', (event) => {
+        input.addEventListener('input', (event) => {
             event.preventDefault();
             if (timeoutId) {
                 clearTimeout(timeoutId);
             }
             timeoutId = setTimeout(() => {
-                this.itens = this.apiProduto.filtrarPorNome((event.target as HTMLInputElement).value);
+                this.itens = this.apiProduto[nomeFuncaoDoFiltro]((event.target as HTMLInputElement).value);
                 this.atualizaHtmlItens(1);
             }, this._filtroAtraso);
         });
-        return filtro;
-    }
-
-    private filtroCodigoDeBarras(): HTMLElement {
-        const filtro = criarElementoHtml('input', [], [
-            {nome: 'name', valor: 'filtro-codigo-barras'},
-            {nome: 'type', valor: 'text'},
-            {nome: 'placeholder', valor: 'Digite o código de barras'}
-        ]);
-        let timeoutId;
-        filtro.addEventListener('input', (event) => {
-            event.preventDefault();
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-            }
-            timeoutId = setTimeout(() => {
-                this.itens = this.apiProduto.filtrarPorCodigoBarra((event.target as HTMLInputElement).value);
-                this.atualizaHtmlItens(1);
-            }, this._filtroAtraso);
-        });
-        return filtro;
+        return input;
     }
 
     private filtroPorPreco(): HTMLElement {
         const faixaDePrecos = this.apiProduto.faixaDePrecos;
-        const div = criarElementoHtml('div');
-        const filtroPorPreco = criarElementoHtml('input', [], [
+        const div = criarElementoHtml('div', ['input-group', 'mb-4']);
+        const filtroPorPreco = criarElementoHtml('input', ['form-control'], [
             {nome: 'name', valor: 'filtro-faixa-de-preco'},
             {nome: 'type', valor: 'range'},
             {nome: 'step', valor: '0.5'},
@@ -123,7 +91,12 @@ export class ListagemDeProdutos extends TelaComPaginacao {
             {nome: 'max', valor: String(faixaDePrecos.maximo)},
             {nome: 'value', valor: String(faixaDePrecos.maximo)}
         ]);
-        const mostradorValor = criarElementoHtml('output', [], [], `Até: ${faixaDePrecos.maximo}`);
+        const mostradorValor = criarElementoHtml(
+            'span',
+            ['input-group-text'],
+            [],
+            'Max: ' + formataNumeroEmDinheiro(faixaDePrecos.maximo)
+        );
         let timeoutId;
         filtroPorPreco.addEventListener('input', (event) => {
             event.preventDefault();
@@ -133,7 +106,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
             }
             timeoutId = setTimeout(() => {
                 const valor = parseFloat((event.target as HTMLInputElement).value);
-                mostradorValor.textContent = 'Até: ' + formataNumeroEmDinheiro(valor);
+                mostradorValor.textContent = 'Max: ' + formataNumeroEmDinheiro(valor);
                 this.itens = this.apiProduto.filtrarPorPreco(0, valor);
                 this.atualizaHtmlItens(1);
             }, this._filtroAtraso);
@@ -168,10 +141,11 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         const div = criarElementoHtml('div', ['col-12', 'filtros-campo', 'pt-3', 'pb-3']);
         const titulo = criarElementoHtml('h2', ['filtros-titulo'], [], 'Filtros');
         div.appendChild(titulo);
-        div.appendChild(this.filtroCodigoDeBarras());
-        div.appendChild(this.filtroPorNome());
-        div.appendChild(this.filtroPorMarca());
-        div.appendChild(this.fitroPorCategoria());
+        div.appendChild(this.campoFiltroDoProdutoPorAtributo('codigo-de-barras', 'Código de Barras', 'filtrarPorCodigoBarra'));
+        div.appendChild(this.campoFiltroDoProdutoPorAtributo('sku', 'SKU', 'filtrarPorSku'));
+        div.appendChild(this.campoFiltroDoProdutoPorAtributo('nome', 'Nome', 'filtrarPorNome'));
+        div.appendChild(this.seletorFiltroDoProdutoPorAtributo('marca', 'Marca', 'filtrarPorMarca'));
+        div.appendChild(this.seletorFiltroDoProdutoPorAtributo('categorias', 'Categoria', 'filtrarPorCategoria'));
         div.appendChild(this.filtroPorPreco());
         div.appendChild(this.botaoListarRemoverFiltro());
         form.appendChild(div);

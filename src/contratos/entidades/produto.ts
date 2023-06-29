@@ -10,4 +10,5 @@ export interface IProduto {
     categorias?: string;
     marca?: string;
     codigo_barras?: string;
+    personalizado?: boolean;
 }

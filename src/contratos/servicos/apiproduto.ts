@@ -14,6 +14,7 @@ export interface IApiProduto {
     filtrarPorPreco: (valorMinimo: number, valorMaximo: number) => IProduto[];
     filtrarPorCodigoBarra: (codigoBarra: string) => IProduto[];
     filtrarPorNome: (nome: string) => IProduto[];
+    filtrarPorSku: (sku: string) => IProduto[];
     filtros: () => Map<string, string[]>;
     consultar: (id: string) => IProduto | undefined;
     listar: (limparCache: boolean) => Promise<IProduto[]>;

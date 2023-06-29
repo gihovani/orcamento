@@ -90,4 +90,8 @@ export class Produto implements IProduto {
     get preco_promocional(): number | null {
         return this._preco_promocional;
     }
-};
+
+    get personalizado(): boolean {
+        return this._nome.toLowerCase().indexOf('personalizad') > -1;
+    }
+}

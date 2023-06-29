@@ -6,8 +6,8 @@ export class ApiConfiguracoes implements IApiConfiguracoes {
     versao: string;
 
     constructor() {
-        this.loja = this.disponiveis()[0];
-        this.versao = '1.0';
+        this.loja = this.disponiveis()[6];
+        this.versao = '1.01';
     }
 
     static instancia(): ApiConfiguracoes {
@@ -55,13 +55,31 @@ export class ApiConfiguracoes implements IApiConfiguracoes {
                 filtros: null
             }
         }, {
+            nome: 'lovers_dc',
+            titulo: 'Lovers DC',
+            url_base: 'https://www.dentalcremer.com.br/',
+            estilos: 'tema-dc.css',
+            google_merchant: {
+                url: 'https://gg2.com.br/xml/?feed=google_feed_lovers_dc.xml',
+                filtros: null
+            }
+        }, {
+            nome: 'speeds_ds',
+            titulo: 'Speeds DS',
+            url_base: 'https://www.dentalspeed.com/',
+            estilos: 'tema-ds.css',
+            google_merchant: {
+                url: 'https://gg2.com.br/xml/?feed=google_feed_speeds_ds.xml',
+                filtros: null
+            }
+        }, {
             nome: 'colgate',
             titulo: 'Colgate',
             url_base: 'https://www.dentalspeed.com/',
             estilos: 'tema-colgate.css',
             google_merchant: {
-                url: 'https://gg2.com.br/xml/?feed=google_feed_ds.xml',
-                filtros: 'marca=COLGATE'
+                url: 'https://gg2.com.br/xml/?feed=google_feed_colgate.xml',
+                filtros: null
             }
         }];
     }

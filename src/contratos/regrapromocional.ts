@@ -1,4 +1,5 @@
-import {ICarrinhoProduto} from "./carrinho";
+import {ICarrinho, ICarrinhoProduto} from "./carrinho";
+import {IProduto} from "./entidades/produto";
 
 /**
  * - tipos
@@ -22,7 +23,7 @@ import {ICarrinhoProduto} from "./carrinho";
  * --  !() : não é um dos
  */
 export interface IRegraPromocionalCondicao {
-    tipo: 'id' | 'preco' | 'categorias' | 'marca';
+    tipo: 'id' | 'preco' | 'categorias' | 'marca' | 'valor_itens' | 'valor_total' | 'quantidade_itens' | 'quantidade_total';
     operacao: 'igual' | 'diferente' | 'maior' | 'menor' | 'maior_igual' | 'menor_igual' | 'e_um_dos' | 'nao_e_um_dos';
     valor: string;
 }
@@ -31,18 +32,21 @@ export interface IRegraPromocionalAcao {
     tipo: 'desconto_porcentagem' | 'desconto_fixo' | 'valor_unitario' | 'brinde_unico' | 'brinde_escolha';
     valor: number;
     valor_maximo?: number;
-    skus?: string[];
+    brindes?: IProduto[];
 }
 
 export interface IRegraPromocional {
     nome: string;
     prioridade: number;
     situacao: boolean;
-    dataInicio: Date;
-    dataFim: Date;
+    data_inicio: Date;
+    data_fim: Date;
     condicoes: IRegraPromocionalCondicao[];
     acao: IRegraPromocionalAcao;
     descricao?: string;
+    imagem_desktop?: string;
+    imagem_mobile?: string;
+    promocao_aplicada: boolean;
     atendeCriteriosDaPromocao: (produtos: ICarrinhoProduto[]) => boolean;
-    aplicarPromocao: () => void;
+    aplicarPromocao: (carrinho: ICarrinho) => void;
 }
