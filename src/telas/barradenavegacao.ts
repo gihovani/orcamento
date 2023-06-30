@@ -26,6 +26,7 @@ export class BarraDeNavegacao implements ITela {
             document.dispatchEvent(new CustomEvent('atualizar-tela', {detail: 'conteudo'}));
         });
     }
+
     conteudo(): HTMLElement {
         const titulo = ApiConfiguracoes.instancia().loja.titulo;
         this.nav.innerHTML = `<div class="container">
@@ -42,6 +43,16 @@ export class BarraDeNavegacao implements ITela {
         for (const menu of this.menus) {
             ul.appendChild(menu);
         }
+        this.mostraEscondeMenu();
         return this.nav;
+    }
+
+    private mostraEscondeMenu(): void {
+        const button = this.nav.querySelector('button.navbar-toggler');
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            const menuMobile = this.nav.querySelector(button.getAttribute('data-bs-target'));
+            menuMobile.classList.toggle('show');
+        });
     }
 }

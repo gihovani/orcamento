@@ -44,25 +44,12 @@ export class App extends ILayout {
         this.inicializar();
     }
 
-    defineTema(tema) {
-        const tagEstilosDoTema = criarElementoHtml('link', [], [{
-            nome: 'rel', valor: 'stylesheet'
-        }, {
-            nome: 'href', valor: './' + tema + '.css'
-        }]);
-        const head = document.querySelector('head');
-        head.prepend(tagEstilosDoTema)
-    }
-
     inicializar() {
-        const body = document.querySelector('body')
-        const tema = 'tema-ds';
+        const body = document.querySelector('body');
         this._apiVendedor = new ApiVendedorMock();
         this._notificacao = new Notificacao(body);
         this._carregando = new Carregando(body);
         this.tela = new FormularioLogin(this._apiVendedor, this._notificacao);
-        body.classList.add(tema);
-        this.defineTema(tema);
         this.inicializaEventos();
     }
 

@@ -119,7 +119,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
     }
 
     private botaoListarRemoverFiltro(): HTMLElement {
-        const botaoListarTodos = criarElementoHtml('button', ['btn', 'btn-info'], [], 'Listar todos os produtos');
+        const botaoListarTodos = criarElementoHtml('button', ['btn', 'btn-primary'], [], 'Listar todos os produtos');
         botaoListarTodos.addEventListener('click', (event) => {
             event.preventDefault();
             if (this.apiProduto.produtos.length > this.itens.length) {

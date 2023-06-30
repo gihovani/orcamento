@@ -1,36 +1,36 @@
 :root {
-    --branco: #f9f9f9;
+    --branco: #fff;
     --verde: #66c925;
     --texto-primario: #242c2f;
-    --enfase: #f09;
-    --primario: #09f;
+    --enfase: #ffa33e;
+    --primario: #0b4687;
 }
 
-.tema-ds #app {
+.tema-dc #app {
     background-color: var(--branco);
 }
 
-.tema-ds .card,
-.tema-ds .card .img-thumbnail {
+.tema-dc .card,
+.tema-dc .card .img-thumbnail {
     border-radius: 1rem;
 }
 
-.tema-ds .card .label-item-adicionado {
+.tema-dc .card .label-item-adicionado {
     background-color: var(--verde);
     color: #fff;
 }
 
-.tema-ds .card .card-title {
+.tema-dc .card .card-title {
     color: var(--texto-primario);
     letter-spacing: .02em;
 }
 
-.tema-ds .card .card-footer .price {
+.tema-dc .card .card-footer .price {
     color: var(--enfase);
     font-weight: 700;
 }
 
-.tema-ds .card button {
+.tema-dc .card button {
     height: 4rem;
     line-height: 1;
     box-shadow: none;
@@ -40,13 +40,13 @@
     padding: .2rem 1.4rem;
 }
 
-.tema-ds .botao-adicionar {
+.tema-dc .botao-adicionar {
     color: #fff;
     background: var(--verde);
     border-color: var(--verde);
 }
 
-.tema-ds .card .card-footer .linha-acao input {
+.tema-dc .card .card-footer .linha-acao input {
     font-size: 1.4rem;
     padding: 0 .9rem;
     color: var(--texto-primario);
@@ -59,67 +59,67 @@
     border: .1rem solid #d2d2d2;
 }
 
-.tema-ds .toast-container .toast-body {
+.tema-dc .toast-container .toast-body {
     font-size: 1.4rem;
 }
 
-.tema-ds .toast-container .success {
+.tema-dc .toast-container .success {
     color: #fff;
     background: var(--verde);
     border: 1px solid var(--verde);
 }
 
-.tema-ds .danger {
+.tema-dc .danger {
     color: #7a1d20;
     background: #f5d6d7;
     border: 1px solid #7a1d20;
 }
 
-.tema-ds button.danger {
+.tema-dc button.danger {
     color: #7a1d20;
 }
 
-.tema-ds button.info {
+.tema-dc button.info {
     color: #1d487a;
 }
 
-.tema-ds button.sem-estilo {
+.tema-dc button.sem-estilo {
     background: transparent;
     border: 1px solid transparent;
 }
 
-.tema-ds .label-quantidade {
+.tema-dc .label-quantidade {
     color: #fff;
     background-color: var(--enfase);
 }
 
-.tema-ds .nav-item:hover a {
+.tema-dc .nav-item:hover a {
     color: var(--primario);
 }
 
-.tema-ds .nav-link.active {
+.tema-dc .nav-link.active {
     color: var(--enfase);
 }
 
-.tema-ds .listagem-de-produtos .filtros-campo select,
-.tema-ds .listagem-de-produtos .filtros-campo button,
-.tema-ds .listagem-de-produtos .filtros-campo input,
-.tema-ds .listagem-de-produtos .filtros-campo span,
-.tema-ds .card input {
+.tema-dc .listagem-de-produtos .filtros-campo select,
+.tema-dc .listagem-de-produtos .filtros-campo button,
+.tema-dc .listagem-de-produtos .filtros-campo input,
+.tema-dc .listagem-de-produtos .filtros-campo span,
+.tema-dc .card input {
     border-radius: 30px;
 }
 
-.tema-ds .lista-de-promocoes .regras .regra .regra-texto span {
+.tema-dc .lista-de-promocoes .regras .regra .regra-texto span {
     border: 3px solid #09f;
     font-weight: 600;
     color: #09f;
 }
 
-.tema-ds .lista-de-compras .brinde {
+.tema-dc .lista-de-compras .brinde {
     border: 3px solid #09f;
 }
 
-.tema-ds .lista-de-compras .card .valor-e-quantidade h3 {
+.tema-dc .lista-de-compras .card .valor-e-quantidade h3 {
     color: var(--enfase);
     font-size: 2rem;
     font-weight: 600;

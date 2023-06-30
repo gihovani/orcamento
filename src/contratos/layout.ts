@@ -1,12 +1,13 @@
 import {ITela} from "./tela";
 import {criarElementoHtml} from "../util/helper";
+import {ApiConfiguracoes} from "../servicos/apiconfiguracoes";
 
 export abstract class ILayout implements ITela {
     elemento: HTMLElement;
     abstract cabecalho(): HTMLElement;
     abstract conteudo(): HTMLElement;
     abstract rodape(): HTMLElement;
-    renderizar() {
+    renderizar(): void {
         if (this.elemento.firstChild) {
             this.elemento.firstChild.remove();
         }
@@ -14,15 +15,24 @@ export abstract class ILayout implements ITela {
         app.appendChild(this.cabecalho());
         app.appendChild(this.conteudo());
         app.appendChild(this.rodape());
+        this.ajustarTema();
         this.elemento.appendChild(app);
-        this.toggleMenu();
     }
 
-    toggleMenu() {
-        const button = document.querySelector('button.navbar-toggler');
-        button.addEventListener('click', function(e) {
-            const menuMobile = document.querySelector(this.getAttribute('data-bs-target'));
-            menuMobile.classList.toggle('show');
-        })
+    private ajustarTema(): void {
+        const config = ApiConfiguracoes.instancia().loja;
+        const link_css = document.getElementById('tema-css');
+        if (link_css && link_css.getAttribute('href') !== config.estilos) {
+            const body = document.querySelector('body');
+            const nome_tema_antigo = this.pegaNomeDoTema(link_css.getAttribute('href'));
+            body.classList.remove(nome_tema_antigo);
+            body.classList.add(this.pegaNomeDoTema(config.estilos));
+
+            link_css.setAttribute('href', config.estilos);
+        }
+    }
+
+    private pegaNomeDoTema(estilo_css: string): string {
+        return estilo_css.split(/[\\/]/g).pop().split('.')[0];
     }
 }

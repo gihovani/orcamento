@@ -22,7 +22,7 @@ export class ApiConfiguracoes implements IApiConfiguracoes {
             nome: 'teste',
             titulo: 'Loja do GG2',
             url_base: 'https://www.utilidadesclinicas.com.br/',
-            estilos: 'tema-ds.css',
+            estilos: './tema-ds.css',
             google_merchant: {
                 url: 'xml/teste.xml',
                 filtros: null
@@ -31,7 +31,7 @@ export class ApiConfiguracoes implements IApiConfiguracoes {
             nome: 'uc',
             titulo: 'Utilidades Clínicas',
             url_base: 'https://www.utilidadesclinicas.com.br/',
-            estilos: 'tema-uc.css',
+            estilos: './tema-uc.css',
             google_merchant: {
                 url: 'https://gg2.com.br/xml/?feed=google_feed.xml',
                 filtros: null
@@ -40,7 +40,7 @@ export class ApiConfiguracoes implements IApiConfiguracoes {
             nome: 'dc',
             titulo: 'Dental Cremer',
             url_base: 'https://www.dentalcremer.com.br/',
-            estilos: 'tema-dc.css',
+            estilos: './tema-dc.css',
             google_merchant: {
                 url: 'https://gg2.com.br/xml/?feed=google_feed_dc.xml',
                 filtros: null
@@ -49,7 +49,7 @@ export class ApiConfiguracoes implements IApiConfiguracoes {
             nome: 'ds',
             titulo: 'Dental Speed',
             url_base: 'https://www.dentalspeed.com/',
-            estilos: 'tema-ds.css',
+            estilos: './tema-ds.css',
             google_merchant: {
                 url: 'https://gg2.com.br/xml/?feed=google_feed_ds.xml',
                 filtros: null
@@ -58,7 +58,7 @@ export class ApiConfiguracoes implements IApiConfiguracoes {
             nome: 'lovers_dc',
             titulo: 'Lovers DC',
             url_base: 'https://www.dentalcremer.com.br/',
-            estilos: 'tema-dc.css',
+            estilos: './tema-dc.css',
             google_merchant: {
                 url: 'https://gg2.com.br/xml/?feed=google_feed_lovers_dc.xml',
                 filtros: null
@@ -67,7 +67,7 @@ export class ApiConfiguracoes implements IApiConfiguracoes {
             nome: 'speeds_ds',
             titulo: 'Speeds DS',
             url_base: 'https://www.dentalspeed.com/',
-            estilos: 'tema-ds.css',
+            estilos: './tema-ds.css',
             google_merchant: {
                 url: 'https://gg2.com.br/xml/?feed=google_feed_speeds_ds.xml',
                 filtros: null
@@ -76,7 +76,7 @@ export class ApiConfiguracoes implements IApiConfiguracoes {
             nome: 'colgate',
             titulo: 'Colgate',
             url_base: 'https://www.dentalspeed.com/',
-            estilos: 'tema-colgate.css',
+            estilos: './tema-colgate.css',
             google_merchant: {
                 url: 'https://gg2.com.br/xml/?feed=google_feed_colgate.xml',
                 filtros: null
