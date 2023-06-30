@@ -4,6 +4,7 @@ import {ICarregando} from "../../contratos/componentes/carregando";
 import {IApiCep} from "../../contratos/servicos/apicep";
 import {IEndereco} from "../../contratos/entidades/endereco";
 import {INotificacao} from "../../contratos/componentes/notificacao";
+import {validarCEP} from "../../util/validacoes";
 
 export class DadosDoEndereco implements IDadosDoEndereco {
     readonly ID: string = 'dados-do-endereco';
@@ -80,7 +81,7 @@ export class DadosDoEndereco implements IDadosDoEndereco {
         `;
         div.querySelector('#endereco-cep')?.addEventListener('change', (e) => {
             const cep = (e.target as HTMLInputElement).value;
-            if (cep.length >= 8 && cep.length <= 9) {
+            if (validarCEP(cep)) {
                 this.carregando.mostrar();
                 this.apiCep.consultar(cep).then((endereco) => {
                     this.preencheDados(endereco);

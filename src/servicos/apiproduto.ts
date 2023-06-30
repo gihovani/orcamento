@@ -91,7 +91,7 @@ export class ApiProduto implements IApiProduto {
         }
     }
 
-    private filtraProdutos(atributo: string, valor: string, operacao: string): IProduto[] {
+    private filtraProdutos(atributo: string, valor: any, operacao: string): IProduto[] {
         return this.produtos.filter(item => {
             if (operacao === '===') {
                 return item[atributo] === valor;
@@ -125,6 +125,10 @@ export class ApiProduto implements IApiProduto {
 
     filtrarPorPreco(valorMinimo: number, valorMaximo: number): IProduto[] {
         return this.produtos.filter(item => item.preco >= valorMinimo && item.preco <= valorMaximo);
+    }
+
+    filtrarPorSituacao(situacao: boolean): IProduto[] {
+        return this.filtraProdutos('situacao', situacao, '===');
     }
 
     consultar(id: string): IProduto | undefined {

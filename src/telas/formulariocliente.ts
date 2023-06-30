@@ -16,6 +16,7 @@ export class FormularioCliente implements ITela {
 
     conteudo(): HTMLElement {
         const form = criarElementoHtml('form');
+        form.setAttribute('autocomplete', 'off');
         const dadosDoCliente = new DadosDoCliente(form, this.apiCliente, this.notificacao, this.carregando);
         dadosDoCliente.mostrar();
 

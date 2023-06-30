@@ -21,7 +21,7 @@ export class FormularioPagamentoBoletoParcelado implements ITela {
 
     conteudo(): HTMLElement {
         const main = criarElementoHtml('main', ['row']);
-        main.innerHTML = `<form class="bg-body-tertiary p-5 rounded mt-3 mb-3 m-auto needs-validation" autocomplete="off">
+        main.innerHTML = `<form class="p-5 rounded mt-3 mb-3 m-auto needs-validation" autocomplete="off">
   <h1 class="h3 mb-3 fw-normal">Boleto Parcelado</h1>
   <div class="row">
     <div class="col-md-6 mb-3">

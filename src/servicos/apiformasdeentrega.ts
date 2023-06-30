@@ -50,6 +50,10 @@ export class ApiFormasDeEntregaMagento implements IApiFormasDeEntrega {
                     body: JSON.stringify({estimate_shipping: {postcode, items}})
                 });
                 let result = await response.json();
+                if (result.message) {
+                    reject(result.message);
+                    return;
+                }
                 const formasDeEntrega = result.map(item => new FormaDeEntrega(
                     item['code'],
                     item['title'],

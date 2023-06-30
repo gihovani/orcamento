@@ -37,7 +37,7 @@ export class FormularioPagamento implements ITela {
                 <span class="badge badge-secondary badge-pill">3</span>
             </h4>
             <div id="itens-do-carrinho"></div>
-            <form class="card p-2" onsubmit="alert('ainda nao disponivel!');return false">
+            <form id="formulario-de-codigo-promocional" class="card p-2" onsubmit="alert('ainda nao disponivel!');return false" autocomplete="off">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Código Promocional" id="codigo-promocional">
                     <div class="input-group-append">
@@ -98,6 +98,7 @@ export class FormularioPagamento implements ITela {
 
     htmlFormularioDePagamento(): HTMLElement {
         const form = criarElementoHtml('form', ['needs-validation']);
+        form.setAttribute('autocomplete', 'off');
         const dadosDoCliente = new DadosDoCliente(form, this.apiCliente, this.notificacao, this.carregando);
         dadosDoCliente.mostrar();
         form.append(criarElementoHtml('hr', ['mb-4']));

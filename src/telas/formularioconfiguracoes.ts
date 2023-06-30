@@ -25,15 +25,15 @@ export class FormularioConfiguracoes implements ITela {
     }
 
     conteudo(): HTMLElement {
-        const main = criarElementoHtml('main', ['row']);
+        const main = criarElementoHtml('main');
         main.innerHTML = `
-            <form class="bg-body-tertiary p-5 rounded mt-3 mb-3 m-auto">
+            <form class="p-5 rounded mt-3 mb-3 row" autocomplete="off">
                 <h1 class="h3 mb-3 fw-normal">Configurações do Sistema</h1>
-                <div class="mb-3">
+                <div class="mb-3 col-6">
                     <label class="form-label" for="loja">Loja</label>
                     <select id="loja" class="form-select"></select>
                 </div>
-                <div class="mb-3">
+                <div class="mb-3 col-6">
                     <label class="form-label" for="versao">Versão</label>
                     <input class="form-control" type="text" id="versao" maxlength="10" value="${this._configuracoes.versao}" />
                 </div>

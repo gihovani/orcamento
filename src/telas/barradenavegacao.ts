@@ -1,12 +1,13 @@
 import {ITela} from "../contratos/tela";
 import {criarElementoHtml} from "../util/helper";
 import {ApiConfiguracoes} from "../servicos/apiconfiguracoes";
+import {ICarrinho} from "../contratos/carrinho";
 
 export class BarraDeNavegacao implements ITela {
     private menus: HTMLElement[] = [];
     private nav = criarElementoHtml('nav', ['navbar', 'navbar-expand-lg', 'bg-body-tertiary', 'row']);
 
-    constructor() {
+    constructor(readonly carrinho: ICarrinho) {
     }
 
     adicionaMenu(id: string, titulo: string, callback: () => void) {
@@ -36,7 +37,7 @@ export class BarraDeNavegacao implements ITela {
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+            <ul class="nav nav-underline nav-justified w-100"></ul>
         </div>
     </div>`;
         const ul = this.nav.querySelector('#navbarSupportedContent ul');
@@ -44,6 +45,7 @@ export class BarraDeNavegacao implements ITela {
             ul.appendChild(menu);
         }
         this.mostraEscondeMenu();
+        this.atualizarQuantidadeDeItensNoCarrinho();
         return this.nav;
     }
 
@@ -54,5 +56,20 @@ export class BarraDeNavegacao implements ITela {
             const menuMobile = this.nav.querySelector(button.getAttribute('data-bs-target'));
             menuMobile.classList.toggle('show');
         });
+    }
+
+    atualizarQuantidadeDeItensNoCarrinho(): void {
+        const menuCarrinho = this.nav.querySelector('#menu-carrinho');
+        if (!menuCarrinho) {
+            return;
+        }
+        const span = criarElementoHtml(
+            'span',
+            ['label-quantidade'],
+            [],
+            String(this.carrinho.produtos.length)
+        );
+        menuCarrinho.querySelector('.label-quantidade')?.remove();
+        menuCarrinho.appendChild(span);
     }
 }

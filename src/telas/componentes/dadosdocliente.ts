@@ -4,6 +4,7 @@ import {criarElementoHtml} from "../../util/helper";
 import {IApiCliente} from "../../contratos/servicos/apicliente";
 import {ICarregando} from "../../contratos/componentes/carregando";
 import {INotificacao} from "../../contratos/componentes/notificacao";
+import {validarCPF} from "../../util/validacoes";
 
 export class DadosDoCliente implements IDadosDoCliente {
     readonly ID: string = 'dados-do-cliente';
@@ -112,7 +113,7 @@ export class DadosDoCliente implements IDadosDoCliente {
         `;
         div.querySelector('#cliente-documento')?.addEventListener('change', (e) => {
             const documento = (e.target as HTMLInputElement).value;
-            if (documento.length === 11) {
+            if (validarCPF(documento)) {
                 this.carregando.mostrar();
                 this.apiCliente.consultar(documento).then((cliente) => {
                     this.preencheDados(cliente);

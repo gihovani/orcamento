@@ -1,5 +1,5 @@
 :root {
-    --branco: #fff;
+    --branco: #f9f9f9;
     --verde: #66c925;
     --texto-primario: #242c2f;
     --enfase: #ffa33e;
@@ -7,7 +7,7 @@
 }
 
 .tema-dc #app {
-    background-color: var(--branco);
+    background-color: #fff;
 }
 
 .tema-dc .card,
@@ -30,16 +30,6 @@
     font-weight: 700;
 }
 
-.tema-dc .card button {
-    height: 4rem;
-    line-height: 1;
-    box-shadow: none;
-    font-size: 1.4rem;
-    text-align: center;
-    border-radius: 12rem;
-    padding: .2rem 1.4rem;
-}
-
 .tema-dc .botao-adicionar {
     color: #fff;
     background: var(--verde);
@@ -47,8 +37,8 @@
 }
 
 .tema-dc .card .card-footer .linha-acao input {
-    font-size: 1.4rem;
-    padding: 0 .9rem;
+    font-size: 0.75rem;
+    padding: 0 0.5rem;
     color: var(--texto-primario);
     text-align: center;
     border-radius: 12rem;
@@ -57,10 +47,6 @@
     vertical-align: baseline;
     background-clip: padding-box;
     border: .1rem solid #d2d2d2;
-}
-
-.tema-dc .toast-container .toast-body {
-    font-size: 1.4rem;
 }
 
 .tema-dc .toast-container .success {
@@ -77,6 +63,7 @@
 
 .tema-dc button.danger {
     color: #7a1d20;
+
 }
 
 .tema-dc button.info {
@@ -106,7 +93,7 @@
 .tema-dc .listagem-de-produtos .filtros-campo input,
 .tema-dc .listagem-de-produtos .filtros-campo span,
 .tema-dc .card input {
-    border-radius: 30px;
+    border-radius: 1.75rem;
 }
 
 .tema-dc .lista-de-promocoes .regras .regra .regra-texto span {
@@ -121,6 +108,5 @@
 
 .tema-dc .lista-de-compras .card .valor-e-quantidade h3 {
     color: var(--enfase);
-    font-size: 2rem;
     font-weight: 600;
 }

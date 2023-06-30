@@ -29,16 +29,18 @@ import {FormularioPagamento} from "./formulariopagamento";
 import {IApiVendedor} from "../contratos/servicos/apivendedor";
 import {Produto} from "../entidades/produto";
 import {ListaDePromocoes} from "./listadepromocoes";
+import {ICarrinho} from "../contratos/carrinho";
 
 export class App extends ILayout {
-    private _apiVendedor: IApiVendedor;
     private _tela: ITela;
+    private _carrinho: ICarrinho;
+    private _apiVendedor: IApiVendedor;
     private _notificacao: INotificacao;
     private _carregando: ICarregando;
+    private _barraDeNavegacao: BarraDeNavegacao;
 
     constructor(
-        public elemento: HTMLElement,
-        public barraDeNavegacao: BarraDeNavegacao
+        public elemento: HTMLElement
     ) {
         super();
         this.inicializar();
@@ -46,9 +48,11 @@ export class App extends ILayout {
 
     inicializar() {
         const body = document.querySelector('body');
+        this._carrinho = this.criaCarrinho();
         this._apiVendedor = new ApiVendedorMock();
         this._notificacao = new Notificacao(body);
         this._carregando = new Carregando(body);
+        this._barraDeNavegacao = new BarraDeNavegacao(this._carrinho);
         this.tela = new FormularioLogin(this._apiVendedor, this._notificacao);
         this.inicializaEventos();
     }
@@ -66,14 +70,13 @@ export class App extends ILayout {
         this.renderizar();
     }
 
-    inicializaEventos() {
+    inicializaEventos(): void {
         document.addEventListener('atualizar-tela', () => {
             this.renderizar();
         });
 
         document.addEventListener('autenticacao', (e: CustomEvent) => {
             const ehAdministrador = this._apiVendedor.ehAdministrador();
-            const carrinho = this.criaCarrinho();
             const apiCliente = new ApiClienteMock();
             const apiCep = new ApiCepViaCep();
             const apiBin = new ApiBin();
@@ -83,54 +86,54 @@ export class App extends ILayout {
             const formularioConfiguracoes = new FormularioConfiguracoes(apiProduto, this._notificacao, this._carregando);
             const formularioCliente = new FormularioCliente(apiCliente, this._notificacao, this._carregando);
             const formularioEndereco = new FormularioEndereco(apiCep, this._notificacao, this._carregando);
-            const listagemDeProdutos = new ListagemDeProdutos(apiProduto, carrinho, this._carregando);
-            const formularioPagamentoCartaoDeCreditoMaquineta = new FormularioPagamentoCartaoDeCreditoMaquineta(carrinho, apiParcelamento, this._notificacao);
-            const formularioPagamentoCartaoDeCredito = new FormularioPagamentoCartaoDeCredito(carrinho, apiParcelamento, apiBin, this._notificacao);
-            const formularioPagamentoBoletoParcelado = new FormularioPagamentoBoletoParcelado(carrinho, apiParcelamento, this._notificacao);
-            const formularioPagamento = new FormularioPagamento(carrinho, apiCliente, apiCep, apiParcelamento, apiBin, this._notificacao, this._carregando);
-            const listaDeCompras = new ListaDeCompras(carrinho, this._notificacao);
-            const listaDePromocoes = new ListaDePromocoes(carrinho);
+            const listagemDeProdutos = new ListagemDeProdutos(apiProduto, this._carrinho, this._barraDeNavegacao, this._carregando);
+            const formularioPagamentoCartaoDeCreditoMaquineta = new FormularioPagamentoCartaoDeCreditoMaquineta(this._carrinho, apiParcelamento, this._notificacao);
+            const formularioPagamentoCartaoDeCredito = new FormularioPagamentoCartaoDeCredito(this._carrinho, apiParcelamento, apiBin, this._notificacao);
+            const formularioPagamentoBoletoParcelado = new FormularioPagamentoBoletoParcelado(this._carrinho, apiParcelamento, this._notificacao);
+            const formularioPagamento = new FormularioPagamento(this._carrinho, apiCliente, apiCep, apiParcelamento, apiBin, this._notificacao, this._carregando);
+            const listaDeCompras = new ListaDeCompras(this._carrinho, this._barraDeNavegacao, this._notificacao);
+            const listaDePromocoes = new ListaDePromocoes(this._carrinho);
 
             this.tela = mensagemBoasVindas;
-            this.barraDeNavegacao.adicionaMenu('menu-configuracoes', 'Configurações', () => {
+            this._barraDeNavegacao.adicionaMenu('menu-configuracoes', 'Configurações', () => {
                 this.tela = formularioConfiguracoes;
             });
-            ehAdministrador && this.barraDeNavegacao.adicionaMenu('menu-cliente', 'Cliente', () => {
+            ehAdministrador && this._barraDeNavegacao.adicionaMenu('menu-cliente', 'Cliente', () => {
                 this.tela = formularioCliente;
             });
-            ehAdministrador && this.barraDeNavegacao.adicionaMenu('menu-endereco', 'Endereço de Entrega', () => {
+            ehAdministrador && this._barraDeNavegacao.adicionaMenu('menu-endereco', 'Endereço de Entrega', () => {
                 this.tela = formularioEndereco;
             });
-            this.barraDeNavegacao.adicionaMenu('menu-lista-de-produtos', 'Lista de Produtos', () => {
+            this._barraDeNavegacao.adicionaMenu('menu-lista-de-produtos', 'Lista de Produtos', () => {
                 listagemDeProdutos.pegaDadosDosProdutos();
                 this.tela = listagemDeProdutos;
             });
-            ehAdministrador && this.barraDeNavegacao.adicionaMenu('menu-cartao-de-credito-maquineta', 'CC Maquineta', () => {
+            ehAdministrador && this._barraDeNavegacao.adicionaMenu('menu-cartao-de-credito-maquineta', 'CC Maquineta', () => {
                 this.tela = formularioPagamentoCartaoDeCreditoMaquineta;
             });
-            ehAdministrador && this.barraDeNavegacao.adicionaMenu('menu-cartao-de-credito', 'CC', () => {
+            ehAdministrador && this._barraDeNavegacao.adicionaMenu('menu-cartao-de-credito', 'CC', () => {
                 this.tela = formularioPagamentoCartaoDeCredito;
             });
-            ehAdministrador && this.barraDeNavegacao.adicionaMenu('menu-boleto-parcelado', 'Boleto Parcelado', () => {
+            ehAdministrador && this._barraDeNavegacao.adicionaMenu('menu-boleto-parcelado', 'Boleto Parcelado', () => {
                 this.tela = formularioPagamentoBoletoParcelado;
             });
-            this.barraDeNavegacao.adicionaMenu('menu-pagamento', 'Promoções', () => {
+            this._barraDeNavegacao.adicionaMenu('menu-pagamento', 'Promoções', () => {
                 this.tela = listaDePromocoes;
             });
-            this.barraDeNavegacao.adicionaMenu('menu-carrinho', 'Carrinho', () => {
+            this._barraDeNavegacao.adicionaMenu('menu-carrinho', 'Carrinho', () => {
                 this.tela = listaDeCompras;
             });
-            this.barraDeNavegacao.adicionaMenu('menu-pagamento', 'Pagamento', () => {
+            this._barraDeNavegacao.adicionaMenu('menu-pagamento', 'Pagamento', () => {
                 this.tela = formularioPagamento;
             });
-            this.barraDeNavegacao.adicionaMenu('menu-deslogar', 'Logout', () => {
+            this._barraDeNavegacao.adicionaMenu('menu-deslogar', 'Logout', () => {
                 window.location.reload();
             });
             this.renderizar();
         });
     }
 
-    private criaCarrinho() {
+    private criaCarrinho(): ICarrinho {
         const carrinho = new Carrinho();
         let prioridade = 1;
 
@@ -189,8 +192,8 @@ export class App extends ILayout {
         return carrinho;
     }
 
-    criarRegraBrinde(
-        prioridade:  number,
+    private criarRegraBrinde(
+        prioridade: number,
         brinde_nome: string,
         brinde_descricao: string,
         brinde_imagem: string,
@@ -219,7 +222,7 @@ export class App extends ILayout {
     }
 
     cabecalho(): HTMLElement {
-        return this.barraDeNavegacao.conteudo();
+        return this._barraDeNavegacao.conteudo();
     }
 
     rodape(): HTMLElement {

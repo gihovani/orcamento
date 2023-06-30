@@ -7,7 +7,7 @@
 }
 
 .tema-colgate #app {
-    background-color: var(--branco);
+    background-color: #fff;
 }
 
 .tema-colgate .card,
@@ -30,16 +30,6 @@
     font-weight: 700;
 }
 
-.tema-colgate .card button {
-    height: 4rem;
-    line-height: 1;
-    box-shadow: none;
-    font-size: 1.4rem;
-    text-align: center;
-    border-radius: 12rem;
-    padding: .2rem 1.4rem;
-}
-
 .tema-colgate .botao-adicionar {
     color: #fff;
     background: var(--verde);
@@ -47,8 +37,8 @@
 }
 
 .tema-colgate .card .card-footer .linha-acao input {
-    font-size: 1.4rem;
-    padding: 0 .9rem;
+    font-size: 0.75rem;
+    padding: 0 0.5rem;
     color: var(--texto-primario);
     text-align: center;
     border-radius: 12rem;
@@ -57,10 +47,6 @@
     vertical-align: baseline;
     background-clip: padding-box;
     border: .1rem solid #d2d2d2;
-}
-
-.tema-colgate .toast-container .toast-body {
-    font-size: 1.4rem;
 }
 
 .tema-colgate .toast-container .success {
@@ -107,7 +93,7 @@
 .tema-colgate .listagem-de-produtos .filtros-campo input,
 .tema-colgate .listagem-de-produtos .filtros-campo span,
 .tema-colgate .card input {
-    border-radius: 30px;
+    border-radius: 1.75rem;
 }
 
 .tema-colgate .lista-de-promocoes .regras .regra .regra-texto span {
@@ -122,6 +108,5 @@
 
 .tema-colgate .lista-de-compras .card .valor-e-quantidade h3 {
     color: var(--enfase);
-    font-size: 2rem;
     font-weight: 600;
 }

@@ -7,7 +7,7 @@
 }
 
 .tema-ds #app {
-    background-color: var(--branco);
+    background-color: #fff;
 }
 
 .tema-ds .card,
@@ -30,16 +30,6 @@
     font-weight: 700;
 }
 
-.tema-ds .card button {
-    height: 4rem;
-    line-height: 1;
-    box-shadow: none;
-    font-size: 1.4rem;
-    text-align: center;
-    border-radius: 12rem;
-    padding: .2rem 1.4rem;
-}
-
 .tema-ds .botao-adicionar {
     color: #fff;
     background: var(--verde);
@@ -47,8 +37,8 @@
 }
 
 .tema-ds .card .card-footer .linha-acao input {
-    font-size: 1.4rem;
-    padding: 0 .9rem;
+    font-size: 0.75rem;
+    padding: 0 0.5rem;
     color: var(--texto-primario);
     text-align: center;
     border-radius: 12rem;
@@ -57,10 +47,6 @@
     vertical-align: baseline;
     background-clip: padding-box;
     border: .1rem solid #d2d2d2;
-}
-
-.tema-ds .toast-container .toast-body {
-    font-size: 1.4rem;
 }
 
 .tema-ds .toast-container .success {
@@ -77,6 +63,7 @@
 
 .tema-ds button.danger {
     color: #7a1d20;
+
 }
 
 .tema-ds button.info {
@@ -106,7 +93,7 @@
 .tema-ds .listagem-de-produtos .filtros-campo input,
 .tema-ds .listagem-de-produtos .filtros-campo span,
 .tema-ds .card input {
-    border-radius: 30px;
+    border-radius: 1.75rem;
 }
 
 .tema-ds .lista-de-promocoes .regras .regra .regra-texto span {
@@ -121,6 +108,5 @@
 
 .tema-ds .lista-de-compras .card .valor-e-quantidade h3 {
     color: var(--enfase);
-    font-size: 2rem;
     font-weight: 600;
 }
