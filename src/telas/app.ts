@@ -51,7 +51,7 @@ export class App extends ILayout {
             nome: 'href', valor: './' + tema + '.css'
         }]);
         const head = document.querySelector('head');
-        head.appendChild(tagEstilosDoTema)
+        head.prepend(tagEstilosDoTema)
     }
 
     inicializar() {

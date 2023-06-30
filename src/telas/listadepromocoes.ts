@@ -8,13 +8,17 @@ export class ListaDePromocoes implements ITela {
     }
 
     htmlListaDePromocoesAtivas(): HTMLElement {
-        const div = criarElementoHtml('div', ['row']);
+        const div = criarElementoHtml('div', ['row','regras']);
         const produtos = this.carrinho.promocoes;
         produtos.map(regra => {
-            const divProduto = criarElementoHtml('div', ['col-6', 'mb-3', `${regra.promocao_aplicada ? 'bg-info' : 'inative'}`]);
+            const divProduto = criarElementoHtml('div', ['col-6', 'mb-3','regra', `${regra.promocao_aplicada ? 'regra-ativa' : 'inative'}`]);
             divProduto.innerHTML = `
-            ${regra.nome} - ${regra.descricao} - ${regra.promocao_aplicada}
-            ${regra.imagem_desktop ? `<img src="${regra.imagem_desktop}" width="540" height="245" alt="${regra.nome}">` : ''}`;
+            <div class="regra-texto">
+                <h4>${regra.nome}</h4>
+                <h5>${regra.descricao}</h5>
+                ${regra.promocao_aplicada ? '<span>Promoção Ativada</span>' : ''}
+            </div>
+            ${regra.imagem_desktop ? `<img src="${regra.imagem_desktop}" alt="${regra.nome}" title="${regra.promocao_aplicada ? 'Promoção Válida' : 'Promoção Inválida'}">` : ''}`;
             div.appendChild(divProduto);
         });
         return div;
