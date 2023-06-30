@@ -1,7 +1,10 @@
 html {
     font-size: 0.7rem;
 }
-
+html.h-100 {
+    min-height: 100vh;
+    height: 100%!important;
+}
 .navbar-nav {
     width: 100%;
 }
@@ -185,6 +188,45 @@ input[type=number]::-webkit-outer-spin-button {
 
 .lista-de-promocoes .regras .regra.regra-ativa img {
     filter: grayscale(0);
+}
+
+.lista-de-compras {
+    display: flex;
+    align-items: flex-end;
+}
+
+.lista-de-compras .brinde {
+    margin-bottom: 30px;
+}
+
+.lista-de-compras .card form{
+    justify-content: flex-end;
+}
+
+.lista-de-compras .card .valor-e-quantidade {
+    width: 250px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+}
+.lista-de-compras .card .valor-e-quantidade input{
+    width: 50px;
+    text-align: center;
+    font-size: 1.4rem;
+}
+.lista-de-compras .card .valor-e-quantidade h3{
+    width: 50%;
+    margin: 0;
+}
+
+.lista-de-compras .card .acoes {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 15px;
+    border-top: 2px solid #F9F9F9;
 }
 
 @media screen and (max-width: 830px) {

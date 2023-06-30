@@ -35,28 +35,30 @@ export class ListaDeCompras implements ITela {
             const divProduto = criarElementoHtml('div', ['col-12']);
             divProduto.setAttribute('id', `produto-id-${produto.id}`);
             divProduto.innerHTML = `<div class="card shadow-sm">
-<div class="row g-0">
-    <div class="col-sm-4 col-md-2">
-        <img height="100" src="${produto.imagem}" alt="${produto.nome}" class="card-img-top img-fluid img-thumbnail" />
-    </div>
-    <div class="col-sm-8 col-md-10">
-        <div class="card-body">
-          <h2 class="card-title fs-5">${produto.nome}</h2>
-          <p class="card-text fs-6">${item.personalizacao.replace(' | ', '<br/>')}</p>
-          
-          <div class="card-footer">
-            ${`<h3 class="text-center fs-5">${(produto.preco > item.preco_unitario) ? 'De: R$ ' + precoDeFormatado + ' / Por:' : ''} R$ ${precoPorFormatado}</h3>
-            <form class="row row-cols-lg-auto g-3 align-items-center">
-            <div class="input-group mb-3">
-              <input id="quantidade-${produto.id}" class="form-control" type="number" step="1" min="1" max="100" value="${item.quantidade}" aria-label="Quantidade" />
-              <button class="input-group-text botao-atualizar"><i class="bi bi-arrow-clockwise"></i></button>
-              <button class="input-group-text botao-remover"><i class="bi bi-x-lg"></i></button>
-            </div>
-            </form>`}
-          </div>
-        </div>
-    </div>
-</div>`;
+            <div class="row g-0">
+                <div class="col-sm-4 col-md-2">
+                    <img height="100" src="${produto.imagem}" alt="${produto.nome}" class="card-img-top img-fluid img-thumbnail" />
+                </div>
+                <div class="col-sm-8 col-md-10">
+                    <div class="card-body">
+                        <h2 class="card-title fs-5">${produto.nome}</h2>
+                        <p class="card-text fs-6">${item.personalizacao.replace(' | ', '<br/>')}</p>
+                        
+                        <div class="card-footer">
+                            ${`<form class="row row-cols-lg-auto g-3 align-items-center">
+                                <div class="valor-e-quantidade">
+                                    <h3 class="text-center">${(produto.preco > item.preco_unitario) ? 'De: R$ ' + precoDeFormatado + ' / Por:' : ''} R$ ${precoPorFormatado}</h3>
+                                    <input id="quantidade-${produto.id}" class="form-control" type="number" step="1" min="1" max="100" value="${item.quantidade}" aria-label="Quantidade" />
+                                </div>
+                                <div class="mb-3 acoes">
+                                    <button class="input-group-text botao-atualizar info sem-estilo"><i class="bi bi-arrow-clockwise" ></i> Atualizar Valores</button>
+                                    <button class="input-group-text botao-remover danger sem-estilo"><i class="bi bi-x-lg mr-3" ></i> Remover Item</button>
+                                </div>
+                            </form>`}
+                        </div>
+                    </div>
+                </div>
+            </div>`;
             divProduto.querySelector('.botao-atualizar')
                 .addEventListener('click', () => this.atualizar(produto));
             divProduto.querySelector('.botao-remover')
@@ -71,21 +73,21 @@ export class ListaDeCompras implements ITela {
         produtos.map(produto => {
             const divProduto = criarElementoHtml('div', ['col-12']);
             divProduto.setAttribute('id', `produto-id-${produto.id}`);
-            divProduto.innerHTML = `<div class="card shadow-sm">
-<div class="row g-0 bg-info">
-    <div class="col-sm-4 col-md-2">
-        <img height="100" src="${produto.imagem}" alt="${produto.nome}" class="card-img-top img-fluid img-thumbnail" />
-    </div>
-    <div class="col-sm-8 col-md-10">
-        <div class="card-body">
-          <h2 class="card-title fs-5">${produto.nome}</h2>
-          <p class="card-text fs-6">${produto.descricao}</p>
-          <div class="card-footer">
-            <h3 class="text-center fs-5">BRINDE</h3>
-          </div>
-        </div>
-    </div>
-</div>`;
+            divProduto.innerHTML = `<div class="card shadow-sm brinde">
+            <div class="row g-0">
+                <div class="col-sm-4 col-md-2">
+                    <img height="100" src="${produto.imagem}" alt="${produto.nome}" class="card-img-top img-fluid img-thumbnail" />
+                </div>
+                <div class="col-sm-8 col-md-10">
+                    <div class="card-body">
+                    <h2 class="card-title fs-5">${produto.nome}</h2>
+                    <p class="card-text fs-6">${produto.descricao}</p>
+                    <div class="card-footer">
+                        <h3 class="text-center fs-5">BRINDE</h3>
+                    </div>
+                    </div>
+                </div>
+            </div>`;
             div.appendChild(divProduto);
         });
         return div;
@@ -104,17 +106,24 @@ export class ListaDeCompras implements ITela {
         }
         if (this.carrinho.produtos.length < 1) {
             div.innerHTML = `<div class="bg-body-tertiary p-5 rounded mt-3">
-    <h2>Seu carrinho de compras está vazio.</h2>
-    <p class="lead">Adicione produtos a sua lista de compras!</p>
-  </div>`;
+                <h2>Seu carrinho de compras está vazio.</h2>
+                <p class="lead">Adicione produtos a sua lista de compras!</p>
+            </div>`;
             return div;
+        } else {
+            div.innerHTML = `<div class="bg-body-tertiary p-5 rounded mt-3">
+                <h2>Carrinho</h2>
+                <p class="lead">Seus produtos estão listados abaixo:</p>
+            </div>`;
         }
 
-        const h1Total = criarElementoHtml('h1', ['text-center', 'col-12']);
-        h1Total.innerHTML = `Total: R$ ${formataNumeroEmDinheiro(this.carrinho.totalizador.valor_total)}`;
-        div.appendChild(h1Total);
-        div.appendChild(this.htmlListaDeProdutosBrindes());
-        div.appendChild(this.htmlListaDeProdutosComprados());
+        const h2Total = criarElementoHtml('h2', ['text-center', 'col-md-12', 'col-lg-4', 'mt-4']);
+        const listaProdutosCarrinho = criarElementoHtml('div',['col-md-12', 'col-lg-8']);
+        h2Total.innerHTML = `Total: R$ ${formataNumeroEmDinheiro(this.carrinho.totalizador.valor_total)}`;
+        listaProdutosCarrinho.appendChild(this.htmlListaDeProdutosBrindes());
+        listaProdutosCarrinho.appendChild(this.htmlListaDeProdutosComprados());
+        div.appendChild(listaProdutosCarrinho)
+        div.appendChild(h2Total);
 
         return div;
     };
