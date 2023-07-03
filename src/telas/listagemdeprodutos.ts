@@ -19,7 +19,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         super();
     }
 
-    pegaDadosDosProdutos() {
+    pegaDadosDosProdutos(): void {
         this.carregando.mostrar();
         this.apiProduto.listar(false).then((produtos) => {
             this.itens = produtos;
@@ -28,7 +28,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         }).finally(() => this.carregando.esconder());
     }
 
-    adicionar(cartaoDoProduto: ICartaoDoProduto) {
+    adicionar(cartaoDoProduto: ICartaoDoProduto): void {
         let personalizacao = '';
         if (cartaoDoProduto.produto.personalizado) {
             personalizacao = window.prompt('Informe a personalizacao: ', 'Linha1: [] | Linha2: []');
@@ -217,7 +217,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         return div;
     }
 
-    atualizaHtmlItens(numeroPagina: number) {
+    atualizaHtmlItens(numeroPagina: number): void {
         this.paginaAtual = numeroPagina;
         this.htmlCartoesDosProdutos();
         this.htmlPaginacao();

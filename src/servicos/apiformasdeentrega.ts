@@ -6,6 +6,10 @@ import {ICarrinho} from "../contratos/carrinho";
 import {ApiConfiguracoes} from "./apiconfiguracoes";
 
 export class ApiFormasDeEntregaMock implements IApiFormasDeEntrega {
+    dados: IFormaDeEntrega;
+    constructor() {
+        this.dados = new FormaDeEntrega();
+    }
     consultar(cep: string, carrinho: ICarrinho): Promise<IFormaDeEntrega[]> {
         return new Promise<IFormaDeEntrega[]>((resolve, reject) => {
             if (!validarCEP(cep)) {
@@ -28,6 +32,10 @@ export class ApiFormasDeEntregaMock implements IApiFormasDeEntrega {
 }
 
 export class ApiFormasDeEntregaMagento implements IApiFormasDeEntrega {
+    dados: IFormaDeEntrega;
+    constructor() {
+        this.dados = new FormaDeEntrega();
+    }
     consultar(cep: string, carrinho: ICarrinho): Promise<IFormaDeEntrega[]> {
         const url_base = ApiConfiguracoes.instancia().loja.url_base;
         return new Promise<IFormaDeEntrega[]>(async (resolve, reject) => {
@@ -42,6 +50,7 @@ export class ApiFormasDeEntregaMagento implements IApiFormasDeEntrega {
             const items = carrinho.produtos.map(item => {
                 return {sku: item.produto.id, qty: item.quantidade};
             });
+
             try {
                 const postcode = cep;
                 const response = await fetch(`${url_base}rest/V2/estimate/shipping/`, {

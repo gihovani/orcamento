@@ -9,13 +9,15 @@ import {IApiCliente} from "../contratos/servicos/apicliente";
 import {IApiCep} from "../contratos/servicos/apicep";
 import {DadosDoCliente} from "./componentes/dadosdocliente";
 import {DadosDoEndereco} from "./componentes/dadosdoendereco";
-import {ApiFormasDeEntregaMagento} from "../servicos/apiformasdeentrega";
+import {DadosDaFormasDeEntrega} from "./componentes/dadosdasformasdeentrega";
+import {IApiFormasDeEntrega} from "../contratos/servicos/apiformasdeentrega";
 
 export class FormularioPagamento implements ITela {
     constructor(
         public carrinho: ICarrinho,
         public apiCliente: IApiCliente,
         public apiCep: IApiCep,
+        public apiFormasDeEntregaMagento: IApiFormasDeEntrega,
         public apiParcelamento: IApiParcelamento,
         public apiBin: IApiBin,
         public notificacao: INotificacao,
@@ -99,6 +101,7 @@ export class FormularioPagamento implements ITela {
     htmlFormularioDePagamento(): HTMLElement {
         const form = criarElementoHtml('form', ['needs-validation']);
         form.setAttribute('autocomplete', 'off');
+
         const dadosDoCliente = new DadosDoCliente(form, this.apiCliente, this.notificacao, this.carregando);
         dadosDoCliente.mostrar();
         form.append(criarElementoHtml('hr', ['mb-4']));
@@ -109,45 +112,41 @@ export class FormularioPagamento implements ITela {
             nome: 'type',
             valor: 'button'
         }], 'Opções de Entrega');
+        form.append(button);
+        form.append(criarElementoHtml('hr', ['mb-4']));
+
+        const div = criarElementoHtml('div');
+        div.setAttribute('id', 'formas-de-entrega');
+        const dadosDasFormasDeEntrega = new DadosDaFormasDeEntrega(div, this.apiFormasDeEntregaMagento, this.notificacao);
+        form.append(div);
+        dadosDasFormasDeEntrega.mostrar();
+
         button.addEventListener('click', (e) => {
             e.preventDefault();
-            const apiFormasDeEntregaMagento = new ApiFormasDeEntregaMagento();
+            this.carregando.mostrar();
             try {
                 const endereco = dadosDoEndereco.pegaDados();
-                apiFormasDeEntregaMagento.consultar(endereco.cep, this.carrinho).then((formas) => {
-                    form.querySelector('#form-entrega')?.remove();
-                    const div = criarElementoHtml('div', ['form-check']);
-                    div.setAttribute('id', 'form-entrega');
-                    formas.map((forma) => {
-                        const divCheck = criarElementoHtml('div', ['form-check']);
-                        const input = criarElementoHtml('input', ['form-check-input']);
-                        input.setAttribute('type', 'radio');
-                        input.setAttribute('name', 'forma-entrega');
-                        input.setAttribute('id', `form-entrega-${forma.tipo}`);
-                        divCheck.append(input);
-                        const label = criarElementoHtml('label', ['form-check-label']);
-                        label.innerHTML = `${forma.titulo} - R$ ${formataNumeroEmDinheiro(forma.valor)} - ${forma.prazodeentrega}`;
-                        label.setAttribute('for', `form-entrega-${forma.tipo}`);
-                        divCheck.append(label);
-                        div.appendChild(divCheck);
-                    });
-                    form.querySelector(`#${dadosDoEndereco.ID}`).append(div);
+                this.apiFormasDeEntregaMagento.consultar(endereco.cep, this.carrinho).then((formas) => {
+                    dadosDasFormasDeEntrega.formasDeEntrega = formas;
+                    dadosDasFormasDeEntrega.mostrar();
                 }).catch(error => this.notificacao.mostrar('Erro', error, 'danger'))
                     .finally(() => this.carregando.esconder());
             } catch (error) {
                 this.notificacao.mostrar('Erro', error, 'danger');
-                this.carregando.esconder()
+                this.carregando.esconder();
             }
         });
-        form.append(button);
-        form.append(criarElementoHtml('hr', ['mb-4']));
 
+
+        form.append(criarElementoHtml('hr', ['mb-4']));
         const submit = criarElementoHtml('button', ['btn', 'btn-primary'], [{
             nome: 'type',
-            valor: 'button'
+            valor: 'submit'
         }], 'SALVAR PEDIDO');
+        form.append(submit);
         form.addEventListener('submit', (e) => {
             e.preventDefault();
+            this.carregando.mostrar();
             try {
                 const cliente = dadosDoCliente.pegaDados();
                 this.apiCliente.salvar(cliente).then(() => {
@@ -157,10 +156,9 @@ export class FormularioPagamento implements ITela {
                     .finally(() => this.carregando.esconder());
             } catch (error) {
                 this.notificacao.mostrar('Erro', error, 'danger');
-                this.carregando.esconder()
+                this.carregando.esconder();
             }
         });
-        form.append(submit);
         return form;
     }
 }

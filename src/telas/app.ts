@@ -30,6 +30,7 @@ import {IApiVendedor} from "../contratos/servicos/apivendedor";
 import {Produto} from "../entidades/produto";
 import {ListaDePromocoes} from "./listadepromocoes";
 import {ICarrinho} from "../contratos/carrinho";
+import {ApiFormasDeEntregaMagento} from "../servicos/apiformasdeentrega";
 
 export class App extends ILayout {
     private _tela: ITela;
@@ -77,11 +78,14 @@ export class App extends ILayout {
 
         document.addEventListener('autenticacao', (e: CustomEvent) => {
             const ehAdministrador = this._apiVendedor.ehAdministrador();
+
             const apiCliente = new ApiClienteMock();
             const apiCep = new ApiCepViaCep();
             const apiBin = new ApiBin();
             const apiParcelamento = new ApiParcelamento();
             const apiProduto = new ApiProduto();
+            const apiFormasDeEntrega = new ApiFormasDeEntregaMagento();
+
             const mensagemBoasVindas = new MensagemBoasVindas(e.detail);
             const formularioConfiguracoes = new FormularioConfiguracoes(apiProduto, this._notificacao, this._carregando);
             const formularioCliente = new FormularioCliente(apiCliente, this._notificacao, this._carregando);
@@ -90,7 +94,7 @@ export class App extends ILayout {
             const formularioPagamentoCartaoDeCreditoMaquineta = new FormularioPagamentoCartaoDeCreditoMaquineta(this._carrinho, apiParcelamento, this._notificacao);
             const formularioPagamentoCartaoDeCredito = new FormularioPagamentoCartaoDeCredito(this._carrinho, apiParcelamento, apiBin, this._notificacao);
             const formularioPagamentoBoletoParcelado = new FormularioPagamentoBoletoParcelado(this._carrinho, apiParcelamento, this._notificacao);
-            const formularioPagamento = new FormularioPagamento(this._carrinho, apiCliente, apiCep, apiParcelamento, apiBin, this._notificacao, this._carregando);
+            const formularioPagamento = new FormularioPagamento(this._carrinho, apiCliente, apiCep, apiFormasDeEntrega, apiParcelamento, apiBin, this._notificacao, this._carregando);
             const listaDeCompras = new ListaDeCompras(this._carrinho, this._barraDeNavegacao, this._notificacao);
             const listaDePromocoes = new ListaDePromocoes(this._carrinho);
 

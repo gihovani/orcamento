@@ -4,21 +4,21 @@ export class FormaDeEntrega implements IFormaDeEntrega {
     private _tipo: string;
     private _titulo: string;
     private _prazodeentrega: string;
-    valor: number;
+    private _valor: number;
     observacoes?: string;
 
     constructor(
-        tipo: string,
-        titulo: string,
-        prazodeentrega: string,
-        valor: number,
+        tipo?: string,
+        titulo?: string,
+        prazodeentrega?: string,
+        valor?: number,
         observacoes?: string
     ) {
-        this.tipo = tipo;
-        this.titulo = titulo;
-        this.prazodeentrega = prazodeentrega;
-        this.valor = valor;
-        this.observacoes = observacoes;
+        tipo && (this.tipo = tipo);
+        titulo && (this.titulo = titulo);
+        prazodeentrega && (this.prazodeentrega = prazodeentrega);
+        valor && (this.valor = valor);
+        observacoes && (this.observacoes = observacoes);
     }
 
     set tipo(tipo: string) {
@@ -36,7 +36,7 @@ export class FormaDeEntrega implements IFormaDeEntrega {
         if (!titulo) {
             throw Error('Forma De Entrega Inválida: o título é obrigatório!');
         }
-        if (['Frete Normal', 'Frete Expresso'].indexOf(titulo) < 0) {
+        if (['Frete Normal', 'Frete Expresso', 'No Evento'].indexOf(titulo) < 0) {
             throw Error(`Forma De Entrega Inválida: o título ${titulo} não é válido!`);
         }
         this._titulo = titulo;
@@ -55,5 +55,15 @@ export class FormaDeEntrega implements IFormaDeEntrega {
 
     get prazodeentrega(): string {
         return this._prazodeentrega;
+    }
+    set valor(valor: number) {
+        if (isNaN(valor)) {
+            throw Error('Forma De Entrega Inválida: o Valor de Entrega é obrigatório!');
+        }
+        this._valor = valor;
+    }
+
+    get valor(): number {
+        return this._valor || 0;
     }
 }
