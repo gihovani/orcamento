@@ -21,9 +21,6 @@ export class Notificacao implements INotificacao {
     }
 
     esconder() {
-        const div = this.elemento.querySelector(`#${this.ID}`);
-        if (div) {
-            div.remove();
-        }
+        this.elemento.querySelector(`#${this.ID}`)?.remove();
     }
 }

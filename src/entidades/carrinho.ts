@@ -11,7 +11,13 @@ export class Carrinho implements ICarrinho {
     private _produtos: ICarrinhoProduto[] = [];
     brindes: IProduto[] = [];
     promocoes: IRegraPromocional[] = [];
-    totalizador: ICarrinhoTotalizador;
+    totalizador: ICarrinhoTotalizador = {
+        quantidade_produtos: 0,
+        valor_total: 0,
+        valor_subtotal: 0,
+        valor_desconto: 0,
+        detalhes_decontos: []
+    };
 
     constructor(promocoes: IRegraPromocional[] = []) {
         this.produtos = [];

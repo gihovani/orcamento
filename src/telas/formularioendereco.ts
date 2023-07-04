@@ -13,7 +13,6 @@ export class FormularioEndereco implements ITela {
     ) {
     }
 
-
     conteudo(): HTMLElement {
         const form = criarElementoHtml('form');
         form.setAttribute('autocomplete', 'off');

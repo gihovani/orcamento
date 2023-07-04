@@ -8,7 +8,7 @@ export class ListaDePromocoes implements ITela {
     constructor(public carrinho: ICarrinho) {
     }
 
-    htmlListaDePromocoesAtivas(): HTMLElement {
+    private htmlListaDePromocoesAtivas(): HTMLElement {
         const div = criarElementoHtml('div', ['row', 'regras']);
         const produtos = this.carrinho.promocoes;
         produtos.map(regra => {
@@ -25,14 +25,11 @@ export class ListaDePromocoes implements ITela {
         return div;
     }
 
-    htmlListaDePromocoes(): HTMLElement {
-        let div = document.getElementById('lista-de-promocoes');
-        if (!div) {
-            div = criarElementoHtml('div', ['lista-de-promocoes', 'row']);
-            div.setAttribute('id', 'lista-de-promocoes');
-        } else {
-            div.innerHTML = '';
-        }
+    private htmlListaDePromocoes(): HTMLElement {
+        document.getElementById('lista-de-promocoes')?.remove();
+        const div = criarElementoHtml('div', ['lista-de-promocoes', 'row']);
+        div.setAttribute('id', 'lista-de-promocoes');
+
         const tituloDescricao = new TituloEDescricaoDaPagina(div);
         if (this.carrinho.promocoes.length < 1 || ApiConfiguracoes.instancia().loja.nome === 'uc') {
             tituloDescricao.mostrar('Nenhuma promoção cadastrada.', 'Que pena não encontramos nenhuma promoção para este cliente!');

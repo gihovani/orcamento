@@ -97,3 +97,4 @@ console.log('Remover produto [2 itens na lista]: ', carrinho.produtos.length ===
 console.log('Atualizada quantidade de Produtos: ', carrinho.totalizador.quantidade_produtos === 2);
 console.log('Valor total atualizado [40]: ', carrinho.totalizador.valor_total, carrinho.totalizador.valor_total === 39);
 console.log('-------------------------------------------');
+

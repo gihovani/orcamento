@@ -48,17 +48,12 @@ export class DadosDaFormasDeEntrega implements IDadosDaFormasDeEntrega {
     }
 
     mostrar(): void {
-        let div = this.elemento.querySelector('#' + this.ID);
-        if (div) {
-            div.innerHTML = '';
-        } else {
-            div = criarElementoHtml('div', ['row']);
-            div.setAttribute('id', this.ID);
-        }
+        this.elemento.querySelector('#' + this.ID)?.remove();
+        const div = criarElementoHtml('div', ['row']);
+        div.setAttribute('id', this.ID);
         this.formasDeEntrega.map((forma) => {
             div.appendChild(this.htmlFormaDeEntrega(forma));
         });
-        div.appendChild(this.htmlFormaDeEntrega(new FormaDeEntrega('no_evento', 'No Evento', 'Retirada no Local', 0)));
         this.elemento.appendChild(div);
     }
 

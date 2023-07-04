@@ -14,7 +14,7 @@ export class FormularioPagamentoCartaoDeCreditoMaquineta implements ITela {
     ) {
     }
 
-    public pegaDadosDoFormulario(form: HTMLFormElement): ICartaoDeCreditoMaquineta {
+    private pegaDadosDoFormulario(form: HTMLFormElement): ICartaoDeCreditoMaquineta {
         const parcelamento = (form.querySelector('#parcelamento') as HTMLInputElement)?.value;
         const bandeira = (form.querySelector('#bandeira') as HTMLInputElement)?.value;
         const codigo_nsu = (form.querySelector('#codigo_nsu') as HTMLInputElement)?.value;

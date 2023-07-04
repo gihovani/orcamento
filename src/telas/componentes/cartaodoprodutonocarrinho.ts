@@ -42,7 +42,7 @@ export class CartaoDoProdutoNoCarrinho implements ICartaoDoProdutoNoCarrinho {
                         <div class="card-footer">
                             ${`<form class="row row-cols-lg-auto g-3 align-items-center" autocomplete="off">
                                 <div class="valor-e-quantidade">
-                                    <h3 class="text-center">
+                                    <h3 class="text-end h5">
                                         ${(produto.preco > this.item.preco_unitario) ? 'De: R$ ' + precoDeFormatado + ' <br/>Por:' : ''} 
                                         R$ ${precoPorFormatado}
                                     </h3>

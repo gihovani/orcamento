@@ -8,9 +8,7 @@ export abstract class ILayout implements ITela {
     abstract conteudo(): HTMLElement;
     abstract rodape(): HTMLElement;
     renderizar(): void {
-        if (this.elemento.firstChild) {
-            this.elemento.firstChild.remove();
-        }
+        this.elemento.firstChild?.remove();
         const app = criarElementoHtml('div', ['d-flex', 'flex-column', 'h-100', 'container']);
         app.appendChild(this.cabecalho());
         app.appendChild(this.conteudo());

@@ -44,7 +44,7 @@ export class CartaoDoProduto implements ICartaoDoProduto {
             SKU: ${produto.id}<br/>${produto.descricao}
           </p>
           <div class="card-footer">
-            <h3 class="price">R$ ${precoFormatado} </h3>
+            <h3 class="price text-end">R$ ${precoFormatado} </h3>
             <form class="row row-cols-lg-auto g-3 align-items-center" autocomplete="off">
                 <div class="linha-acao mb-3">
                     <input id="${this.ID}quantidade-${produto.id}"

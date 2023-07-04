@@ -46,7 +46,7 @@ export abstract class TelaComPaginacao implements ITela {
             return this.itens;
         }
 
-        let paginacao: any[] = [];
+        const paginacao: any[] = [];
         const itens = this.itens;
         const inicio = (this.paginaAtual * this.numeroItensPorPagina) - this.numeroItensPorPagina;
         const limite = inicio + this.numeroItensPorPagina;
@@ -102,14 +102,14 @@ export abstract class TelaComPaginacao implements ITela {
 
     htmlPaginacao(): HTMLElement {
         let div = document.getElementById('lista-de-produtos-paginacao');
-        if (!div) {
+        if (div) {
+            div.innerHTML = '';
+        } else {
             div = criarElementoHtml(
                 'div',
-                ['lista-de-produtos-paginacao', 'row', 'pt-3', 'pb-3'],
-                [{nome: 'id', valor: 'lista-de-produtos-paginacao'}]
+                ['lista-de-produtos-paginacao', 'row', 'pt-3', 'pb-3']
             );
-        } else {
-            div.innerHTML = '';
+            div.setAttribute('id', 'lista-de-produtos-paginacao');
         }
         if (!this.temPaginacao()) {
             return div;
@@ -126,6 +126,7 @@ export abstract class TelaComPaginacao implements ITela {
     }
 
     abstract htmlItens(): HTMLElement;
+
     abstract atualizaHtmlItens(numeroPagina: number);
 
     conteudo(): HTMLElement {

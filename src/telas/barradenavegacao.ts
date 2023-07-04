@@ -10,7 +10,7 @@ export class BarraDeNavegacao implements ITela {
     constructor(readonly carrinho: ICarrinho) {
     }
 
-    adicionaMenu(id: string, titulo: string, callback: () => void) {
+    adicionaMenu(id: string, titulo: string, callback: () => void): void {
         const a = criarElementoHtml('a', ['nav-link'], [{nome: 'href', valor: '#'}], titulo);
         this.adicionaEventoNoMenu(a, callback);
         const li = criarElementoHtml('li', ['nav-item', `item-${id}`], [{nome: 'id', valor: id}]);
@@ -18,7 +18,7 @@ export class BarraDeNavegacao implements ITela {
         this.menus.push(li);
     };
 
-    private adicionaEventoNoMenu(a: HTMLElement, callback: () => void) {
+    private adicionaEventoNoMenu(a: HTMLElement, callback: () => void): void {
         a.addEventListener('click', (e) => {
             e.preventDefault();
             this.nav.querySelector('.active')?.classList.remove('active');

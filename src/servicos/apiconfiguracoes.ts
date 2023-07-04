@@ -4,6 +4,8 @@ export class ApiConfiguracoes implements IApiConfiguracoes {
     static _instancia: IApiConfiguracoes;
     loja: IApiConfiguracoesLoja;
     versao: string;
+    retirada_permitida: boolean = true;
+    offline: boolean = false;
 
     constructor() {
         this.loja = this.disponiveis()[6];

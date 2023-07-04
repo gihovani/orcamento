@@ -15,7 +15,7 @@ export class ListaDeCompras implements ITela {
     ) {
     }
 
-    atualizar(cartao: ICartaoDoProdutoNoCarrinho): void {
+    private atualizar(cartao: ICartaoDoProdutoNoCarrinho): void {
         const produto = cartao.item.produto;
         const quantidade = cartao.pegaQuantidade();
         this.carrinho.adicionarProduto(produto, quantidade, true);
@@ -23,7 +23,7 @@ export class ListaDeCompras implements ITela {
         this.htmlListaDeProdutos();
     }
 
-    remover(cartao: ICartaoDoProdutoNoCarrinho): void {
+    private remover(cartao: ICartaoDoProdutoNoCarrinho): void {
         const produto = cartao.item.produto;
         this.carrinho.removerProduto(produto);
         this.notificacao.mostrar('Sucesso', `Produto ${produto.id} foi removido com sucesso!`, 'success');
@@ -31,7 +31,7 @@ export class ListaDeCompras implements ITela {
         this.htmlListaDeProdutos();
     }
 
-    htmlListaDeProdutosComprados(): HTMLElement {
+    private htmlListaDeProdutosComprados(): HTMLElement {
         const div = criarElementoHtml('div');
         const produtos = this.carrinho.produtos;
         produtos.map(item => {
@@ -47,7 +47,7 @@ export class ListaDeCompras implements ITela {
         return div;
     }
 
-    htmlListaDeProdutosBrindes(): HTMLElement {
+    private htmlListaDeProdutosBrindes(): HTMLElement {
         const div = criarElementoHtml('div');
         const produtos = this.carrinho.brindes;
         produtos.map(produto => {
@@ -73,26 +73,35 @@ export class ListaDeCompras implements ITela {
         return div;
     }
 
-    htmlListaDeProdutos(): HTMLElement {
+    private htmlListaDeProdutos(): HTMLElement {
         let div = document.getElementById('lista-de-compras');
-        if (!div) {
-            div = criarElementoHtml('div',['lista-de-compras', 'row']);
-            div.setAttribute('id', 'lista-de-compras');
-        } else {
+        if (div) {
             div.innerHTML = '';
+        } else {
+            div = criarElementoHtml('div', ['lista-de-compras', 'row']);
+            div.setAttribute('id', 'lista-de-compras');
         }
 
         const tituloDescricao = new TituloEDescricaoDaPagina(div);
         if (this.carrinho.produtos.length < 1) {
             tituloDescricao.mostrar('Lista de Compras', 'Seu carrinho está vazio!');
             return div;
-        } else {
-            tituloDescricao.mostrar('Carrinho', 'Seus produtos estão listados abaixo:');
         }
 
-        const h2Total = criarElementoHtml('h2', ['text-center', 'col-md-12', 'col-lg-4', 'mt-4']);
+        tituloDescricao.mostrar('Carrinho', 'Seus produtos estão listados abaixo:');
+        const total = criarElementoHtml('div', ['text-end', 'col-md-12', 'col-lg-4', 'mt-4']);
+        const h2Subtotal = criarElementoHtml('h2', ['h3']);
+        h2Subtotal.innerHTML = `Subtotal: R$ ${formataNumeroEmDinheiro(this.carrinho.totalizador.valor_total)}`;
+        total.appendChild(h2Subtotal);
+
+        const h2Descontos = criarElementoHtml('h2', ['h3']);
+        h2Descontos.innerHTML = `Descontos: R$ ${formataNumeroEmDinheiro(this.carrinho.totalizador.valor_desconto)}`;
+        total.appendChild(h2Descontos);
+
+        const h2Total = criarElementoHtml('h2', ['h2']);
         h2Total.innerHTML = `Total: R$ ${formataNumeroEmDinheiro(this.carrinho.totalizador.valor_total)}`;
-        div.appendChild(h2Total);
+        total.appendChild(h2Total);
+        div.appendChild(total);
 
         const listaDeProdutosNoCarrinho = criarElementoHtml('div', ['col-md-12', 'col-lg-8']);
         listaDeProdutosNoCarrinho.appendChild(this.htmlListaDeProdutosBrindes());

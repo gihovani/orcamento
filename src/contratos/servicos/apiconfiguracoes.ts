@@ -1,6 +1,8 @@
 export interface IApiConfiguracoes {
     loja: IApiConfiguracoesLoja;
     versao: string;
+    offline: boolean;
+    retirada_permitida: boolean;
     disponiveis: () => IApiConfiguracoesLoja[];
 }
 

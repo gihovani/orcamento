@@ -15,9 +15,6 @@ export class TituloEDescricaoDaPagina implements ITituloEDescricaoDaPagina {
     }
 
     esconder(): void {
-        const div = this.elemento.querySelector(`#${this.ID}`);
-        if (div) {
-            div.remove();
-        }
+        this.elemento.querySelector(`#${this.ID}`)?.remove();
     }
 }

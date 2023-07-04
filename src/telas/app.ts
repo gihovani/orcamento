@@ -31,6 +31,7 @@ import {Produto} from "../entidades/produto";
 import {ListaDePromocoes} from "./listadepromocoes";
 import {ICarrinho} from "../contratos/carrinho";
 import {ApiFormasDeEntregaMagento} from "../servicos/apiformasdeentrega";
+import {ApiCarrinhoMagento} from "../servicos/apicarrinho";
 
 export class App extends ILayout {
     private _tela: ITela;
@@ -85,6 +86,7 @@ export class App extends ILayout {
             const apiParcelamento = new ApiParcelamento();
             const apiProduto = new ApiProduto();
             const apiFormasDeEntrega = new ApiFormasDeEntregaMagento();
+            const apiCarrinho = new ApiCarrinhoMagento();
 
             const mensagemBoasVindas = new MensagemBoasVindas(e.detail);
             const formularioConfiguracoes = new FormularioConfiguracoes(apiProduto, this._notificacao, this._carregando);
@@ -94,7 +96,7 @@ export class App extends ILayout {
             const formularioPagamentoCartaoDeCreditoMaquineta = new FormularioPagamentoCartaoDeCreditoMaquineta(this._carrinho, apiParcelamento, this._notificacao);
             const formularioPagamentoCartaoDeCredito = new FormularioPagamentoCartaoDeCredito(this._carrinho, apiParcelamento, apiBin, this._notificacao);
             const formularioPagamentoBoletoParcelado = new FormularioPagamentoBoletoParcelado(this._carrinho, apiParcelamento, this._notificacao);
-            const formularioPagamento = new FormularioPagamento(this._carrinho, apiCliente, apiCep, apiFormasDeEntrega, apiParcelamento, apiBin, this._notificacao, this._carregando);
+            const formularioPagamento = new FormularioPagamento(this._carrinho, apiCliente, apiCep, apiFormasDeEntrega, apiCarrinho, apiParcelamento, apiBin, this._notificacao, this._carregando);
             const listaDeCompras = new ListaDeCompras(this._carrinho, this._barraDeNavegacao, this._notificacao);
             const listaDePromocoes = new ListaDePromocoes(this._carrinho);
 

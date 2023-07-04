@@ -8,7 +8,7 @@ export class FormularioLogin implements ITela {
 
     conteudo(): HTMLElement {
         const main = criarElementoHtml('main');
-        main.innerHTML = `<form class="bg-body-tertiary p-5 rounded mt-5 mb-5 m-auto text-center form-login" autocomplete="off">
+        main.innerHTML = `<form class="bg-body-tertiary p-5 rounded mt-5 mb-5 m-auto text-center form-login needs-validation" autocomplete="off">
     <h1 class="h3 mb-3 fw-normal">FAÇA O LOGIN</h1>
     <div class="form-floating mb-3">
       <input type="text" class="form-control" id="login" placeholder="Login">

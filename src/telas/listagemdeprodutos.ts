@@ -28,7 +28,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         }).finally(() => this.carregando.esconder());
     }
 
-    adicionar(cartaoDoProduto: ICartaoDoProduto): void {
+    private adicionar(cartaoDoProduto: ICartaoDoProduto): void {
         let personalizacao = '';
         if (cartaoDoProduto.produto.personalizado) {
             personalizacao = window.prompt('Informe a personalizacao: ', 'Linha1: [] | Linha2: []');
@@ -162,15 +162,15 @@ export class ListagemDeProdutos extends TelaComPaginacao {
 
     private htmlFiltrosDosProdutos(): HTMLElement {
         let form = document.getElementById('lista-de-produtos-filtros');
-        if (!form) {
-            form = criarElementoHtml(
-                'form',
-                ['lista-de-produtos-filtros', 'row', 'g-3', 'align-items-center'],
-                [{nome: 'id', valor: 'lista-de-produtos-filtros'}]
-            );
-        } else {
+        if (form) {
             form.innerHTML = '';
+        } else {
+            form = criarElementoHtml('form', [
+                'lista-de-produtos-filtros', 'row', 'g-3', 'align-items-center'
+            ]);
+            form.setAttribute('id', 'lista-de-produtos-filtros');
         }
+
         const div = criarElementoHtml('div', ['col-12', 'filtros-campo', 'pt-3', 'pb-3']);
         const titulo = criarElementoHtml('h2', ['filtros-titulo'], [], 'Filtros');
         div.appendChild(titulo);
@@ -188,15 +188,15 @@ export class ListagemDeProdutos extends TelaComPaginacao {
 
     private htmlCartoesDosProdutos(): HTMLElement {
         let div = document.getElementById('lista-de-produtos');
-        if (!div) {
+        if (div) {
+            div.innerHTML = '';
+        } else {
             div = criarElementoHtml('div', [
                 'lista-de-produtos', 'row', 'row-cols-2', 'row-cols-xs-2',
                 'row-cols-sm-3', 'row-cols-md-3', 'row-cols-xl-4', 'g-4'
-            ], [{nome: 'id', valor: 'lista-de-produtos'}]);
-        } else {
-            div.innerHTML = '';
+            ]);
+            div.setAttribute('id', 'lista-de-produtos');
         }
-
         const itens = this.itensPaginado();
         if (itens.length < 1) {
             div.appendChild(criarElementoHtml('div', ['col', 'text-center'], [], 'Nenhum produto encontrado'));
@@ -204,7 +204,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         }
 
         itens.map(produto => {
-            let produtoEstaNoCarrinho = this.carrinho.produtos.find((item) => item.produto.id === produto.id);
+            const produtoEstaNoCarrinho = this.carrinho.produtos.find((item) => item.produto.id === produto.id);
             const cartao = new CartaoDoProduto(div, produto);
             cartao.mostrar((event) => {
                 event.preventDefault();

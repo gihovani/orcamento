@@ -17,6 +17,10 @@ export class Carregando implements ICarregando {
         div.innerHTML = `<strong>Carregando...</strong><div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>`;
         this.elemento.appendChild(div);
         this.temporizador = setTimeout(() => {
+            if (!this.elemento.querySelector(`#${this.ID}`)) {
+                return;
+            }
+
             if (window.confirm(`Detectamos uma lentidão no sistema, verifique a conexao com a internet!
 Se for uma operação demorada pode desconsiderar este alerta!`)) {
                 this.esconder();
@@ -25,10 +29,7 @@ Se for uma operação demorada pode desconsiderar este alerta!`)) {
     }
 
     esconder() {
-        const div = this.elemento.querySelector(`#${this.ID}`);
-        if (div) {
-            div.remove();
-        }
+        this.elemento.querySelector(`#${this.ID}`)?.remove();
         clearTimeout(this.temporizador);
     }
 }
