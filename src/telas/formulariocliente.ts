@@ -36,7 +36,7 @@ export class FormularioCliente implements ITela {
                 this.carregando.esconder()
             }
         });
-        form.append(button);
+        form.appendChild(button);
         return form;
     }
 }

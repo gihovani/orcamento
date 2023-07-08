@@ -42,7 +42,6 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         this.barraDeNavegacao.atualizarQuantidadeDeItensNoCarrinho();
     }
 
-
     private seletorFiltroDoProdutoPorAtributo(atributo: string, titulo: string, nomeFuncaoDoFiltro: string): HTMLElement {
         const select = criarElementoHtml('select', ['form-select'], [{nome: 'name', valor: `filtro-${atributo}`}]);
         const option = criarElementoHtml('option', [], [{nome: 'value', valor: ''}, {nome: 'label', valor: titulo}]);
@@ -123,15 +122,15 @@ export class ListagemDeProdutos extends TelaComPaginacao {
 
     private filtroPorSituacao(): HTMLElement {
         const select = criarElementoHtml('select', ['form-select'], [{nome: 'name', valor: `filtro-situacao`}]);
-        select.append(criarElementoHtml('option', [], [{nome: 'value', valor: ''}, {
+        select.appendChild(criarElementoHtml('option', [], [{nome: 'value', valor: ''}, {
             nome: 'label',
             valor: 'Situacao'
         }]));
-        select.append(criarElementoHtml('option', [], [{nome: 'value', valor: '1'}, {
+        select.appendChild(criarElementoHtml('option', [], [{nome: 'value', valor: '1'}, {
             nome: 'label',
             valor: 'Em Estoque'
         }]));
-        select.append(criarElementoHtml('option', [], [{nome: 'value', valor: '0'}, {
+        select.appendChild(criarElementoHtml('option', [], [{nome: 'value', valor: '0'}, {
             nome: 'label',
             valor: 'Esgotado'
         }]));

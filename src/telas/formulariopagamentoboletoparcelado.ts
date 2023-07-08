@@ -1,10 +1,9 @@
 import {criarElementoHtml, formataNumeroEmDinheiro} from "../util/helper";
 import {ITela} from "../contratos/tela";
 import {INotificacao} from "../contratos/componentes/notificacao";
-import {IBoletoParcelado} from "../contratos/entidades/boletoparcelado";
-import {BoletoParcelado} from "../entidades/boletoparcelado";
 import {IApiParcelamento} from "../contratos/servicos/apiparcelamento";
 import {ICarrinho} from "../contratos/carrinho";
+import {Boleto} from "../entidades/formadepagamento";
 
 export class FormularioPagamentoBoletoParcelado implements ITela {
     constructor(
@@ -14,9 +13,9 @@ export class FormularioPagamentoBoletoParcelado implements ITela {
     ) {
     }
 
-    public pegaDadosDoFormulario(form: HTMLFormElement): IBoletoParcelado {
+    public pegaDadosDoFormulario(form: HTMLFormElement): Boleto {
         const parcelamento = (form.querySelector('#parcelamento') as HTMLInputElement)?.value;
-        return new BoletoParcelado(parseInt(parcelamento));
+        return new Boleto(parseInt(parcelamento));
     }
 
     conteudo(): HTMLElement {

@@ -2,10 +2,9 @@ import {criarElementoHtml, formataNumeroEmDinheiro} from "../util/helper";
 import {ITela} from "../contratos/tela";
 import {INotificacao} from "../contratos/componentes/notificacao";
 import {IApiBin} from "../contratos/servicos/apibin";
-import {ICartaoDeCredito} from "../contratos/entidades/cartaodecredito";
-import {CartaoDeCredito} from "../entidades/cartaodecredito";
 import {IApiParcelamento} from "../contratos/servicos/apiparcelamento";
 import {ICarrinho} from "../contratos/carrinho";
+import {CartaoDeCredito} from "../entidades/formadepagamento";
 
 export class FormularioPagamentoCartaoDeCredito implements ITela {
     constructor(
@@ -16,7 +15,7 @@ export class FormularioPagamentoCartaoDeCredito implements ITela {
     ) {
     }
 
-    private pegaDadosDoFormulario(form: HTMLFormElement): ICartaoDeCredito {
+    private pegaDadosDoFormulario(form: HTMLFormElement): CartaoDeCredito {
         const parcelamento = (form.querySelector('#parcelamento') as HTMLInputElement)?.value;
         const bandeira = (form.querySelector('#bandeira') as HTMLInputElement)?.value;
         const nome = (form.querySelector('#nome') as HTMLInputElement)?.value;
