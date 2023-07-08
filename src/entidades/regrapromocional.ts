@@ -25,6 +25,7 @@ export class RegraPromocional implements IRegraPromocional {
     }
 
     atendeCriteriosDaPromocao(produtos: ICarrinhoProduto[]): boolean {
+        this._promocao_aplicada = false;
         if (!this.situacao) {
             return false;
         }

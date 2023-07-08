@@ -4,6 +4,12 @@ import {IApiFormasDeEntrega} from "../../contratos/servicos/apiformasdeentrega";
 import {IFormaDeEntrega} from "../../contratos/entidades/formadeentrega";
 import {IDadosDaFormasDeEntrega} from "../../contratos/componentes/dadosdasformasdeentrega";
 import {FormaDeEntrega} from "../../entidades/formadeentrega";
+import {ApiConfiguracoes} from "../../servicos/apiconfiguracoes";
+import {DadosDoEndereco} from "./dadosdoendereco";
+import {IApiCep} from "../../contratos/servicos/apicep";
+import {ICarregando} from "../../contratos/componentes/carregando";
+import {ICarrinho} from "../../contratos/carrinho";
+import {IEndereco} from "../../contratos/entidades/endereco";
 
 export class DadosDaFormasDeEntrega implements IDadosDaFormasDeEntrega {
     readonly ID: string = 'dados-da-forma-de-entrega';
@@ -11,15 +17,17 @@ export class DadosDaFormasDeEntrega implements IDadosDaFormasDeEntrega {
 
     constructor(
         public elemento: HTMLElement,
+        public carrinho: ICarrinho,
         public apiFormasDeEntrega: IApiFormasDeEntrega,
-        public notificacao: INotificacao
+        public apiCep: IApiCep,
+        public notificacao: INotificacao,
+        public carregando: ICarregando
     ) {
         this.formasDeEntrega = [];
     }
 
     set formasDeEntrega(formasDeEntrega: IFormaDeEntrega[]) {
         this._formasDeEntrega = formasDeEntrega;
-        this.mostrar();
     }
 
     get formasDeEntrega(): IFormaDeEntrega[] {
@@ -49,12 +57,60 @@ export class DadosDaFormasDeEntrega implements IDadosDaFormasDeEntrega {
 
     mostrar(): void {
         this.elemento.querySelector('#' + this.ID)?.remove();
-        const div = criarElementoHtml('div', ['row']);
+        const div = criarElementoHtml('div');
         div.setAttribute('id', this.ID);
+
+        const dadosDoEndereco = new DadosDoEndereco(div, this.apiCep, this.notificacao, this.carregando);
+        dadosDoEndereco.mostrar();
+        const button = criarElementoHtml('button', ['btn', 'btn-secondary'], [{
+            nome: 'type',
+            valor: 'button'
+        }], 'Opções de Entrega');
+        div.appendChild(button);
+        div.appendChild(criarElementoHtml('hr', ['mb-4']));
+
+        const divFormasDeEntrega = criarElementoHtml('div');
+        divFormasDeEntrega.setAttribute('id', 'html-formas-de-entrega');
+        div.appendChild(divFormasDeEntrega);
+
+        button.addEventListener('click', async (e): Promise<void> => {
+            e.preventDefault();
+            this.carregando.mostrar();
+            try {
+                const endereco = dadosDoEndereco.pegaDados();
+                await this.atualizaFormasDeEntrega(divFormasDeEntrega, endereco);
+            } catch (error) {
+                this.notificacao.mostrar('Erro', error, 'danger');
+            }
+            this.carregando.esconder();
+        });
+        this.elemento.appendChild(div);
+    }
+
+    private htmlFormasDeEntrega(div: HTMLElement): void {
+        div.innerHTML = '';
         this.formasDeEntrega.map((forma) => {
             div.appendChild(this.htmlFormaDeEntrega(forma));
         });
-        this.elemento.appendChild(div);
+    }
+
+    private async atualizaFormasDeEntrega(div: HTMLElement, endereco: IEndereco): Promise<void> {
+        let formasDeEntrega = [];
+        const configuracoes = ApiConfiguracoes.instancia();
+        if (!configuracoes.offline) {
+            this.carregando.mostrar();
+            try {
+                formasDeEntrega = await this.apiFormasDeEntrega.consultar(endereco, this.carrinho);
+            } catch (error) {
+                this.notificacao.mostrar('Erro', error, 'danger');
+            }
+            this.carregando.esconder();
+        }
+        if (configuracoes.retirada_permitida) {
+            formasDeEntrega.unshift(new FormaDeEntrega('no_evento', 'No Evento', 'Retirada no Local', 0));
+        }
+        this.formasDeEntrega = formasDeEntrega;
+        this.htmlFormasDeEntrega(div);
     }
 
     htmlFormaDeEntrega(forma: IFormaDeEntrega): HTMLElement {

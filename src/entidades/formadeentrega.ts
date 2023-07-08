@@ -1,4 +1,5 @@
 import {IFormaDeEntrega} from "../contratos/entidades/formadeentrega";
+import {IEndereco} from "../contratos/entidades/endereco";
 
 export class FormaDeEntrega implements IFormaDeEntrega {
     private _tipo: string;
@@ -6,19 +7,22 @@ export class FormaDeEntrega implements IFormaDeEntrega {
     private _prazodeentrega: string;
     private _valor: number;
     observacoes?: string;
+    endereco?: IEndereco;
 
     constructor(
         tipo?: string,
         titulo?: string,
         prazodeentrega?: string,
         valor?: number,
-        observacoes?: string
+        observacoes?: string,
+        endereco?: IEndereco
     ) {
         tipo && (this.tipo = tipo);
         titulo && (this.titulo = titulo);
         prazodeentrega && (this.prazodeentrega = prazodeentrega);
         valor && (this.valor = valor);
         observacoes && (this.observacoes = observacoes);
+        endereco && (this.endereco = endereco);
     }
 
     set tipo(tipo: string) {

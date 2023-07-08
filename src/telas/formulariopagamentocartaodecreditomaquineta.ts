@@ -3,8 +3,7 @@ import {ITela} from "../contratos/tela";
 import {INotificacao} from "../contratos/componentes/notificacao";
 import {IApiParcelamento} from "../contratos/servicos/apiparcelamento";
 import {ICarrinho} from "../contratos/carrinho";
-import {ICartaoDeCreditoMaquineta} from "../contratos/entidades/cartaodecreditomaquineta";
-import {CartaoDeCreditoMaquineta} from "../entidades/cartaodecreditomaquineta";
+import {CartaoDeCreditoMaquineta} from "../entidades/formadepagamento";
 
 export class FormularioPagamentoCartaoDeCreditoMaquineta implements ITela {
     constructor(
@@ -14,7 +13,7 @@ export class FormularioPagamentoCartaoDeCreditoMaquineta implements ITela {
     ) {
     }
 
-    private pegaDadosDoFormulario(form: HTMLFormElement): ICartaoDeCreditoMaquineta {
+    private pegaDadosDoFormulario(form: HTMLFormElement): CartaoDeCreditoMaquineta {
         const parcelamento = (form.querySelector('#parcelamento') as HTMLInputElement)?.value;
         const bandeira = (form.querySelector('#bandeira') as HTMLInputElement)?.value;
         const codigo_nsu = (form.querySelector('#codigo_nsu') as HTMLInputElement)?.value;

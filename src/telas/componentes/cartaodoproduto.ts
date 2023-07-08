@@ -18,7 +18,7 @@ export class CartaoDoProduto implements ICartaoDoProduto {
 
         const divProduto = (this.elemento.querySelector(`#produto-id-${produto.id} .card`) as HTMLDivElement);
         divProduto.querySelector('.label-item-adicionado')?.remove();
-        divProduto.append(this.seloProdutoAdicionado());
+        divProduto.appendChild(this.seloProdutoAdicionado());
     }
 
     public pegaQuantidade(): number {

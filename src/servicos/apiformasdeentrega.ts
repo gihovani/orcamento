@@ -1,19 +1,21 @@
-import {validarCEP} from "../util/validacoes";
 import {IFormaDeEntrega} from "../contratos/entidades/formadeentrega";
 import {IApiFormasDeEntrega} from "../contratos/servicos/apiformasdeentrega";
 import {FormaDeEntrega} from "../entidades/formadeentrega";
 import {ICarrinho} from "../contratos/carrinho";
 import {ApiConfiguracoes} from "./apiconfiguracoes";
+import {IEndereco} from "../contratos/entidades/endereco";
 
 export class ApiFormasDeEntregaMock implements IApiFormasDeEntrega {
     dados: IFormaDeEntrega;
+
     constructor() {
         this.dados = new FormaDeEntrega();
     }
-    consultar(cep: string, carrinho: ICarrinho): Promise<IFormaDeEntrega[]> {
+
+    consultar(endereco: IEndereco, carrinho: ICarrinho): Promise<IFormaDeEntrega[]> {
         return new Promise<IFormaDeEntrega[]>((resolve, reject) => {
-            if (!validarCEP(cep)) {
-                reject('O Cep deve ser um némero válido! Ex: 88100-000');
+            if (!endereco.cep) {
+                reject('O Cep deve ser um número válido! Ex: 88100-000');
                 return;
             }
             if (carrinho.produtos.length === 0) {
@@ -24,7 +26,9 @@ export class ApiFormasDeEntregaMock implements IApiFormasDeEntrega {
                 'expresso',
                 'Frete Expresso',
                 'Chegará em até 31 dias úteis',
-                0
+                0,
+                '',
+                endereco
             );
             resolve([formaDeEntrega]);
         });
@@ -33,14 +37,16 @@ export class ApiFormasDeEntregaMock implements IApiFormasDeEntrega {
 
 export class ApiFormasDeEntregaMagento implements IApiFormasDeEntrega {
     dados: IFormaDeEntrega;
+
     constructor() {
         this.dados = new FormaDeEntrega();
     }
-    consultar(cep: string, carrinho: ICarrinho): Promise<IFormaDeEntrega[]> {
+
+    consultar(endereco: IEndereco, carrinho: ICarrinho): Promise<IFormaDeEntrega[]> {
         const url_base = ApiConfiguracoes.instancia().loja.url_base;
         return new Promise<IFormaDeEntrega[]>(async (resolve, reject) => {
-            if (!validarCEP(cep)) {
-                reject('O Cep deve ser um némero válido! Ex: 88100-000');
+            if (!endereco.cep) {
+                reject('O Cep deve ser um número válido! Ex: 88100-000');
                 return;
             }
             if (carrinho.produtos.length === 0) {
@@ -52,7 +58,7 @@ export class ApiFormasDeEntregaMagento implements IApiFormasDeEntrega {
             });
 
             try {
-                const postcode = cep;
+                const postcode = endereco.cep;
                 const response = await fetch(`${url_base}rest/V2/estimate/shipping/`, {
                     method: 'POST', // or 'PUT'
                     headers: {'Content-Type': 'application/json'},
@@ -68,7 +74,8 @@ export class ApiFormasDeEntregaMagento implements IApiFormasDeEntrega {
                     item['title'],
                     item['deadline'],
                     item['price'],
-                    item['method_description']
+                    item['method_description'],
+                    endereco
                 ));
                 resolve(formasDeEntrega);
             } catch (error) {

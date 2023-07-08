@@ -8,20 +8,17 @@ import {ICarregando} from "../contratos/componentes/carregando";
 import {IApiCliente} from "../contratos/servicos/apicliente";
 import {IApiCep} from "../contratos/servicos/apicep";
 import {DadosDoCliente} from "./componentes/dadosdocliente";
-import {DadosDoEndereco} from "./componentes/dadosdoendereco";
-import {DadosDaFormasDeEntrega} from "./componentes/dadosdasformasdeentrega";
 import {IApiFormasDeEntrega} from "../contratos/servicos/apiformasdeentrega";
-import {FormaDeEntrega} from "../entidades/formadeentrega";
 import {TituloEDescricaoDaPagina} from "./componentes/tituloedescricaodapagina";
-import {ApiConfiguracoes} from "../servicos/apiconfiguracoes";
 import {IApiCarrinho} from "../contratos/servicos/apicarrinho";
+import {DadosDaFormasDeEntrega} from "./componentes/dadosdasformasdeentrega";
 
 export class FormularioPagamento implements ITela {
     constructor(
         public carrinho: ICarrinho,
         public apiCliente: IApiCliente,
         public apiCep: IApiCep,
-        public apiFormasDeEntregaMagento: IApiFormasDeEntrega,
+        public apiFormasDeEntrega: IApiFormasDeEntrega,
         public apiCarrinho: IApiCarrinho,
         public apiParcelamento: IApiParcelamento,
         public apiBin: IApiBin,
@@ -95,10 +92,10 @@ export class FormularioPagamento implements ITela {
     private htmlItensCarrinho(): HTMLElement {
         const ul = criarElementoHtml('ul', ['list-group', 'mb-3', 'sticky-top']);
         this.carrinho.produtos.map(item => {
-            ul.append(this.htmlItemCarrinho(item));
+            ul.appendChild(this.htmlItemCarrinho(item));
         });
-        ul.append(this.htmlDescontos());
-        ul.append(this.htmlTotal());
+        ul.appendChild(this.htmlDescontos());
+        ul.appendChild(this.htmlTotal());
         return ul;
     }
 
@@ -108,43 +105,24 @@ export class FormularioPagamento implements ITela {
 
         const dadosDoCliente = new DadosDoCliente(form, this.apiCliente, this.notificacao, this.carregando);
         dadosDoCliente.mostrar();
-        form.append(criarElementoHtml('hr', ['mb-4']));
+        form.appendChild(criarElementoHtml('hr', ['mb-4']));
 
-        const dadosDoEndereco = new DadosDoEndereco(form, this.apiCep, this.notificacao, this.carregando);
-        dadosDoEndereco.mostrar();
-        const button = criarElementoHtml('button', ['btn', 'btn-secondary'], [{
-            nome: 'type',
-            valor: 'button'
-        }], 'Opções de Entrega');
-        form.append(button);
-        form.append(criarElementoHtml('hr', ['mb-4']));
+        const dadosDasFormasDeEntrega = new DadosDaFormasDeEntrega(form, this.carrinho, this.apiFormasDeEntrega, this.apiCep, this.notificacao, this.carregando);
+        dadosDasFormasDeEntrega.mostrar();
+        form.appendChild(criarElementoHtml('hr', ['mb-4']));
 
-        const div = criarElementoHtml('div');
-        div.setAttribute('id', 'formas-de-entrega');
-        const dadosDasFormasDeEntrega = new DadosDaFormasDeEntrega(div, this.apiFormasDeEntregaMagento, this.notificacao);
-        form.append(div);
-        button.addEventListener('click', async (e) => {
-            e.preventDefault();
-            this.carregando.mostrar();
-            try {
-                const endereco = dadosDoEndereco.pegaDados();
-                dadosDasFormasDeEntrega.formasDeEntrega = await this.pegaFormasDeEntrega(endereco.cep);
-            } catch (error) {
-                this.notificacao.mostrar('Erro', error, 'danger');
-            }
-            this.carregando.esconder();
-        });
-        form.append(criarElementoHtml('hr', ['mb-4']));
         const submit = criarElementoHtml('button', ['btn', 'btn-primary'], [{
             nome: 'type',
             valor: 'submit'
         }], 'SALVAR PEDIDO');
-        form.append(submit);
+        form.appendChild(submit);
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             this.carregando.mostrar();
             try {
                 const cliente = dadosDoCliente.pegaDados();
+                const entrega = dadosDasFormasDeEntrega.pegaDados();
+
                 this.apiCarrinho.totalizar().then(carrinho => {
                     const valor_total = carrinho.totalizador.valor_total;
                     this.notificacao.mostrar('Sucesso', `O Pedido do Cliente ${cliente.nome} Foi Retotalizado!`, 'success');
@@ -162,23 +140,5 @@ export class FormularioPagamento implements ITela {
             }
         });
         return form;
-    }
-
-    private async pegaFormasDeEntrega(cep: string) {
-        let formasDeEntrega = [];
-        const configuracoes = ApiConfiguracoes.instancia();
-        if (!configuracoes.offline) {
-            this.carregando.mostrar();
-            try {
-                formasDeEntrega = await this.apiFormasDeEntregaMagento.consultar(cep, this.carrinho);
-            } catch (error) {
-                this.notificacao.mostrar('Erro', error, 'danger');
-            }
-            this.carregando.esconder();
-        }
-        if (configuracoes.retirada_permitida) {
-            formasDeEntrega.unshift(new FormaDeEntrega('no_evento', 'No Evento', 'Retirada no Local', 0));
-        }
-        return formasDeEntrega;
     }
 }
