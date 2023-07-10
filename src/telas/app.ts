@@ -7,8 +7,6 @@ import {ApiClienteMock} from "../servicos/apicliente";
 import {ApiCepViaCep} from "../servicos/apibuscacep";
 import {ApiProduto} from "../servicos/apiproduto";
 import {BarraDeNavegacao} from "./barradenavegacao";
-import {FormularioCliente} from "./formulariocliente";
-import {FormularioEndereco} from "./formularioendereco";
 import {ListagemDeProdutos} from "./listagemdeprodutos";
 import {ListaDeCompras} from "./listadecompras";
 import {MensagemBoasVindas} from "./mensagemboasvindas";
@@ -19,10 +17,7 @@ import {INotificacao} from "../contratos/componentes/notificacao";
 import {Notificacao} from "./componentes/notificacao";
 import {ICarregando} from "../contratos/componentes/carregando";
 import {Carregando} from "./componentes/carregando";
-import {FormularioPagamentoCartaoDeCredito} from "./formulariopagamentocartaodecredito";
 import {ApiBin} from "../servicos/apibin";
-import {FormularioPagamentoBoletoParcelado} from "./formulariopagamentoboletoparcelado";
-import {FormularioPagamentoCartaoMaquineta} from "./formulariopagamentocartaomaquineta";
 import {ApiConfiguracoes} from "../servicos/apiconfiguracoes";
 import {FormularioPagamento} from "./formulariopagamento";
 import {IApiVendedor} from "../contratos/servicos/apivendedor";
@@ -32,6 +27,11 @@ import {ICarrinho} from "../contratos/carrinho";
 import {ApiFormasDeEntregaMagento} from "../servicos/apiformasdeentrega";
 import {ApiCarrinhoMagento} from "../servicos/apicarrinho";
 import {ApiFormasDePagamentoMagento} from "../servicos/apiformasdepagamento";
+import {FormularioCliente} from "./descontinuadas/formulariocliente";
+import {FormularioEndereco} from "./descontinuadas/formularioendereco";
+import {FormularioPagamentoCartaoMaquineta} from "./descontinuadas/formulariopagamentocartaomaquineta";
+import {FormularioPagamentoCartaoDeCredito} from "./descontinuadas/formulariopagamentocartaodecredito";
+import {FormularioPagamentoBoletoParcelado} from "./descontinuadas/formulariopagamentoboletoparcelado";
 
 export class App extends ILayout {
     private _tela: ITela;
@@ -90,15 +90,18 @@ export class App extends ILayout {
 
             const mensagemBoasVindas = new MensagemBoasVindas(e.detail);
             const formularioConfiguracoes = new FormularioConfiguracoes(apiProduto, this._notificacao, this._carregando);
+
+            const listagemDeProdutos = new ListagemDeProdutos(apiProduto, this._carrinho, this._barraDeNavegacao, this._carregando);
+            const listaDePromocoes = new ListaDePromocoes(this._carrinho);
+            const listaDeCompras = new ListaDeCompras(this._carrinho, this._barraDeNavegacao, this._notificacao);
+            const formularioPagamento = new FormularioPagamento(this._carrinho, apiCliente, apiCep, apiFormasDeEntrega, apiCarrinho, apiFormaDePagamento, apiBin, this._notificacao, this._carregando);
+
+            //Descontinuadas
             const formularioCliente = new FormularioCliente(apiCliente, this._notificacao, this._carregando);
             const formularioEndereco = new FormularioEndereco(apiCep, this._notificacao, this._carregando);
-            const listagemDeProdutos = new ListagemDeProdutos(apiProduto, this._carrinho, this._barraDeNavegacao, this._carregando);
             const formularioPagamentoCartaoDeCreditoMaquineta = new FormularioPagamentoCartaoMaquineta(this._carrinho, this._notificacao);
             const formularioPagamentoCartaoDeCredito = new FormularioPagamentoCartaoDeCredito(this._carrinho, apiBin, this._notificacao);
             const formularioPagamentoBoletoParcelado = new FormularioPagamentoBoletoParcelado(this._carrinho, this._notificacao);
-            const formularioPagamento = new FormularioPagamento(this._carrinho, apiCliente, apiCep, apiFormasDeEntrega, apiCarrinho, apiFormaDePagamento, apiBin, this._notificacao, this._carregando);
-            const listaDeCompras = new ListaDeCompras(this._carrinho, this._barraDeNavegacao, this._notificacao);
-            const listaDePromocoes = new ListaDePromocoes(this._carrinho);
 
             this.tela = mensagemBoasVindas;
             this._barraDeNavegacao.adicionaMenu('menu-configuracoes', 'Configurações', () => {

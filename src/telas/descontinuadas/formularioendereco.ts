@@ -1,9 +1,9 @@
-import {criarElementoHtml} from "../util/helper";
-import {IApiCep} from "../contratos/servicos/apicep";
-import {ITela} from "../contratos/tela";
-import {INotificacao} from "../contratos/componentes/notificacao";
-import {ICarregando} from "../contratos/componentes/carregando";
-import {DadosDoEndereco} from "./componentes/formularios/dadosdoendereco";
+import {criarElementoHtml} from "../../util/helper";
+import {IApiCep} from "../../contratos/servicos/apicep";
+import {ITela} from "../../contratos/tela";
+import {INotificacao} from "../../contratos/componentes/notificacao";
+import {ICarregando} from "../../contratos/componentes/carregando";
+import {DadosDoEndereco} from "../componentes/formularios/dadosdoendereco";
 
 export class FormularioEndereco implements ITela {
     constructor(

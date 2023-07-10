@@ -1,8 +1,8 @@
-import {criarElementoHtml, formataNumeroEmDinheiro} from "../util/helper";
-import {ITela} from "../contratos/tela";
-import {INotificacao} from "../contratos/componentes/notificacao";
-import {ICarrinho} from "../contratos/carrinho";
-import {CartaoMaquineta} from "../entidades/formadepagamento";
+import {criarElementoHtml, formataNumeroEmDinheiro} from "../../util/helper";
+import {ITela} from "../../contratos/tela";
+import {INotificacao} from "../../contratos/componentes/notificacao";
+import {ICarrinho} from "../../contratos/carrinho";
+import {CartaoMaquineta} from "../../entidades/formadepagamento";
 
 export class FormularioPagamentoCartaoMaquineta implements ITela {
     constructor(public carrinho: ICarrinho, public notificacao: INotificacao) {

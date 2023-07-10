@@ -1,9 +1,9 @@
-import {criarElementoHtml, formataNumeroEmDinheiro} from "../util/helper";
-import {ITela} from "../contratos/tela";
-import {INotificacao} from "../contratos/componentes/notificacao";
-import {IApiBin} from "../contratos/servicos/apibin";
-import {ICarrinho} from "../contratos/carrinho";
-import {CartaoDeCredito} from "../entidades/formadepagamento";
+import {criarElementoHtml, formataNumeroEmDinheiro} from "../../util/helper";
+import {ITela} from "../../contratos/tela";
+import {INotificacao} from "../../contratos/componentes/notificacao";
+import {IApiBin} from "../../contratos/servicos/apibin";
+import {ICarrinho} from "../../contratos/carrinho";
+import {CartaoDeCredito} from "../../entidades/formadepagamento";
 
 export class FormularioPagamentoCartaoDeCredito implements ITela {
     constructor(
