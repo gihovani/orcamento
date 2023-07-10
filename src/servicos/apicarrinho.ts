@@ -175,7 +175,8 @@ export class ApiCarrinhoMagento extends ApiCarrinho {
         return new Promise<ICarrinho>(async (resolve, reject) => {
             const url_base = ApiConfiguracoes.instancia().loja.url_base;
             try {
-                const response = await fetch(`${url_base}customer/section/load/?sections=cart`);
+                // customer/section/load/?sections=cart
+                const response = await fetch(`${url_base}rest/V2/estimate/shipping/`);
                 let result = await response.json();
                 if (result.message) {
                     reject(result.message);

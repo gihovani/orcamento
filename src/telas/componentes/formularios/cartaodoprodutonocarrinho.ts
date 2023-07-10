@@ -1,29 +1,31 @@
-import {criarElementoHtml, formataNumeroEmDinheiro} from "../../util/helper";
-import {ICarrinhoProduto} from "../../contratos/carrinho";
-import {ICartaoDoProdutoNoCarrinho} from "../../contratos/componentes/cartaodoprodutonocarrinho";
+import {criarElementoHtml, formataNumeroEmDinheiro} from "../../../util/helper";
+import {ICarrinhoProduto} from "../../../contratos/carrinho";
+import {IFormulario} from "../../../contratos/componentes/formulario";
 
-export class CartaoDoProdutoNoCarrinho implements ICartaoDoProdutoNoCarrinho {
+export class CartaoDoProdutoNoCarrinho implements IFormulario {
     readonly ID: string = 'produto-no-carrinho-id-';
 
     constructor(
         public elemento: HTMLElement,
         public item: ICarrinhoProduto,
+        public eventoAtualizarProduto: (event: CustomEvent) => void,
+        public eventoRemoverProduto: (event: CustomEvent) => void
     ) {
     }
 
-    public preencheQuantidade(quantidade: number): void {
+    preencheDados(quantidade: number): void {
         const produto = this.item.produto;
         const inputQuantidade = (this.elemento.querySelector(`#${this.ID}quantidade-${produto.id}`) as HTMLInputElement);
         inputQuantidade.value = String(quantidade ?? '1');
     }
 
-    public pegaQuantidade(): number {
+    pegaDados(): number {
         const produto = this.item.produto;
         const inputQuantidade = (this.elemento.querySelector(`#${this.ID}quantidade-${produto.id}`) as HTMLInputElement);
         return parseInt(inputQuantidade.value);
     }
 
-    mostrar(eventoAtualizarProduto: (event: Event) => void, eventoRemoverProduto: (event: Event) => void): void {
+    mostrar(): void {
         this.elemento.querySelector('#' + this.ID)?.remove();
         const produto = this.item.produto;
         let precoDeFormatado = formataNumeroEmDinheiro(produto.preco);
@@ -65,9 +67,15 @@ export class CartaoDoProdutoNoCarrinho implements ICartaoDoProdutoNoCarrinho {
                 </div>
             </div>`;
         div.querySelector('.botao-atualizar')
-            .addEventListener('click', eventoAtualizarProduto);
+            .addEventListener('click', (event) => {
+                event.preventDefault();
+                this.eventoAtualizarProduto(new CustomEvent('botao-atualizar', {detail: this}));
+            });
         div.querySelector('.botao-remover')
-            .addEventListener('click', eventoRemoverProduto);
+            .addEventListener('click', (event) => {
+                event.preventDefault();
+                this.eventoRemoverProduto(new CustomEvent('botao-remover', {detail: this}));
+            });
         this.elemento.appendChild(div);
     }
 }

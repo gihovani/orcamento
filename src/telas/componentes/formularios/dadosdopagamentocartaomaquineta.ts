@@ -1,27 +1,34 @@
-import {criarElementoHtml, formataNumeroEmDinheiro} from "../util/helper";
-import {ITela} from "../contratos/tela";
-import {INotificacao} from "../contratos/componentes/notificacao";
-import {IApiParcelamento} from "../contratos/servicos/apiparcelamento";
-import {ICarrinho} from "../contratos/carrinho";
-import {CartaoDeCreditoMaquineta} from "../entidades/formadepagamento";
+import {criarElementoHtml, formataNumeroEmDinheiro} from "../../../util/helper";
+import {INotificacao} from "../../../contratos/componentes/notificacao";
+import {ICarrinho} from "../../../contratos/carrinho";
+import {CartaoMaquineta} from "../../../entidades/formadepagamento";
+import {IFormulario} from "../../../contratos/componentes/formulario";
 
-export class FormularioPagamentoCartaoDeCreditoMaquineta implements ITela {
+export class DadosDoPagamentoCartaoMaquineta implements IFormulario {
     constructor(
+        public elemento: HTMLElement,
         public carrinho: ICarrinho,
-        public apiParcelamento: IApiParcelamento,
         public notificacao: INotificacao
     ) {
     }
 
-    private pegaDadosDoFormulario(form: HTMLFormElement): CartaoDeCreditoMaquineta {
+    preencheDados(dados: CartaoMaquineta): void {
+        (this.elemento.querySelector('#parcelamento') as HTMLInputElement).value = String(dados.parcelamento);
+        (this.elemento.querySelector('#bandeira') as HTMLInputElement).value = dados.bandeira;
+        (this.elemento.querySelector('#codigo_nsu') as HTMLInputElement).value = dados.codigo_nsu;
+        (this.elemento.querySelector('#codigo_autorizacao') as HTMLInputElement).value = dados.codigo_autorizacao;
+    }
+
+    pegaDados(): CartaoMaquineta {
+        const form = this.elemento;
         const parcelamento = (form.querySelector('#parcelamento') as HTMLInputElement)?.value;
         const bandeira = (form.querySelector('#bandeira') as HTMLInputElement)?.value;
         const codigo_nsu = (form.querySelector('#codigo_nsu') as HTMLInputElement)?.value;
         const codigo_autorizacao = (form.querySelector('#codigo_autorizacao') as HTMLInputElement)?.value;
-        return new CartaoDeCreditoMaquineta(parseInt(parcelamento), bandeira, codigo_nsu, codigo_autorizacao);
+        return new CartaoMaquineta(parseInt(parcelamento), bandeira, codigo_nsu, codigo_autorizacao);
     }
 
-    conteudo(): HTMLElement {
+    mostrar(): HTMLElement {
         const main = criarElementoHtml('main', ['row']);
         main.innerHTML = `<form class="p-5 rounded mt-3 mb-3 m-auto needs-validation" autocomplete="off">
   <h1 class="h3 mb-3 fw-normal">Cartão de Crédito Maquineta</h1>
@@ -58,22 +65,26 @@ export class FormularioPagamentoCartaoDeCreditoMaquineta implements ITela {
   </div>
   <button type="submit" class="btn btn-primary">SALVAR</button>
 </form>`;
-        this.apiParcelamento.consultar('cartaodecreditomaquineta', this.carrinho).then((maximoParcelas) => {
-            const parcelamento = main.querySelector('#parcelamento');
-            for (let parcelas = 1; parcelas <= maximoParcelas; parcelas++) {
-                const total = this.carrinho.totalizador?.valor_total || 0;
-                const options = criarElementoHtml('option', [], [{nome: 'value', valor: String(parcelas)}, {
-                    nome: 'label',
-                    valor: `${parcelas}x R$ ${formataNumeroEmDinheiro(total/parcelas)}`
-                }]);
-                parcelamento.appendChild(options)
-            }
-        });
+        const total = this.carrinho.totalizador?.valor_total || 0;
+        const maximoParcelas = new CartaoMaquineta().numeroParcelasDisponiveis(total);
+        const parcelamento = main.querySelector('#parcelamento');
+        for (let parcelas = 1; parcelas <= maximoParcelas; parcelas++) {
+            const options = criarElementoHtml('option', [], [{nome: 'value', valor: String(parcelas)}, {
+                nome: 'label',
+                valor: `${parcelas}x R$ ${formataNumeroEmDinheiro(total / parcelas)}`
+            }]);
+            parcelamento.appendChild(options)
+        }
         const form = main.querySelector('form') as HTMLFormElement;
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const cartaoDeCredito = this.pegaDadosDoFormulario(form);
-            this.notificacao.mostrar('Sucesso', `Os Dados do Cartão de Crédito (${cartaoDeCredito.bandeira}) Foram Salvos!`);
+            try {
+                const cartaoDeCredito = this.pegaDados();
+                this.notificacao.mostrar('Sucesso', `Os Dados do Cartão de Crédito (${cartaoDeCredito.bandeira}) Foram Salvos!`, 'success');
+            } catch (error) {
+                this.notificacao.mostrar('Erro', error, 'danger');
+            }
+
         });
         return main;
     }

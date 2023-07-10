@@ -62,5 +62,37 @@ export const validarUF = (uf: string): boolean => {
         'SE', 'BA', 'MG', 'ES', 'RJ', 'SP', 'PR',
         'SC', 'RS', 'MS', 'MT', 'GO', 'DF'
     ];
-    return (ufs.indexOf(uf) >= 0);
+    return (ufs.indexOf(uf.toUpperCase()) >= 0);
+}
+
+export const validarBandeiraCartaoDeCredito = (nome: string): boolean => {
+    // const bandeiras = ['VISA', 'MASTERCARD', 'AMERICAN EXPRESS', 'DINERS CLUB', 'DISCOVER', 'JCB', 'HIPERCARD', 'ELO', 'AURA'];
+    const bandeiras = ['VISA', 'MASTERCARD', 'ELO', 'HIPERCARD', 'AMEX'];
+    return bandeiras.indexOf(nome.toUpperCase()) >= 0;
+}
+
+export const validarCartaoDeCredito = (numero: string): boolean => {
+    numero = numero.replace(/\s/g, '');
+    const regex = new RegExp("^[0-9]{13,19}$");
+    if (!regex.test(numero)) {
+        return false;
+    }
+
+    return luhnCheck(numero);
+}
+
+const luhnCheck = val => {
+    let checksum = 0;
+    let j = 1;
+    for (let i = val.length - 1; i >= 0; i--) {
+        let calc = 0;
+        calc = Number(val.charAt(i)) * j;
+        if (calc > 9) {
+            checksum = checksum + 1;
+            calc = calc - 10;
+        }
+        checksum = checksum + calc;
+        j = (j === 1) ? 2 : 1;
+    }
+    return (checksum % 10) == 0;
 }

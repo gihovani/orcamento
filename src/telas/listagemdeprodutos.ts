@@ -3,9 +3,8 @@ import {ICarrinho} from "../contratos/carrinho";
 import {IApiProduto} from "../contratos/servicos/apiproduto";
 import {TelaComPaginacao} from "./telacompaginacao";
 import {ICarregando} from "../contratos/componentes/carregando";
-import {CartaoDoProduto} from "./componentes/cartaodoproduto";
-import {ICartaoDoProduto} from "../contratos/componentes/cartaodoproduto";
 import {BarraDeNavegacao} from "./barradenavegacao";
+import {CartaoDoProduto} from "./componentes/formularios/cartaodoproduto";
 
 export class ListagemDeProdutos extends TelaComPaginacao {
     private _filtroAtraso = 500;
@@ -28,17 +27,18 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         }).finally(() => this.carregando.esconder());
     }
 
-    private adicionar(cartaoDoProduto: ICartaoDoProduto): void {
+    private adicionar(event: CustomEvent) {
+        const cartao = (event.detail as CartaoDoProduto);
         let personalizacao = '';
-        if (cartaoDoProduto.produto.personalizado) {
+        if (cartao.produto.personalizado) {
             personalizacao = window.prompt('Informe a personalizacao: ', 'Linha1: [] | Linha2: []');
             if (!personalizacao) {
                 return;
             }
         }
-        const quantidade = cartaoDoProduto.pegaQuantidade();
-        cartaoDoProduto.preencheQuantidade(quantidade);
-        this.carrinho.adicionarProduto(cartaoDoProduto.produto, quantidade, false, personalizacao);
+        const quantidade = cartao.pegaDados();
+        cartao.preencheDados(quantidade);
+        this.carrinho.adicionarProduto(cartao.produto, quantidade, false, personalizacao);
         this.barraDeNavegacao.atualizarQuantidadeDeItensNoCarrinho();
     }
 
@@ -204,13 +204,12 @@ export class ListagemDeProdutos extends TelaComPaginacao {
 
         itens.map(produto => {
             const produtoEstaNoCarrinho = this.carrinho.produtos.find((item) => item.produto.id === produto.id);
-            const cartao = new CartaoDoProduto(div, produto);
-            cartao.mostrar((event) => {
-                event.preventDefault();
-                this.adicionar(cartao);
+            const cartao = new CartaoDoProduto(div, produto, (event: CustomEvent) => {
+                this.adicionar(event);
             });
+            cartao.mostrar();
             if (produtoEstaNoCarrinho?.quantidade) {
-                cartao.preencheQuantidade(produtoEstaNoCarrinho.quantidade);
+                cartao.preencheDados(produtoEstaNoCarrinho.quantidade);
             }
         });
         return div;

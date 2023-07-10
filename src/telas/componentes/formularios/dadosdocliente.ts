@@ -1,12 +1,12 @@
-import {IDadosDoCliente} from "../../contratos/componentes/dadosdocliente";
-import {ICliente} from "../../contratos/entidades/cliente";
-import {criarElementoHtml} from "../../util/helper";
-import {IApiCliente} from "../../contratos/servicos/apicliente";
-import {ICarregando} from "../../contratos/componentes/carregando";
-import {INotificacao} from "../../contratos/componentes/notificacao";
-import {validarCPF} from "../../util/validacoes";
+import {ICliente} from "../../../contratos/entidades/cliente";
+import {criarElementoHtml} from "../../../util/helper";
+import {IApiCliente} from "../../../contratos/servicos/apicliente";
+import {ICarregando} from "../../../contratos/componentes/carregando";
+import {INotificacao} from "../../../contratos/componentes/notificacao";
+import {validarCPF} from "../../../util/validacoes";
+import {IFormulario} from "../../../contratos/componentes/formulario";
 
-export class DadosDoCliente implements IDadosDoCliente {
+export class DadosDoCliente implements IFormulario {
     readonly ID: string = 'dados-do-cliente';
 
     constructor(
@@ -17,7 +17,7 @@ export class DadosDoCliente implements IDadosDoCliente {
     ) {
     }
 
-    public preencheDados(cliente: ICliente): void {
+    preencheDados(cliente: ICliente): void {
         (this.elemento.querySelector('#cliente-documento') as HTMLInputElement).value = cliente.documento;
         (this.elemento.querySelector('#cliente-nome') as HTMLInputElement).value = cliente.nome;
         (this.elemento.querySelector('#cliente-sexo') as HTMLInputElement).value = cliente.sexo;
@@ -32,7 +32,7 @@ export class DadosDoCliente implements IDadosDoCliente {
         (this.elemento.querySelector('#cliente-celular') as HTMLInputElement).value = cliente.celular;
     }
 
-    public pegaDados(): ICliente {
+    pegaDados(): ICliente {
         const dados = this.apiCliente.dados;
         dados.documento = (this.elemento.querySelector('#cliente-documento') as HTMLInputElement)?.value;
         dados.nome = (this.elemento.querySelector('#cliente-nome') as HTMLInputElement)?.value;

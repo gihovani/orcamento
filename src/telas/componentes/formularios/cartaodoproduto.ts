@@ -1,17 +1,18 @@
-import {criarElementoHtml, formataNumeroEmDinheiro} from "../../util/helper";
-import {IProduto} from "../../contratos/entidades/produto";
-import {ICartaoDoProduto} from "../../contratos/componentes/cartaodoproduto";
+import {criarElementoHtml, formataNumeroEmDinheiro} from "../../../util/helper";
+import {IProduto} from "../../../contratos/entidades/produto";
+import {IFormulario} from "../../../contratos/componentes/formulario";
 
-export class CartaoDoProduto implements ICartaoDoProduto {
+export class CartaoDoProduto implements IFormulario {
     readonly ID: string = 'produto-id-';
 
     constructor(
         public elemento: HTMLElement,
         public produto: IProduto,
+        public eventoAdicionarProduto: (event: CustomEvent) => void
     ) {
     }
 
-    public preencheQuantidade(quantidade: number): void {
+    preencheDados(quantidade: number): void {
         const produto = this.produto;
         const inputQuantidade = (this.elemento.querySelector(`#${this.ID}quantidade-${produto.id}`) as HTMLInputElement);
         inputQuantidade.value = String(quantidade ?? '1');
@@ -21,7 +22,7 @@ export class CartaoDoProduto implements ICartaoDoProduto {
         divProduto.appendChild(this.seloProdutoAdicionado());
     }
 
-    public pegaQuantidade(): number {
+    pegaDados(): number {
         const inputQuantidade = (this.elemento.querySelector(`#${this.ID}quantidade-${this.produto.id}`) as HTMLInputElement);
         return parseInt(inputQuantidade.value);
     }
@@ -30,7 +31,7 @@ export class CartaoDoProduto implements ICartaoDoProduto {
         return criarElementoHtml('span', ['label-item-adicionado'], [], 'Adicionado ao carrinho');
     }
 
-    mostrar(eventoAdicionarProduto: (event: Event) => void): void {
+    mostrar(): void {
         this.elemento.querySelector('#' + this.ID)?.remove();
         const produto = this.produto;
         let precoFormatado = formataNumeroEmDinheiro(produto.preco);
@@ -60,7 +61,10 @@ export class CartaoDoProduto implements ICartaoDoProduto {
         </div>
     </div>`;
         div.querySelector('.botao-adicionar')
-            .addEventListener('click', eventoAdicionarProduto);
+            .addEventListener('click', (event) => {
+                event.preventDefault();
+                this.eventoAdicionarProduto(new CustomEvent('botao-adicionar', {detail: this}));
+            });
         this.elemento.appendChild(div);
     }
 }

@@ -1,19 +1,32 @@
-import {criarElementoHtml, formataNumeroEmDinheiro} from "../util/helper";
-import {ITela} from "../contratos/tela";
-import {INotificacao} from "../contratos/componentes/notificacao";
-import {IApiBin} from "../contratos/servicos/apibin";
-import {ICarrinho} from "../contratos/carrinho";
-import {CartaoDeCredito} from "../entidades/formadepagamento";
+import {criarElementoHtml, formataNumeroEmDinheiro} from "../../../util/helper";
+import {INotificacao} from "../../../contratos/componentes/notificacao";
+import {IApiBin} from "../../../contratos/servicos/apibin";
+import {ICarrinho} from "../../../contratos/carrinho";
+import {CartaoDeCredito} from "../../../entidades/formadepagamento";
+import {IFormulario} from "../../../contratos/componentes/formulario";
 
-export class FormularioPagamentoCartaoDeCredito implements ITela {
+export class DadosDoPagamentoCartaoDeCredito implements IFormulario {
     constructor(
+        public elemento: HTMLElement,
         public carrinho: ICarrinho,
         public apiBin: IApiBin,
         public notificacao: INotificacao
     ) {
     }
 
-    private pegaDadosDoFormulario(form: HTMLFormElement): CartaoDeCredito {
+    preencheDados(dados: CartaoDeCredito): void {
+        const [data_expiracao_mes, data_expiracao_ano] = dados.data_expiracao.split('/');
+        (this.elemento.querySelector('#parcelamento') as HTMLInputElement).value = String(dados.parcelamento);
+        (this.elemento.querySelector('#bandeira') as HTMLInputElement).value = dados.bandeira;
+        (this.elemento.querySelector('#nome') as HTMLInputElement).value = dados.nome;
+        (this.elemento.querySelector('#data_expiracao_mes') as HTMLInputElement).value = data_expiracao_mes;
+        (this.elemento.querySelector('#data_expiracao_ano') as HTMLInputElement).value = data_expiracao_ano;
+        (this.elemento.querySelector('#codigo_verificacao') as HTMLInputElement).value = dados.codigo_verificacao;
+        (this.elemento.querySelector('#numero') as HTMLInputElement).value = dados.numero;
+    }
+
+    pegaDados(): CartaoDeCredito {
+        const form = this.elemento;
         const parcelamento = (form.querySelector('#parcelamento') as HTMLInputElement)?.value;
         const bandeira = (form.querySelector('#bandeira') as HTMLInputElement)?.value;
         const nome = (form.querySelector('#nome') as HTMLInputElement)?.value;
@@ -25,7 +38,7 @@ export class FormularioPagamentoCartaoDeCredito implements ITela {
         return new CartaoDeCredito(parseInt(parcelamento), bandeira, nome, numero, data_expiracao, codigo_verificacao);
     }
 
-    conteudo(): HTMLElement {
+    mostrar(): void {
         const main = criarElementoHtml('main', ['row']);
         main.innerHTML = `<form class="p-5 rounded mt-3 mb-3 m-auto needs-validation" autocomplete="off">
   <h1 class="h3 mb-3 fw-normal">Cartão de Crédito</h1>
@@ -108,7 +121,7 @@ export class FormularioPagamentoCartaoDeCredito implements ITela {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             try {
-                const cartaoDeCredito = this.pegaDadosDoFormulario(form);
+                const cartaoDeCredito = this.pegaDados();
                 this.notificacao.mostrar('Sucesso', `Os Dados do Cartão de Crédito (${cartaoDeCredito.bandeira}) Foram Salvos!`, 'success');
             } catch (error) {
                 this.notificacao.mostrar('Erro', error, 'danger');
@@ -122,6 +135,6 @@ export class FormularioPagamentoCartaoDeCredito implements ITela {
                 });
             }
         });
-        return main;
+        this.elemento.appendChild(main);
     }
 }

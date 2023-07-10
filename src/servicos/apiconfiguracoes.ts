@@ -6,6 +6,9 @@ export class ApiConfiguracoes implements IApiConfiguracoes {
     versao: string;
     retirada_permitida: boolean = true;
     offline: boolean = false;
+    forma_pagamento_cartao_credito: boolean = true;
+    forma_pagamento_cartao_maquineta: boolean = true;
+    forma_pagamento_boleto: boolean = true;
 
     constructor() {
         this.loja = this.disponiveis()[6];

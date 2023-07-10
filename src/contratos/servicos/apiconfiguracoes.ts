@@ -3,6 +3,9 @@ export interface IApiConfiguracoes {
     versao: string;
     offline: boolean;
     retirada_permitida: boolean;
+    forma_pagamento_cartao_credito: boolean;
+    forma_pagamento_cartao_maquineta: boolean;
+    forma_pagamento_boleto: boolean;
     disponiveis: () => IApiConfiguracoesLoja[];
 }
 

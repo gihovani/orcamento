@@ -1,17 +1,17 @@
-import {criarElementoHtml, formataNumeroEmDinheiro} from "../../util/helper";
-import {INotificacao} from "../../contratos/componentes/notificacao";
-import {IApiFormasDeEntrega} from "../../contratos/servicos/apiformasdeentrega";
-import {IFormaDeEntrega} from "../../contratos/entidades/formadeentrega";
-import {IDadosDaFormasDeEntrega} from "../../contratos/componentes/dadosdasformasdeentrega";
-import {FormaDeEntrega} from "../../entidades/formadeentrega";
-import {ApiConfiguracoes} from "../../servicos/apiconfiguracoes";
+import {criarElementoHtml, formataNumeroEmDinheiro} from "../../../util/helper";
+import {INotificacao} from "../../../contratos/componentes/notificacao";
+import {IApiFormasDeEntrega} from "../../../contratos/servicos/apiformasdeentrega";
+import {IFormaDeEntrega} from "../../../contratos/entidades/formadeentrega";
+import {FormaDeEntrega} from "../../../entidades/formadeentrega";
+import {ApiConfiguracoes} from "../../../servicos/apiconfiguracoes";
+import {IApiCep} from "../../../contratos/servicos/apicep";
+import {ICarregando} from "../../../contratos/componentes/carregando";
+import {ICarrinho} from "../../../contratos/carrinho";
+import {IEndereco} from "../../../contratos/entidades/endereco";
+import {IFormulario} from "../../../contratos/componentes/formulario";
 import {DadosDoEndereco} from "./dadosdoendereco";
-import {IApiCep} from "../../contratos/servicos/apicep";
-import {ICarregando} from "../../contratos/componentes/carregando";
-import {ICarrinho} from "../../contratos/carrinho";
-import {IEndereco} from "../../contratos/entidades/endereco";
 
-export class DadosDaFormasDeEntrega implements IDadosDaFormasDeEntrega {
+export class DadosDaFormasDeEntrega implements IFormulario {
     readonly ID: string = 'dados-da-forma-de-entrega';
     private _formasDeEntrega: IFormaDeEntrega[];
 
@@ -34,7 +34,7 @@ export class DadosDaFormasDeEntrega implements IDadosDaFormasDeEntrega {
         return this._formasDeEntrega;
     }
 
-    public preencheDados(formaDeEntrega: IFormaDeEntrega): void {
+    preencheDados(formaDeEntrega: IFormaDeEntrega): void {
         const input = (this.elemento.querySelector(`#${this.ID}-${formaDeEntrega.tipo}`) as HTMLInputElement);
         if (input) {
             input.setAttribute('checked', 'true');
@@ -42,7 +42,7 @@ export class DadosDaFormasDeEntrega implements IDadosDaFormasDeEntrega {
         }
     }
 
-    public pegaDados(): IFormaDeEntrega {
+    pegaDados(): IFormaDeEntrega {
         const dados = this.apiFormasDeEntrega.dados;
         for (const forma of this.formasDeEntrega) {
             if (forma.tipo === dados.tipo) {
@@ -113,7 +113,7 @@ export class DadosDaFormasDeEntrega implements IDadosDaFormasDeEntrega {
         this.htmlFormasDeEntrega(div);
     }
 
-    htmlFormaDeEntrega(forma: IFormaDeEntrega): HTMLElement {
+    private htmlFormaDeEntrega(forma: IFormaDeEntrega): HTMLElement {
         const formaSelecionada = this.apiFormasDeEntrega.dados;
         const div = criarElementoHtml('div', ['form-check']);
         const input = criarElementoHtml('input', ['form-check-input']);

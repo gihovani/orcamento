@@ -3,9 +3,8 @@ import {ICarrinho} from "../contratos/carrinho";
 import {ITela} from "../contratos/tela";
 import {INotificacao} from "../contratos/componentes/notificacao";
 import {BarraDeNavegacao} from "./barradenavegacao";
-import {CartaoDoProdutoNoCarrinho} from "./componentes/cartaodoprodutonocarrinho";
-import {ICartaoDoProdutoNoCarrinho} from "../contratos/componentes/cartaodoprodutonocarrinho";
 import {TituloEDescricaoDaPagina} from "./componentes/tituloedescricaodapagina";
+import {CartaoDoProdutoNoCarrinho} from "./componentes/formularios/cartaodoprodutonocarrinho";
 
 export class ListaDeCompras implements ITela {
     constructor(
@@ -15,15 +14,17 @@ export class ListaDeCompras implements ITela {
     ) {
     }
 
-    private atualizar(cartao: ICartaoDoProdutoNoCarrinho): void {
+    private atualizar(event: CustomEvent): void {
+        const cartao = (event.detail as CartaoDoProdutoNoCarrinho);
         const produto = cartao.item.produto;
-        const quantidade = cartao.pegaQuantidade();
+        const quantidade = cartao.pegaDados();
         this.carrinho.adicionarProduto(produto, quantidade, true);
         this.notificacao.mostrar('Sucesso', `Produto ${produto.id} foi atualizado com sucesso!`, 'success');
         this.htmlListaDeProdutos();
     }
 
-    private remover(cartao: ICartaoDoProdutoNoCarrinho): void {
+    private remover(event: CustomEvent): void {
+        const cartao = (event.detail as CartaoDoProdutoNoCarrinho);
         const produto = cartao.item.produto;
         this.carrinho.removerProduto(produto);
         this.notificacao.mostrar('Sucesso', `Produto ${produto.id} foi removido com sucesso!`, 'success');
@@ -35,14 +36,12 @@ export class ListaDeCompras implements ITela {
         const div = criarElementoHtml('div');
         const produtos = this.carrinho.produtos;
         produtos.map(item => {
-            const cartao = new CartaoDoProdutoNoCarrinho(div, item);
-            cartao.mostrar((event) => {
-                event.preventDefault();
-                this.atualizar(cartao);
-            }, (event) => {
-                event.preventDefault();
-                this.remover(cartao);
+            const cartao = new CartaoDoProdutoNoCarrinho(div, item, (event: CustomEvent) => {
+                this.atualizar(event);
+            }, (event: CustomEvent) => {
+                this.remover(event);
             });
+            cartao.mostrar();
         });
         return div;
     }

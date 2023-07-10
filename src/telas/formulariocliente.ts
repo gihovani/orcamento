@@ -3,7 +3,7 @@ import {criarElementoHtml} from "../util/helper";
 import {IApiCliente} from "../contratos/servicos/apicliente";
 import {INotificacao} from "../contratos/componentes/notificacao";
 import {ICarregando} from "../contratos/componentes/carregando";
-import {DadosDoCliente} from "./componentes/dadosdocliente";
+import {DadosDoCliente} from "./componentes/formularios/dadosdocliente";
 
 export class FormularioCliente implements ITela {
     constructor(

@@ -2,16 +2,17 @@ import {criarElementoHtml, formataNumeroEmDinheiro} from "../util/helper";
 import {ITela} from "../contratos/tela";
 import {INotificacao} from "../contratos/componentes/notificacao";
 import {IApiBin} from "../contratos/servicos/apibin";
-import {IApiParcelamento} from "../contratos/servicos/apiparcelamento";
 import {ICarrinho, ICarrinhoProduto} from "../contratos/carrinho";
 import {ICarregando} from "../contratos/componentes/carregando";
 import {IApiCliente} from "../contratos/servicos/apicliente";
 import {IApiCep} from "../contratos/servicos/apicep";
-import {DadosDoCliente} from "./componentes/dadosdocliente";
 import {IApiFormasDeEntrega} from "../contratos/servicos/apiformasdeentrega";
 import {TituloEDescricaoDaPagina} from "./componentes/tituloedescricaodapagina";
 import {IApiCarrinho} from "../contratos/servicos/apicarrinho";
-import {DadosDaFormasDeEntrega} from "./componentes/dadosdasformasdeentrega";
+import {IApiFormasDePagamento} from "../contratos/servicos/apiformasdepagamento";
+import {DadosDoCliente} from "./componentes/formularios/dadosdocliente";
+import {DadosDaFormasDeEntrega} from "./componentes/formularios/dadosdasformasdeentrega";
+import {DadosDaFormasDePagamento} from "./componentes/formularios/dadosdasformasdepagamento";
 
 export class FormularioPagamento implements ITela {
     constructor(
@@ -20,7 +21,7 @@ export class FormularioPagamento implements ITela {
         public apiCep: IApiCep,
         public apiFormasDeEntrega: IApiFormasDeEntrega,
         public apiCarrinho: IApiCarrinho,
-        public apiParcelamento: IApiParcelamento,
+        public apiFormasDePagamento: IApiFormasDePagamento,
         public apiBin: IApiBin,
         public notificacao: INotificacao,
         public carregando: ICarregando
@@ -111,6 +112,10 @@ export class FormularioPagamento implements ITela {
         dadosDasFormasDeEntrega.mostrar();
         form.appendChild(criarElementoHtml('hr', ['mb-4']));
 
+        const dadosDasFormasDePagamento = new DadosDaFormasDePagamento(form, this.carrinho, this.apiFormasDePagamento, this.apiBin, this.notificacao, this.carregando);
+        dadosDasFormasDePagamento.mostrar();
+        form.appendChild(criarElementoHtml('hr', ['mb-4']));
+
         const submit = criarElementoHtml('button', ['btn', 'btn-primary'], [{
             nome: 'type',
             valor: 'submit'
@@ -121,7 +126,7 @@ export class FormularioPagamento implements ITela {
             this.carregando.mostrar();
             try {
                 const cliente = dadosDoCliente.pegaDados();
-                const entrega = dadosDasFormasDeEntrega.pegaDados();
+                // const entrega = dadosDasFormasDeEntrega.pegaDados();
 
                 this.apiCarrinho.totalizar().then(carrinho => {
                     const valor_total = carrinho.totalizador.valor_total;

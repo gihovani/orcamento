@@ -1,12 +1,12 @@
-import {IDadosDoEndereco} from "../../contratos/componentes/dadosdoendereco";
-import {criarElementoHtml} from "../../util/helper";
-import {ICarregando} from "../../contratos/componentes/carregando";
-import {IApiCep} from "../../contratos/servicos/apicep";
-import {IEndereco} from "../../contratos/entidades/endereco";
-import {INotificacao} from "../../contratos/componentes/notificacao";
-import {validarCEP} from "../../util/validacoes";
+import {criarElementoHtml} from "../../../util/helper";
+import {ICarregando} from "../../../contratos/componentes/carregando";
+import {IApiCep} from "../../../contratos/servicos/apicep";
+import {IEndereco} from "../../../contratos/entidades/endereco";
+import {INotificacao} from "../../../contratos/componentes/notificacao";
+import {validarCEP} from "../../../util/validacoes";
+import {IFormulario} from "../../../contratos/componentes/formulario";
 
-export class DadosDoEndereco implements IDadosDoEndereco {
+export class DadosDoEndereco implements IFormulario {
     readonly ID: string = 'dados-do-endereco';
 
     constructor(
@@ -17,7 +17,7 @@ export class DadosDoEndereco implements IDadosDoEndereco {
     ) {
     }
 
-    public preencheDados(endereco: IEndereco): void {
+    preencheDados(endereco: IEndereco): void {
         (this.elemento.querySelector('#endereco-cep') as HTMLInputElement).value = endereco.cep;
         (this.elemento.querySelector('#endereco-rua') as HTMLInputElement).value = endereco.rua;
         (this.elemento.querySelector('#endereco-bairro') as HTMLInputElement).value = endereco.bairro;
@@ -27,7 +27,7 @@ export class DadosDoEndereco implements IDadosDoEndereco {
         (this.elemento.querySelector('#endereco-complemento') as HTMLInputElement).value = endereco.complemento;
     }
 
-    public pegaDados(): IEndereco {
+    pegaDados(): IEndereco {
         const dados = this.apiCep.dados;
         dados.cep = (this.elemento.querySelector('#endereco-cep') as HTMLInputElement)?.value;
         dados.rua = (this.elemento.querySelector('#endereco-rua') as HTMLInputElement)?.value;

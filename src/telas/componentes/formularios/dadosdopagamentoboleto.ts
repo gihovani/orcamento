@@ -1,22 +1,29 @@
-import {criarElementoHtml, formataNumeroEmDinheiro} from "../util/helper";
-import {ITela} from "../contratos/tela";
-import {INotificacao} from "../contratos/componentes/notificacao";
-import {ICarrinho} from "../contratos/carrinho";
-import {Boleto} from "../entidades/formadepagamento";
+import {criarElementoHtml, formataNumeroEmDinheiro} from "../../../util/helper";
+import {INotificacao} from "../../../contratos/componentes/notificacao";
+import {ICarrinho} from "../../../contratos/carrinho";
+import {Boleto} from "../../../entidades/formadepagamento";
+import {IFormulario} from "../../../contratos/componentes/formulario";
 
-export class FormularioPagamentoBoletoParcelado implements ITela {
+export class DadosDoPagamentoBoleto implements IFormulario {
+    readonly ID: string = 'dados-do-pagamento-boleto';
+
     constructor(
+        public elemento: HTMLElement,
         public carrinho: ICarrinho,
         public notificacao: INotificacao
     ) {
     }
 
-    public pegaDadosDoFormulario(form: HTMLFormElement): Boleto {
-        const parcelamento = (form.querySelector('#parcelamento') as HTMLInputElement)?.value;
+    preencheDados(boleto: Boleto): void {
+        (this.elemento.querySelector('#parcelamento') as HTMLInputElement).value = String(boleto.parcelamento);
+    }
+
+    pegaDados(): Boleto {
+        const parcelamento = (this.elemento.querySelector('#parcelamento') as HTMLInputElement)?.value;
         return new Boleto(parseInt(parcelamento));
     }
 
-    conteudo(): HTMLElement {
+    mostrar(): void {
         const main = criarElementoHtml('main', ['row']);
         main.innerHTML = `<form class="p-5 rounded mt-3 mb-3 m-auto needs-validation" autocomplete="off">
   <h1 class="h3 mb-3 fw-normal">Boleto Parcelado</h1>
@@ -43,12 +50,12 @@ export class FormularioPagamentoBoletoParcelado implements ITela {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             try {
-                const boleto = this.pegaDadosDoFormulario(form);
+                const boleto = this.pegaDados();
                 this.notificacao.mostrar('Sucesso', `Os Dados do (${boleto.tipo}) Foram Salvos!`);
             } catch (error) {
                 this.notificacao.mostrar('Erro', error, 'danger');
             }
         });
-        return main;
+        this.elemento.appendChild(main);
     }
 }
