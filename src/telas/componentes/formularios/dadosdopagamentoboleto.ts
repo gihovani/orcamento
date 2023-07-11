@@ -23,10 +23,14 @@ export class DadosDoPagamentoBoleto implements IFormulario {
         return new Boleto(parseInt(parcelamento));
     }
 
+    esconder(): void {
+        this.elemento.querySelector('#' + this.ID)?.remove();
+    }
+
     mostrar(): void {
-        this.elemento.querySelector(`#${this.ID}`)?.remove();
+        this.esconder();
         const div = criarElementoHtml('div', ['row'], [{nome: 'id', valor: this.ID}]);
-        div.innerHTML = `<h3 class="h4 mb-3 fw-normal">Boleto Parcelados</h3>
+        div.innerHTML = `<h3 class="h4 mb-1 mt-1 fw-normal">Boleto</h3>
 <div class="mb-3 col-12">
     <label class="form-label" for="${this.ID}-parcelamento">Número de Parcelas</label>
     <select class="form-select" id="${this.ID}-parcelamento" required></select>

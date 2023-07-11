@@ -40,11 +40,15 @@ export class DadosDoPagamentoCartaoDeCredito implements IFormulario {
         return new CartaoDeCredito(parseInt(parcelamento), bandeira, nome, numero, data_expiracao, codigo_verificacao);
     }
 
+    esconder(): void {
+        this.elemento.querySelector('#' + this.ID)?.remove();
+    }
+
     mostrar(): void {
-        this.elemento.querySelector(`#${this.ID}`)?.remove();
+        this.esconder();
         const div = criarElementoHtml('div', ['row']);
         div.setAttribute('id', this.ID);
-        div.innerHTML = `<h3 class="h4 mb-3 fw-normal">Cartão de Crédito</h3>
+        div.innerHTML = `<h3 class="h4 mb-1 mt-1 fw-normal">Cartão de Crédito</h3>
 <div class="col-md-4 mb-3">
   <label for="${this.ID}-parcelamento">Número de Parcelas</label>
   <select class="form-select" id="${this.ID}-parcelamento" required></select>

@@ -39,9 +39,9 @@ export class FormularioPagamento implements ITela {
 <div class="col-md-4 order-md-2 mb-4">
     <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="text-muted">Carrinho</span>
-        <span class="badge badge-secondary badge-pill">3</span>
+        <span class="badge text-bg-primary">${this.carrinho.totalizador.quantidade_produtos || 0}</span>
     </h4>
-    <div id="itens-do-carrinho"></div>
+    <div id="itens-do-carrinho" class="text-center">Seu carrinho está vazio!</div>
     <form id="formulario-de-codigo-promocional" class="card p-2" onsubmit="alert('ainda nao disponivel!');return false" autocomplete="off">
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Código Promocional" id="codigo-promocional">
@@ -52,8 +52,8 @@ export class FormularioPagamento implements ITela {
     </form>
 </div>
 <div class="col-md-8 order-md-1" id="formulario-de-pagamento"></div>`;
-        row.querySelector('#itens-do-carrinho').appendChild(this.htmlItensCarrinho());
-        row.querySelector('#formulario-de-pagamento').appendChild(this.htmlFormularioDePagamento());
+        this.htmlItensCarrinho(row.querySelector('#itens-do-carrinho'));
+        this.htmlFormularioDePagamento(row.querySelector('#formulario-de-pagamento'));
         main.appendChild(row);
         return main;
     }
@@ -90,18 +90,25 @@ export class FormularioPagamento implements ITela {
         return li;
     }
 
-    private htmlItensCarrinho(): HTMLElement {
+    private htmlItensCarrinho(div: HTMLElement): void {
+        if (!this.carrinho.totalizador.quantidade_produtos) {
+            return;
+        }
+
+        div.classList.remove('text-center');
+        div.innerHTML = '';
         const ul = criarElementoHtml('ul', ['list-group', 'mb-3', 'sticky-top']);
         this.carrinho.produtos.map(item => {
             ul.appendChild(this.htmlItemCarrinho(item));
         });
         ul.appendChild(this.htmlDescontos());
         ul.appendChild(this.htmlTotal());
-        return ul;
+        div.appendChild(ul);
     }
 
-    htmlFormularioDePagamento(): HTMLElement {
-        const form = criarElementoHtml('form', ['needs-validation']);
+    private htmlFormularioDePagamento(div: HTMLElement): void {
+        div.innerHTML = '';
+        const form = criarElementoHtml('form', ['needs-validation', 'mb-4']);
         form.setAttribute('autocomplete', 'off');
 
         const dadosDoCliente = new DadosDoCliente(form, this.apiCliente, this.notificacao, this.carregando);
@@ -116,7 +123,7 @@ export class FormularioPagamento implements ITela {
         dadosDasFormasDePagamento.mostrar();
         form.appendChild(criarElementoHtml('hr', ['mb-4']));
 
-        const submit = criarElementoHtml('button', ['btn', 'btn-primary'], [{
+        const submit = criarElementoHtml('button', ['btn', 'btn-primary', 'w-100'], [{
             nome: 'type',
             valor: 'submit'
         }], 'SALVAR PEDIDO');
@@ -149,6 +156,6 @@ export class FormularioPagamento implements ITela {
                 this.carregando.esconder();
             }
         });
-        return form;
+        div.appendChild(form);
     }
 }

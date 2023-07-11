@@ -31,8 +31,12 @@ export class CartaoDoProduto implements IFormulario {
         return criarElementoHtml('span', ['label-item-adicionado'], [], 'Adicionado ao carrinho');
     }
 
-    mostrar(): void {
+    esconder(): void {
         this.elemento.querySelector('#' + this.ID)?.remove();
+    }
+
+    mostrar(): void {
+        this.esconder();
         const produto = this.produto;
         let precoFormatado = formataNumeroEmDinheiro(produto.preco);
         const div = criarElementoHtml('div', ['col']);

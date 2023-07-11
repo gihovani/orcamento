@@ -12,7 +12,11 @@ import {DadosDoPagamentoCartaoDeCredito} from "./dadosdopagamentocartaodecredito
 
 export class DadosDaFormasDePagamento implements IFormulario {
     readonly ID: string = 'dados-da-forma-de-pagamento';
+    private _div: HTMLElement;
     private _formulario: IFormulario;
+    private _formularioBoleto: IFormulario;
+    private _formularioCartaoMaquineta: IFormulario;
+    private _formularioCartaoDeCredito: IFormulario;
 
     constructor(
         public elemento: HTMLElement,
@@ -22,10 +26,16 @@ export class DadosDaFormasDePagamento implements IFormulario {
         public notificacao: INotificacao,
         public carregando: ICarregando
     ) {
+        this._div = criarElementoHtml('div');
+        this._div.setAttribute('id', this.ID);
+
+        this._formularioBoleto = new DadosDoPagamentoBoleto(this._div, this.carrinho, this.notificacao);
+        this._formularioCartaoMaquineta = new DadosDoPagamentoCartaoMaquineta(this._div, this.carrinho, this.notificacao);
+        this._formularioCartaoDeCredito = new DadosDoPagamentoCartaoDeCredito(this._div, this.carrinho, this.apiBin, this.notificacao);
     }
 
     public preencheDados(formasDePagamento: IFormaDePagamento): void {
-        const input = (this.elemento.querySelector(`#${this.ID}-${formasDePagamento.tipo}`) as HTMLInputElement);
+        const input = (this._div.querySelector(`#${this.ID}-${formasDePagamento.tipo}`) as HTMLInputElement);
         if (input) {
             input.setAttribute('checked', 'true');
             this.apiFormasDePagamento.dados = formasDePagamento;
@@ -36,28 +46,28 @@ export class DadosDaFormasDePagamento implements IFormulario {
         return this._formulario.pegaDados();
     }
 
-    mostrar(): void {
-        this.elemento.querySelector('#' + this.ID)?.remove();
-        const div = criarElementoHtml('div');
-        div.setAttribute('id', this.ID);
-
-        this.htmlFormasDePagamentos(div);
-        setTimeout(() => {
-            this.htmlFormaDePagamentoSelecionada(div);
-        }, 50);
-        this.elemento.appendChild(div);
+    esconder(): void {
+        this._div.innerHTML = '';
     }
 
-    private htmlFormasDePagamentos(div: HTMLElement): void {
-        div.innerHTML = '';
+    mostrar(): void {
+        this.esconder();
+        this.htmlFormasDePagamentos();
+        setTimeout(() => {
+            this.htmlFormaDePagamentoSelecionada();
+        }, 50);
+        this.elemento.appendChild(this._div);
+    }
+
+    private htmlFormasDePagamentos(): void {
         this.apiFormasDePagamento.consultar().then((formas) => {
             formas.map((forma) => {
-                this.htmlOpcaoFormaDePagamento(div, forma);
+                this.htmlOpcaoFormaDePagamento(forma);
             });
         });
     }
 
-    private htmlOpcaoFormaDePagamento(divPai: HTMLElement, forma: IFormaDePagamento): void {
+    private htmlOpcaoFormaDePagamento(forma: IFormaDePagamento): void {
         const formaSelecionada = this.apiFormasDePagamento.dados;
         const div = criarElementoHtml('div', ['form-check']);
         const input = criarElementoHtml('input', ['form-check-input']);
@@ -71,7 +81,7 @@ export class DadosDaFormasDePagamento implements IFormulario {
         input.addEventListener('change', (event) => {
             event.preventDefault();
             this.apiFormasDePagamento.dados = forma;
-            this.htmlFormaDePagamentoSelecionada(divPai);
+            this.htmlFormaDePagamentoSelecionada();
         });
         div.appendChild(input);
 
@@ -79,24 +89,22 @@ export class DadosDaFormasDePagamento implements IFormulario {
         label.innerHTML = `${forma.tipo}`;
         label.setAttribute('for', `${this.ID}-${forma.tipo}`);
         div.appendChild(label);
-        divPai.appendChild(div);
+        this._div.appendChild(div);
     }
 
-    private htmlFormaDePagamentoSelecionada(divPai: HTMLElement): void {
-        divPai.querySelector(`#${this.ID}-selecionada`)?.remove();
-
+    private htmlFormaDePagamentoSelecionada(): void {
         const formaSelecionada = this.apiFormasDePagamento.dados;
-        const div = criarElementoHtml('div');
-        div.setAttribute('id', `${this.ID}-selecionada`);
+        this._formularioBoleto.esconder();
+        this._formularioCartaoMaquineta.esconder();
+        this._formularioCartaoDeCredito.esconder();
 
         if (formaSelecionada.tipo === 'Boleto') {
-            this._formulario = new DadosDoPagamentoBoleto(div, this.carrinho, this.notificacao);
+            this._formulario = this._formularioBoleto;
         } else if (formaSelecionada.tipo === 'Cartão Maquineta') {
-            this._formulario = new DadosDoPagamentoCartaoMaquineta(div, this.carrinho, this.notificacao);
+            this._formulario = this._formularioCartaoMaquineta;
         } else if (formaSelecionada.tipo === 'Cartão De Crédito') {
-            this._formulario = new DadosDoPagamentoCartaoDeCredito(div, this.carrinho, this.apiBin, this.notificacao);
+            this._formulario = this._formularioCartaoDeCredito;
         }
         this._formulario.mostrar();
-        divPai.appendChild(div);
     }
 }

@@ -55,21 +55,30 @@ export class DadosDaFormasDeEntrega implements IFormulario {
         return dados;
     }
 
-    mostrar(): void {
+    esconder(): void {
         this.elemento.querySelector('#' + this.ID)?.remove();
+    }
+
+    mostrar(): void {
+        this.esconder();
         const div = criarElementoHtml('div');
         div.setAttribute('id', this.ID);
 
         const dadosDoEndereco = new DadosDoEndereco(div, this.apiCep, this.notificacao, this.carregando);
         dadosDoEndereco.mostrar();
-        const button = criarElementoHtml('button', ['btn', 'btn-secondary'], [{
+        const button = criarElementoHtml('button', ['btn', 'btn-secondary', 'w-100'], [{
             nome: 'type',
             valor: 'button'
         }], 'Opções de Entrega');
         div.appendChild(button);
         div.appendChild(criarElementoHtml('hr', ['mb-4']));
 
-        const divFormasDeEntrega = criarElementoHtml('div');
+        const divFormasDeEntrega = criarElementoHtml(
+            'div',
+            [],
+            [],
+            'Calcule as formas de entrega disponíveis.'
+        );
         div.appendChild(divFormasDeEntrega);
 
         button.addEventListener('click', async (e): Promise<void> => {

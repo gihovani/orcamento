@@ -49,8 +49,12 @@ export class DadosDoCliente implements IFormulario {
         return dados;
     }
 
-    mostrar(): void {
+    esconder(): void {
         this.elemento.querySelector('#' + this.ID)?.remove();
+    }
+
+    mostrar(): void {
+        this.esconder();
         const div = criarElementoHtml('div', ['row']);
         div.setAttribute('id', this.ID);
         const cliente = this.apiCliente.dados;

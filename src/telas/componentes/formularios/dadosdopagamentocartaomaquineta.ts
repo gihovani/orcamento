@@ -30,11 +30,15 @@ export class DadosDoPagamentoCartaoMaquineta implements IFormulario {
         return new CartaoMaquineta(parseInt(parcelamento), bandeira, codigo_nsu, codigo_autorizacao);
     }
 
+    esconder(): void {
+        this.elemento.querySelector('#' + this.ID)?.remove();
+    }
+
     mostrar(): void {
-        this.elemento.querySelector(`#${this.ID}`)?.remove();
+        this.esconder();
         const div = criarElementoHtml('div', ['row']);
         div.setAttribute('id', this.ID);
-        div.innerHTML = `<h3 class="h4 mb-3 fw-normal">Cartão Maquineta</h3>
+        div.innerHTML = `<h3 class="h4 mb-1 mt-1 fw-normal">Cartão Maquineta</h3>
 <div class="col-md-6 mb-3">
   <label for="${this.ID}-parcelamento">Número de Parcelas</label>
   <select class="form-select" id="${this.ID}-parcelamento" required></select>

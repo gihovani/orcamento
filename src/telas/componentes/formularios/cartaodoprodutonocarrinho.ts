@@ -25,8 +25,12 @@ export class CartaoDoProdutoNoCarrinho implements IFormulario {
         return parseInt(inputQuantidade.value);
     }
 
-    mostrar(): void {
+    esconder(): void {
         this.elemento.querySelector('#' + this.ID)?.remove();
+    }
+
+    mostrar(): void {
+        this.esconder();
         const produto = this.item.produto;
         let precoDeFormatado = formataNumeroEmDinheiro(produto.preco);
         let precoPorFormatado = formataNumeroEmDinheiro(this.item.preco_unitario);
