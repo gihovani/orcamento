@@ -10,9 +10,11 @@ html.h-100 {
     min-height: 100vh;
     height: 100% !important;
 }
+
 .nav {
     gap: 0.5rem;
 }
+
 .navbar-brand {
     color: var(--enfase);
 }
@@ -25,6 +27,7 @@ html.h-100 {
     transition: color .3s;
     font-size: 0.75rem;
 }
+
 #formulario-de-pagamento .form-label,
 #formulario-de-pagamento .form-select,
 #formulario-de-pagamento .form-control,
@@ -41,6 +44,7 @@ html.h-100 {
     border-radius: 0 1.25rem 1.25rem 0;
     padding: 0.125rem 1rem;
 }
+
 #formulario-de-pagamento .form-control {
     padding: 0.375rem;
 }
@@ -56,15 +60,19 @@ input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
 }
 
-.card .img-thumbnail {
-    border: unset;
-    padding: 1rem;
-}
-
 .card {
     border: unset;
     position: relative;
     box-shadow: 0 .2rem .7rem rgba(55, 84, 102, .15);
+}
+
+.card figure {
+    margin: 0;
+}
+
+.card .figure-caption {
+    text-align: center;
+    margin-top: -20px;
 }
 
 .card .label-item-adicionado {
@@ -163,18 +171,6 @@ input[type=number]::-webkit-outer-spin-button {
     font-size: 0.7rem;
 }
 
-.listagem-de-produtos .lista-de-produtos-filtros {
-    width: 20%;
-}
-
-.listagem-de-produtos .lista-de-produtos {
-    width: 80%;
-}
-
-.listagem-de-produtos .filtros-campo .filtros-titulo {
-    width: 100%;
-}
-
 .listagem-de-produtos .filtros-campo select,
 .listagem-de-produtos .filtros-campo input[type=text] {
     margin: 1rem 0;
@@ -184,10 +180,12 @@ input[type=number]::-webkit-outer-spin-button {
     width: 100%;
     display: block;
 }
+
 .listagem-de-produtos .filtros-campo input[type=range] {
     font-size: 0.75rem;
     padding: 0 0.5rem;
 }
+
 .listagem-de-produtos .filtros-campo .input-group-text {
     font-size: 0.75rem;
     padding: 0 0.25rem;
@@ -270,18 +268,6 @@ input[type=number]::-webkit-outer-spin-button {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-    }
-
-    .listagem-de-produtos .filtros-campo select {
-        width: 48%;
-    }
-
-    .listagem-de-produtos .lista-de-produtos-filtros {
-        width: 100%;
-    }
-
-    .listagem-de-produtos .lista-de-produtos {
-        width: 100%;
     }
 }
 

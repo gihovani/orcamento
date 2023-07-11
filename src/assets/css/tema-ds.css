@@ -1,0 +1,107 @@
+:root {
+    --branco: #f9f9f9;
+    --verde: #66c925;
+    --texto-primario: #242c2f;
+    --enfase: #f09;
+    --primario: #09f;
+}
+
+.tema-ds #app {
+    background-color: #fff;
+}
+
+.tema-ds .card .label-item-adicionado {
+    background-color: var(--verde);
+    color: #fff;
+}
+
+.tema-ds .card .card-title {
+    color: var(--texto-primario);
+    letter-spacing: .02em;
+}
+
+.tema-ds .card .card-footer .price {
+    color: var(--enfase);
+    font-weight: 700;
+}
+
+.tema-ds .botao-adicionar {
+    color: #fff;
+    background: var(--verde);
+    border-color: var(--verde);
+}
+
+.tema-ds .card .card-footer .linha-acao input {
+    font-size: 0.75rem;
+    padding: 0 0.5rem;
+    color: var(--texto-primario);
+    text-align: center;
+    border-radius: 12rem;
+    background: var(--branco);
+    box-sizing: border-box;
+    vertical-align: baseline;
+    background-clip: padding-box;
+    border: .1rem solid #d2d2d2;
+}
+
+.tema-ds .toast-container .success {
+    color: #fff;
+    background: var(--verde);
+    border: 1px solid var(--verde);
+}
+
+.tema-ds .danger {
+    color: #7a1d20;
+    background: #f5d6d7;
+    border: 1px solid #7a1d20;
+}
+
+.tema-ds button.danger {
+    color: #7a1d20;
+
+}
+
+.tema-ds button.info {
+    color: #1d487a;
+}
+
+.tema-ds button.sem-estilo {
+    background: transparent;
+    border: 1px solid transparent;
+}
+
+.tema-ds .label-quantidade {
+    color: #fff;
+    background-color: var(--enfase);
+}
+
+.tema-ds .nav-item:hover a {
+    color: var(--primario);
+}
+
+.tema-ds .nav-link.active {
+    color: var(--enfase);
+}
+
+.tema-ds .listagem-de-produtos .filtros-campo select,
+.tema-ds .listagem-de-produtos .filtros-campo button,
+.tema-ds .listagem-de-produtos .filtros-campo input,
+.tema-ds .listagem-de-produtos .filtros-campo span,
+.tema-ds .card input {
+    border-radius: 1.75rem;
+}
+
+.tema-ds .lista-de-promocoes .regras .regra .regra-texto span {
+    border: 3px solid #09f;
+    font-weight: 600;
+    color: #09f;
+}
+
+.tema-ds .lista-de-compras .brinde {
+    border: 3px solid #09f;
+}
+
+.tema-ds .lista-de-compras .card .valor-e-quantidade h3 {
+    color: var(--enfase);
+    font-weight: 600;
+}

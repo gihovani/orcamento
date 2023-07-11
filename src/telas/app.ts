@@ -213,7 +213,7 @@ export class App extends ILayout {
         valor_produtos: string,
         promocao_imagem: string
     ): RegraPromocional {
-        const brinde = new Produto(`BRINDE${prioridade}`, brinde_nome, 0, true);
+        const brinde = new Produto(`BRINDE${prioridade}`, 'BRINDE', brinde_nome, 0, true);
         brinde.imagem = brinde_imagem;
         brinde.descricao = brinde_descricao;
         return new RegraPromocional(

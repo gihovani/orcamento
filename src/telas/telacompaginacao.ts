@@ -6,6 +6,11 @@ export abstract class TelaComPaginacao implements ITela {
     public paginaAtual = 1;
     public ultimaPagina = 1;
     public itens: any[] = [];
+    public elemento: HTMLElement;
+
+    constructor() {
+        this.elemento = criarElementoHtml('main', ['listagem-de-produtos', 'row']);
+    }
 
     temProximaPagina(): boolean {
         return this.paginaAtual < this.ultimaPagina;
@@ -100,19 +105,17 @@ export abstract class TelaComPaginacao implements ITela {
         return li;
     }
 
-    htmlPaginacao(): HTMLElement {
-        let div = document.getElementById('lista-de-produtos-paginacao');
+    htmlPaginacao(): void {
+        let div = this.elemento.querySelector('#lista-de-produtos-paginacao');
         if (div) {
             div.innerHTML = '';
         } else {
-            div = criarElementoHtml(
-                'div',
-                ['lista-de-produtos-paginacao', 'row', 'pt-3', 'pb-3']
-            );
+            div = criarElementoHtml('div', ['lista-de-produtos-paginacao', 'row', 'pt-3', 'pb-3']);
             div.setAttribute('id', 'lista-de-produtos-paginacao');
+            this.elemento.appendChild(div);
         }
         if (!this.temPaginacao()) {
-            return div;
+            return;
         }
 
         const nav = criarElementoHtml('nav', [], [{'nome': 'aria-label', 'valor': 'Page navigation example'}]);
@@ -122,17 +125,15 @@ export abstract class TelaComPaginacao implements ITela {
         ul.appendChild(this.htmlPaginacaoBotaoAvancar());
         nav.appendChild(ul);
         div.appendChild(nav);
-        return div;
     }
 
-    abstract htmlItens(): HTMLElement;
+    abstract htmlItens(): void;
 
     abstract atualizaHtmlItens(numeroPagina: number);
 
     conteudo(): HTMLElement {
-        const main = criarElementoHtml('main');
-        main.appendChild(this.htmlItens());
-        main.appendChild(this.htmlPaginacao());
-        return main;
+        this.htmlItens();
+        this.htmlPaginacao();
+        return this.elemento;
     }
 }

@@ -20,13 +20,13 @@ export abstract class ILayout implements ITela {
     private ajustarTema(): void {
         const config = ApiConfiguracoes.instancia().loja;
         const link_css = document.getElementById('tema-css');
-        if (link_css && link_css.getAttribute('href') !== config.estilos) {
+        if (link_css && !link_css.getAttribute('href').endsWith(config.estilos)) {
             const body = document.querySelector('body');
             const nome_tema_antigo = this.pegaNomeDoTema(link_css.getAttribute('href'));
             body.classList.remove(nome_tema_antigo);
             body.classList.add(this.pegaNomeDoTema(config.estilos));
 
-            link_css.setAttribute('href', config.estilos);
+            link_css.setAttribute('href', `dist/assets/css/${config.estilos}`);
         }
     }
 

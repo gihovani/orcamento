@@ -15,6 +15,7 @@ export interface IApiProduto {
     filtrarPorCodigoBarra: (codigoBarra: string) => IProduto[];
     filtrarPorNome: (nome: string) => IProduto[];
     filtrarPorSku: (sku: string) => IProduto[];
+    filtrarPorAgrupador: (agrupador: string) => IProduto[];
     filtrarPorSituacao: (situacao: boolean) => IProduto[];
     filtros: () => Map<string, string[]>;
     consultar: (id: string) => IProduto | undefined;

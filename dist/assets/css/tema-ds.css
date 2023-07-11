@@ -1,42 +1,37 @@
 :root {
     --branco: #f9f9f9;
     --verde: #66c925;
-    --texto-primario: #222;
-    --enfase: #b91424;
-    --primario: #ed192e;
+    --texto-primario: #242c2f;
+    --enfase: #f09;
+    --primario: #09f;
 }
 
-.tema-colgate #app {
+.tema-ds #app {
     background-color: #fff;
 }
 
-.tema-colgate .card,
-.tema-colgate .card .img-thumbnail {
-    border-radius: 1rem;
-}
-
-.tema-colgate .card .label-item-adicionado {
+.tema-ds .card .label-item-adicionado {
     background-color: var(--verde);
     color: #fff;
 }
 
-.tema-colgate .card .card-title {
+.tema-ds .card .card-title {
     color: var(--texto-primario);
     letter-spacing: .02em;
 }
 
-.tema-colgate .card .card-footer .price {
+.tema-ds .card .card-footer .price {
     color: var(--enfase);
     font-weight: 700;
 }
 
-.tema-colgate .botao-adicionar {
+.tema-ds .botao-adicionar {
     color: #fff;
     background: var(--verde);
     border-color: var(--verde);
 }
 
-.tema-colgate .card .card-footer .linha-acao input {
+.tema-ds .card .card-footer .linha-acao input {
     font-size: 0.75rem;
     padding: 0 0.5rem;
     color: var(--texto-primario);
@@ -49,64 +44,64 @@
     border: .1rem solid #d2d2d2;
 }
 
-.tema-colgate .toast-container .success {
+.tema-ds .toast-container .success {
     color: #fff;
     background: var(--verde);
     border: 1px solid var(--verde);
 }
 
-.tema-colgate .danger {
+.tema-ds .danger {
     color: #7a1d20;
     background: #f5d6d7;
     border: 1px solid #7a1d20;
 }
 
-.tema-colgate button.danger {
+.tema-ds button.danger {
     color: #7a1d20;
 
 }
 
-.tema-colgate button.info {
+.tema-ds button.info {
     color: #1d487a;
 }
 
-.tema-colgate button.sem-estilo {
+.tema-ds button.sem-estilo {
     background: transparent;
     border: 1px solid transparent;
 }
 
-.tema-colgate .label-quantidade {
+.tema-ds .label-quantidade {
     color: #fff;
     background-color: var(--enfase);
 }
 
-.tema-colgate .nav-item:hover a {
+.tema-ds .nav-item:hover a {
     color: var(--primario);
 }
 
-.tema-colgate .nav-link.active {
+.tema-ds .nav-link.active {
     color: var(--enfase);
 }
 
-.tema-colgate .listagem-de-produtos .filtros-campo select,
-.tema-colgate .listagem-de-produtos .filtros-campo button,
-.tema-colgate .listagem-de-produtos .filtros-campo input,
-.tema-colgate .listagem-de-produtos .filtros-campo span,
-.tema-colgate .card input {
+.tema-ds .listagem-de-produtos .filtros-campo select,
+.tema-ds .listagem-de-produtos .filtros-campo button,
+.tema-ds .listagem-de-produtos .filtros-campo input,
+.tema-ds .listagem-de-produtos .filtros-campo span,
+.tema-ds .card input {
     border-radius: 1.75rem;
 }
 
-.tema-colgate .lista-de-promocoes .regras .regra .regra-texto span {
+.tema-ds .lista-de-promocoes .regras .regra .regra-texto span {
     border: 3px solid #09f;
     font-weight: 600;
     color: #09f;
 }
 
-.tema-colgate .lista-de-compras .brinde {
+.tema-ds .lista-de-compras .brinde {
     border: 3px solid #09f;
 }
 
-.tema-colgate .lista-de-compras .card .valor-e-quantidade h3 {
+.tema-ds .lista-de-compras .card .valor-e-quantidade h3 {
     color: var(--enfase);
     font-weight: 600;
 }

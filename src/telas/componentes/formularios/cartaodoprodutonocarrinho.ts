@@ -40,12 +40,19 @@ export class CartaoDoProdutoNoCarrinho implements IFormulario {
 <div class="card shadow-sm">
     <div class="row g-0">
         <div class="col-sm-4 col-md-2">
-            <img height="100" src="${produto.imagem}" alt="${produto.nome}" class="card-img-top img-fluid img-thumbnail" />
+            <figure class="figure">
+                <img height="100" width="100" src="${produto.imagem}" alt="${produto.nome}" loading="lazy" class="figure-img card-img-top img-fluid" />
+                <figcaption class="figure-caption">${produto.marca}</figcaption>
+            </figure>
         </div>
         <div class="col-sm-8 col-md-10">
             <div class="card-body">
                 <h2 class="card-title">${produto.nome}</h2>
-                <p class="card-text">${this.item.personalizacao.replace(' | ', '<br/>')}</p>
+                <p class="card-text">
+                SKU: ${produto.id}<br/>
+                ${produto.descricao}<br/>
+                ${this.item.personalizacao.replace(' | ', '<br/>')}
+                </p>
                 <div class="card-footer">
                     <form class="row row-cols-lg-auto g-3 align-items-center needs-validation" autocomplete="off">
                         <div class="valor-e-quantidade">
@@ -72,16 +79,17 @@ export class CartaoDoProdutoNoCarrinho implements IFormulario {
         </div>
     </div>
 </div>`;
-        div.querySelector('form')
-            .addEventListener('submit', (event) => {
-                event.preventDefault();
-                this.eventoAtualizarProduto(new CustomEvent('botao-atualizar', {detail: this}));
-            });
-        div.querySelector('.botao-remover')
-            .addEventListener('click', (event) => {
-                event.preventDefault();
-                this.eventoRemoverProduto(new CustomEvent('botao-remover', {detail: this}));
-            });
+        div.querySelector('form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            this.eventoAtualizarProduto(new CustomEvent('botao-atualizar', {detail: this}));
+        });
+        div.querySelector('.botao-remover').addEventListener('click', (event) => {
+            event.preventDefault();
+            this.eventoRemoverProduto(new CustomEvent('botao-remover', {detail: this}));
+        });
+        div.querySelector('img').addEventListener('error', (event) => {
+            (event.target as HTMLImageElement).src = 'dist/assets/img/placeholder.webp';
+        });
         this.elemento.appendChild(div);
     }
 }

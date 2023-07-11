@@ -1,5 +1,6 @@
 export interface IProduto {
     id: string;
+    agrupador: string;
     nome: string;
     preco: number;
     situacao: boolean;

@@ -8,7 +8,8 @@ export class CartaoDoProduto implements IFormulario {
     constructor(
         public elemento: HTMLElement,
         public produto: IProduto,
-        public eventoAdicionarProduto: (event: CustomEvent) => void
+        public eventoAdicionarProduto: (event: CustomEvent) => void,
+        public eventoProdutosSimilares: (event: CustomEvent) => void
     ) {
     }
 
@@ -43,7 +44,10 @@ export class CartaoDoProduto implements IFormulario {
         div.setAttribute('id', `${this.ID}-${produto.id}`);
         div.innerHTML = `
 <div class="card">
-    <img height="200" width="200" src="${produto.imagem}" alt="${produto.nome}" class="card-img-top img-fluid img-thumbnail" />
+    <figure class="figure">
+        <img height="200" width="200" src="${produto.imagem}" alt="${produto.nome}" loading="lazy" class="figure-img card-img-top img-fluid" />
+        <figcaption class="figure-caption">${produto.marca}</figcaption>
+    </figure>
     <div class="card-body">
         <h2 class="card-title">${produto.nome}</h2>
         <p class="card-text">SKU: ${produto.id}<br />${produto.descricao}</p>
@@ -60,14 +64,24 @@ export class CartaoDoProduto implements IFormulario {
                     </button>
                 </div>
             </form>
+            <div class="btn-group w-100" role="group" aria-label="Mais informações:">
+              <a href="#${produto.agrupador}" class="btn btn-sm btn-outline-warning botao-similares">+ similares</a>
+              <a rel="external" target="_blank" href="${produto.link}" class="btn btn-sm btn-outline-info">- site</a>
+            </div>
         </div>
     </div>
 </div>`;
-        div.querySelector('form')
-            .addEventListener('submit', (event) => {
-                event.preventDefault();
-                this.eventoAdicionarProduto(new CustomEvent('botao-adicionar', {detail: this}));
-            });
+        div.querySelector('form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            this.eventoAdicionarProduto(new CustomEvent('botao-adicionar', {detail: this}));
+        });
+        div.querySelector('.botao-similares').addEventListener('click', (event) => {
+            event.preventDefault();
+            this.eventoProdutosSimilares(new CustomEvent('botao-similares', {detail: this}));
+        });
+        div.querySelector('img').addEventListener('error', (event) => {
+            (event.target as HTMLImageElement).src = 'dist/assets/img/placeholder.webp';
+        });
         this.elemento.appendChild(div);
     }
 }

@@ -42,6 +42,17 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         this.barraDeNavegacao.atualizarQuantidadeDeItensNoCarrinho();
     }
 
+    private produtosSimilares(event: CustomEvent) {
+        const filtroAgrupador = (document.getElementById('filtro-agrupador') as HTMLInputElement);
+        if (!filtroAgrupador) {
+            return;
+        }
+
+        const cartao = (event.detail as CartaoDoProduto);
+        filtroAgrupador.value = cartao.produto.agrupador;
+        filtroAgrupador.dispatchEvent(new Event('keyup'));
+    }
+
     private seletorFiltroDoProdutoPorAtributo(atributo: string, titulo: string, nomeFuncaoDoFiltro: string): HTMLElement {
         const select = criarElementoHtml('select', ['form-select'], [{nome: 'name', valor: `filtro-${atributo}`}]);
         const option = criarElementoHtml('option', [], [{nome: 'value', valor: ''}, {nome: 'label', valor: titulo}]);
@@ -66,12 +77,13 @@ export class ListagemDeProdutos extends TelaComPaginacao {
 
     private campoFiltroDoProdutoPorAtributo(atributo: string, titulo: string, nomeFuncaoDoFiltro: string): HTMLElement {
         const input = criarElementoHtml('input', [], [
+            {nome: 'id', valor: `filtro-${atributo}`},
             {nome: 'name', valor: `filtro-${atributo}`},
             {nome: 'type', valor: 'text'},
             {nome: 'placeholder', valor: `Digite o ${titulo} do produto`}
         ]);
         let timeoutId;
-        input.addEventListener('input', (event) => {
+        input.addEventListener('keyup', (event) => {
             event.preventDefault();
             if (timeoutId) {
                 clearTimeout(timeoutId);
@@ -159,21 +171,22 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         return botaoListarTodos;
     }
 
-    private htmlFiltrosDosProdutos(): HTMLElement {
-        let form = document.getElementById('lista-de-produtos-filtros');
+    private htmlFiltrosDosProdutos(): void {
+        let form = this.elemento.querySelector('#lista-de-produtos-filtros');
         if (form) {
             form.innerHTML = '';
         } else {
             form = criarElementoHtml('form', [
-                'lista-de-produtos-filtros', 'row', 'g-3', 'align-items-center'
+                'lista-de-produtos-filtros', 'row', 'g-3', 'col-md-3', 'align-items-center'
             ]);
             form.setAttribute('id', 'lista-de-produtos-filtros');
+            this.elemento.appendChild(form);
         }
-
         const div = criarElementoHtml('div', ['col-12', 'filtros-campo', 'pt-3', 'pb-3']);
         const titulo = criarElementoHtml('h2', ['filtros-titulo'], [], 'Filtros');
         div.appendChild(titulo);
         div.appendChild(this.campoFiltroDoProdutoPorAtributo('codigo-de-barras', 'Código de Barras', 'filtrarPorCodigoBarra'));
+        div.appendChild(this.campoFiltroDoProdutoPorAtributo('agrupador', 'Agrupador', 'filtrarPorAgrupador'));
         div.appendChild(this.campoFiltroDoProdutoPorAtributo('sku', 'SKU', 'filtrarPorSku'));
         div.appendChild(this.campoFiltroDoProdutoPorAtributo('nome', 'Nome', 'filtrarPorNome'));
         div.appendChild(this.seletorFiltroDoProdutoPorAtributo('marca', 'Marca', 'filtrarPorMarca'));
@@ -182,37 +195,39 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         div.appendChild(this.filtroPorPreco());
         div.appendChild(this.botaoListarRemoverFiltro());
         form.appendChild(div);
-        return form;
     }
 
-    private htmlCartoesDosProdutos(): HTMLElement {
-        let div = document.getElementById('lista-de-produtos');
+    private htmlCartoesDosProdutos(): void {
+        let div = (this.elemento.querySelector('#lista-de-produtos') as HTMLElement);
         if (div) {
             div.innerHTML = '';
         } else {
             div = criarElementoHtml('div', [
                 'lista-de-produtos', 'row', 'row-cols-2', 'row-cols-xs-2',
-                'row-cols-sm-3', 'row-cols-md-3', 'row-cols-xl-4', 'g-4'
+                'row-cols-sm-3', 'row-cols-md-3', 'row-cols-xl-4', 'col-md-9', 'g-4'
             ]);
             div.setAttribute('id', 'lista-de-produtos');
+            this.elemento.appendChild(div);
         }
+
         const itens = this.itensPaginado();
         if (itens.length < 1) {
             div.appendChild(criarElementoHtml('div', ['col', 'text-center'], [], 'Nenhum produto encontrado'));
-            return div;
+            return;
         }
 
         itens.map(produto => {
             const produtoEstaNoCarrinho = this.carrinho.produtos.find((item) => item.produto.id === produto.id);
             const cartao = new CartaoDoProduto(div, produto, (event: CustomEvent) => {
                 this.adicionar(event);
+            }, (event: CustomEvent) => {
+                this.produtosSimilares(event);
             });
             cartao.mostrar();
             if (produtoEstaNoCarrinho?.quantidade) {
                 cartao.preencheDados(produtoEstaNoCarrinho.quantidade);
             }
         });
-        return div;
     }
 
     atualizaHtmlItens(numeroPagina: number): void {
@@ -221,10 +236,8 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         this.htmlPaginacao();
     }
 
-    htmlItens(): HTMLElement {
-        const main = criarElementoHtml('main', ['listagem-de-produtos']);
-        main.appendChild(this.htmlFiltrosDosProdutos());
-        main.appendChild(this.htmlCartoesDosProdutos());
-        return main;
+    htmlItens(): void {
+        this.htmlFiltrosDosProdutos();
+        this.htmlCartoesDosProdutos();
     };
 }

@@ -18,7 +18,7 @@ export class FormularioConfiguracoes implements ITela {
         this._configuracoes = ApiConfiguracoes.instancia();
     }
 
-    private pegaDadosDoFormulario(form: HTMLElement): IApiConfiguracoes {
+    private pegaDados(form: HTMLElement): IApiConfiguracoes {
         const lojaSelecionada = (form.querySelector('#configuracao-loja') as HTMLInputElement)?.value
         this._configuracoes.loja = this._configuracoes.disponiveis()[lojaSelecionada];
         this._configuracoes.versao = (form.querySelector('#configuracao-versao') as HTMLInputElement)?.value;
@@ -73,7 +73,7 @@ export class FormularioConfiguracoes implements ITela {
             e.preventDefault();
             this.carregando.mostrar();
             try {
-                console.log(this.pegaDadosDoFormulario(form));
+                this.pegaDados(form);
                 this.apiProduto.listar(true).then(() => {
                     this.notificacao.mostrar('Sucesso', 'Suas Confiruações Foram Atualizadas!', 'success');
                 }).finally(() => this.carregando.esconder());

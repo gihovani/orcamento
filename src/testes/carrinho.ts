@@ -6,7 +6,7 @@ import {ApiConfiguracoes} from "../servicos/apiconfiguracoes";
 const configuracoes = ApiConfiguracoes.instancia();
 configuracoes.loja.google_merchant.url = 'xml/test.xml';
 const produto1 = new Produto(
-    'SKU',
+    'SKU', 'SKU',
     'Nome do Produto',
     10,
     true,
@@ -19,13 +19,13 @@ const produto1 = new Produto(
     '1234567890'
 );
 const produto2 = new Produto(
-    'SKU2',
+    'SKU2', 'SKU2',
     'Nome do Produto2',
     20,
     true
 );
 const produto3 = new Produto(
-    'SKU3',
+    'SKU3', 'SKU3',
     'Nome do Produto3',
     30,
     false,

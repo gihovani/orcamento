@@ -2,6 +2,7 @@ import {IProduto} from "../contratos/entidades/produto";
 
 export class Produto implements IProduto {
     private _id: string;
+    private _agrupador: string;
     private _nome: string;
     private _preco: number;
     private _situacao: boolean;
@@ -15,6 +16,7 @@ export class Produto implements IProduto {
 
     constructor(
         id: string,
+        agrupador: string,
         nome: string,
         preco: number,
         situacao: boolean,
@@ -27,6 +29,7 @@ export class Produto implements IProduto {
         codigo_barras?: string | null
     ) {
         this.id = id;
+        this.agrupador = agrupador;
         this.nome = nome;
         this.preco = preco;
         this.situacao = situacao;
@@ -44,6 +47,13 @@ export class Produto implements IProduto {
             throw Error("Produto Inválido: o id do produto é obrigatório!")
         }
         this._id = id;
+    }
+
+    set agrupador(agrupador: string) {
+        if (!agrupador) {
+            throw Error("Produto Inválido: o agrupador do produto é obrigatório!")
+        }
+        this._agrupador = agrupador;
     }
 
     set nome(nome: string) {
@@ -73,6 +83,10 @@ export class Produto implements IProduto {
 
     get id(): string {
         return this._id;
+    }
+
+    get agrupador(): string {
+        return this._agrupador;
     }
 
     get nome(): string {

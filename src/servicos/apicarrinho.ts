@@ -60,6 +60,7 @@ abstract class ApiCarrinho implements IApiCarrinho {
     itemMagentoTransformaICarrinhoProduto(item: CarrinhoItemMagento): ICarrinhoProduto {
         const produto = new Produto(
             item.product_sku,
+            item.product_id,
             item.product_name,
             parseFloat(String(item.product_price_value)),
             item.is_visible_in_site_visibility,
@@ -81,7 +82,6 @@ abstract class ApiCarrinho implements IApiCarrinho {
     }
 
     carrinhoMagentoTransformaICarrinho(carrinho: CarrinhoMagento): ICarrinho {
-        console.log(carrinho);
         this.dados.totalizador.valor_total = parseFloat(carrinho.total);
         this.dados.totalizador.valor_subtotal = parseFloat(carrinho.subtotal);
         this.dados.produtos = [];

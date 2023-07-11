@@ -38,6 +38,7 @@ export class ApiProduto implements IApiProduto {
                     const sale_price = pegaTextoDoElementoXml(item, 'sale_price');
                     const produto = new Produto(
                         pegaTextoDoElementoXml(item, 'id'),
+                        pegaTextoDoElementoXml(item, 'item_group_id'),
                         pegaTextoDoElementoXml(item, 'title'),
                         transformaDinheiroEmNumero(price),
                         pegaTextoDoElementoXml(item, 'availability') === 'In Stock',
@@ -109,6 +110,10 @@ export class ApiProduto implements IApiProduto {
 
     filtrarPorMarca(nome: string): IProduto[] {
         return this.filtraProdutos('marca', nome, '===');
+    }
+
+    filtrarPorAgrupador(agrupador: string): IProduto[] {
+        return this.filtraProdutos('agrupador', agrupador, '===');
     }
 
     filtrarPorCodigoBarra(codigoBarra: string): IProduto[] {
