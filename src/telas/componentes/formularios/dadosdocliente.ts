@@ -59,62 +59,61 @@ export class DadosDoCliente implements IFormulario {
         div.setAttribute('id', this.ID);
         const cliente = this.apiCliente.dados;
         div.innerHTML = `
-<h3 class="h4 mb-3 fw-normal">Cadastro de cliente</h3>
-<div class="mb-3 col-sm-4 col-md-3">
-    <label class="form-label" for="${this.ID}-documento">Documento</label>
+<h3 class="h4 mb-1 fw-normal">Cadastro de cliente</h3>
+<div class="mb-1 col-sm-4">
+    <label class="form-label mb-0" for="${this.ID}-documento">Documento</label>
     <input class="form-control" type="text" id="${this.ID}-documento" value="${cliente?.documento ?? ''}" maxlength="15" required />
 </div>
-<div class="mb-3  col-sm-8 col-md-7">
-    <label class="form-label" for="${this.ID}-nome">Nome</label>
+<div class="mb-1 col-sm-8">
+    <label class="form-label mb-0" for="${this.ID}-nome">Nome</label>
     <input class="form-control" type="text" id="${this.ID}-nome" value="${cliente?.nome ?? ''}" max="100" required />
 </div>
-<div class="mb-3 col-sm-4 col-md-2">
-    <label class="form-label" for="${this.ID}-sexo">Sexo</label>
+<div class="mb-1 col-sm-4">
+    <label class="form-label mb-0" for="${this.ID}-sexo">Sexo</label>
     <select class="form-select" id="${this.ID}-sexo" required>
         <option value="M" ${cliente?.sexo === 'M' ? 'selected' : ''}>Masculino</option>
         <option value="F" ${cliente?.sexo === 'F' ? 'selected' : ''}>Feminino</option>
     </select>
 </div>
-<div class="mb-3 col-sm-4 col-md-2">
-    <label class="form-label" for="${this.ID}-data_nascimento">Data Nascimento</label>
+<div class="mb-1 col-sm-4">
+    <label class="form-label mb-0" for="${this.ID}-data_nascimento">Data Nascimento</label>
     <input class="form-control" type="text" id="${this.ID}-data_nascimento" maxlength="10" value="${cliente?.data_nascimento ?? ''}" />
 </div>
-<div class="mb-3 col-sm-4 col-md-3">
-    <label class="form-label" for="${this.ID}-profissao">Profissão</label>
+<div class="mb-1 col-sm-4">
+    <label class="form-label mb-0" for="${this.ID}-profissao">Profissão</label>
     <select class="form-select" id="${this.ID}-profissao">
         <option value="Cirurgião-Dentista" ${cliente?.profissao === 'Cirurgião-Dentista' ? 'selected' : ''}>Cirurgião-Dentista</option>
         <option value="Clínica Odontológica" ${cliente?.profissao === 'Clínica Odontológica' ? 'selected' : ''}>Clínica Odontológica</option>
     </select>
 </div>
-<div class="mb-3 col-sm-3 col-md-2">
-    <label class="form-label" for="${this.ID}-registro">Registro</label>
+<div class="mb-1 col-sm-3">
+    <label class="form-label mb-0" for="${this.ID}-registro">Registro</label>
     <input class="form-control" type="text" id="${this.ID}-registro" maxlength="10" value="${cliente?.registro ?? ''}" />
 </div>
-<div class="mb-3 col-sm-3 col-md-2">
-    <label class="form-label" for="${this.ID}-registro_uf">Registro UF</label>
+<div class="mb-1 col-sm-3">
+    <label class="form-label mb-0" for="${this.ID}-registro_uf">Registro UF</label>
     <input class="form-control" type="text" id="${this.ID}-registro_uf" maxlength="2" value="${cliente?.registro_uf ?? ''}" />
 </div>
-<div class="mb-3 col-sm-3 col-md-2">
-    <label class="form-label" for="${this.ID}-rg">RG</label>
+<div class="mb-1 col-sm-3">
+    <label class="form-label mb-0" for="${this.ID}-rg">RG</label>
     <input class="form-control" type="text" id="${this.ID}-rg" maxlength="10" value="${cliente?.rg ?? ''}" />
 </div>
-<div class="mb-3 col-sm-3 col-md-1">
-    <label class="form-label" for="${this.ID}-rg_uf">RG UF</label>
+<div class="mb-1 col-sm-3">
+    <label class="form-label mb-0" for="${this.ID}-rg_uf">RG UF</label>
     <input class="form-control" type="text" id="${this.ID}-rg_uf" maxlength="2" value="${cliente?.rg_uf ?? ''}" />
 </div>
-<div class="mb-3 col-sm-3 col-md-3">
-    <label class="form-label" for="${this.ID}-telefone">Telefone</label>
+<div class="mb-1 col-sm-3">
+    <label class="form-label mb-0" for="${this.ID}-telefone">Telefone</label>
     <input class="form-control" type="text" id="${this.ID}-telefone" maxlength="15" value="${cliente?.telefone ?? ''}" required />
 </div>
-<div class="mb-3 col-sm-3 col-md-3">
-    <label class="form-label" for="${this.ID}-celular">Celular</label>
+<div class="mb-1 col-sm-3">
+    <label class="form-label mb-0" for="${this.ID}-celular">Celular</label>
     <input class="form-control" type="text" id="${this.ID}-celular" maxlength="15" value="${cliente?.celular ?? ''}" />
 </div>
-<div class="mb-3 col-sm-6 col-md-6">
-    <label class="form-label" for="${this.ID}-email">E-mail</label>
+<div class="mb-1 col-sm-6">
+    <label class="form-label mb-0" for="${this.ID}-email">E-mail</label>
     <input class="form-control" type="email" id="${this.ID}-email" maxlength="100" value="${cliente?.email ?? ''}" required />
-</div>
-        `;
+</div>`;
         div.querySelector(`#${this.ID}-documento`)?.addEventListener('keyup', (e) => {
             const documento = (e.target as HTMLInputElement).value;
             if (validarCPF(documento)) {

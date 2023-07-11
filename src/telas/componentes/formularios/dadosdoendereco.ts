@@ -50,37 +50,37 @@ export class DadosDoEndereco implements IFormulario {
         div.setAttribute('id', this.ID);
         const endereco = this.apiCep.dados;
         div.innerHTML = `
-<h3 class="h4 mb-3 fw-normal">Endereço de Entrega</h3>
-<div class="col-sm-2 mb-3">
-    <label class="form-label" for="${this.ID}-cep">CEP</label>
+<h3 class="h4 mb-1 fw-normal">Endereço de Entrega</h3>
+<div class="col-sm-2 mb-1">
+    <label class="form-label mb-0" for="${this.ID}-cep">CEP</label>
     <input class="form-control" type="text" id="${this.ID}-cep" maxlength="9" value="${endereco?.cep ?? ''}" required />
 </div>
-<div class="col-sm-5 mb-3">
-    <label class="form-label" for="${this.ID}-rua">Rua</label>
+<div class="col-sm-5 mb-1">
+    <label class="form-label mb-0" for="${this.ID}-rua">Rua</label>
     <input class="form-control" type="text" id="${this.ID}-rua" maxlength="100" value="${endereco?.rua ?? ''}" required />
 </div>
-<div class="col-sm-2 mb-3">
-    <label class="form-label" for="${this.ID}-numero">Número</label>
+<div class="col-sm-2 mb-1">
+    <label class="form-label mb-0" for="${this.ID}-numero">Número</label>
     <input class="form-control" type="text" id="${this.ID}-numero" maxlength="20" value="${endereco?.numero ?? ''}" />
 </div>
-<div class="col-sm-3 mb-3">
-    <label class="form-label" for="${this.ID}-complemento">Complemento</label>
+<div class="col-sm-3 mb-1">
+    <label class="form-label mb-0" for="${this.ID}-complemento">Complemento</label>
     <input class="form-control" type="text" id="${this.ID}-complemento" maxlength="50" value="${endereco?.complemento ?? ''}" />
 </div>
-<div class="col-sm-4 mb-3">
-    <label class="form-label" for="${this.ID}-bairro">Bairro</label>
+<div class="col-sm-4 mb-1">
+    <label class="form-label mb-0" for="${this.ID}-bairro">Bairro</label>
     <input class="form-control" type="text" id="${this.ID}-bairro" maxlength="100" value="${endereco?.bairro ?? ''}" required />
 </div>
-<div class="col-sm-4 mb-3">
-    <label class="form-label" for="${this.ID}-cidade">Cidade</label>
+<div class="col-sm-4 mb-1">
+    <label class="form-label mb-0" for="${this.ID}-cidade">Cidade</label>
     <input class="form-control" type="text" id="${this.ID}-cidade" maxlength="100" value="${endereco?.cidade ?? ''}" required />
 </div>
-<div class="col-sm-1 mb-3">
-    <label class="form-label" for="${this.ID}-uf">UF</label>
+<div class="col-sm-1 mb-1">
+    <label class="form-label mb-0" for="${this.ID}-uf">UF</label>
     <input class="form-control" type="text" id="${this.ID}-uf" maxlength="2" value="${endereco?.uf ?? ''}" required />
 </div>
-<div class="col-sm-3 mb-3">
-    <label class="form-label" for="${this.ID}-telefone">Telefone</label>
+<div class="col-sm-3 mb-1">
+    <label class="form-label mb-0" for="${this.ID}-telefone">Telefone</label>
     <input class="form-control" type="text" id="${this.ID}-telefone" maxlength="15" value="${endereco?.telefone ?? ''}" required />
 </div>   
         `;

@@ -49,18 +49,17 @@ export class DadosDoPagamentoCartaoDeCredito implements IFormulario {
         const div = criarElementoHtml('div', ['row']);
         div.setAttribute('id', this.ID);
         div.innerHTML = `<h3 class="h4 mb-1 mt-1 fw-normal">Cartão de Crédito</h3>
-<div class="col-md-4 mb-3">
-  <label for="${this.ID}-parcelamento">Número de Parcelas</label>
+<div class="col-md-4 mb-1">
+  <label for="${this.ID}-parcelamento" class="form-label mb-0">Número de Parcelas</label>
   <select class="form-select" id="${this.ID}-parcelamento" required></select>
-  <small class="text-muted">Número de Parcelas.</small>
 </div>
-<div class="col-md-8 mb-3">
-  <label for="${this.ID}-numero">Número do cartão de crédito</label>
-  <input type="text" class="form-control" id="${this.ID}-numero" placeholder="Número do cartão de crédito" required maxlength="16">
+<div class="col-md-8 mb-1">
+  <label for="${this.ID}-numero" class="form-label mb-0">Número do cartão de crédito</label>
+  <input type="text" class="form-control" id="${this.ID}-numero" required maxlength="16">
   <div class="invalid-feedback">O número do cartão de crédito é obrigatório.</div>
 </div>
-<div class="col-md-4 mb-3">
-  <label for="${this.ID}-bandeira">Bandeira do Cartão</label>
+<div class="col-md-4 mb-1">
+  <label for="${this.ID}-bandeira" class="form-label mb-0">Bandeira do Cartão</label>
   <select class="form-select" id="${this.ID}-bandeira" required>
     <option value="VISA">VISA</option>
     <option value="MASTERCARD">MASTERCARD</option>
@@ -68,17 +67,16 @@ export class DadosDoPagamentoCartaoDeCredito implements IFormulario {
     <option value="HIPERCARD">HIPERCARD</option>
     <option value="AMEX">AMERICAN EXPRESS</option>
   </select>
-  <small class="text-muted">Bandeira, do seu cartão.</small>
   <div class="invalid-feedback">A bandeira do cartão de crédito é obrigatório.</div>
 </div>
-<div class="col-md-8 mb-3">
-  <label for="${this.ID}-nome">Nome no cartão</label>
-  <input type="text" class="form-control" id="${this.ID}-nome" placeholder="Nome no Cartão" required>
+<div class="col-md-8 mb-1">
+  <label for="${this.ID}-nome" class="form-label mb-0">Nome no cartão</label>
+  <input type="text" class="form-control" id="${this.ID}-nome" required>
   <small class="text-muted">Nome completo, como mostrado no cartão.</small>
   <div class="invalid-feedback">O nome que está no cartão é obrigatório.</div>
 </div>
-<div class="col-md-8 mb-3">
-  <label for="${this.ID}-data_expiracao_mes">Data de expiração</label>
+<div class="col-md-8 mb-1">
+  <label for="${this.ID}-data_expiracao_mes" class="form-label mb-0">Data de expiração</label>
   <div class="input-group">
     <div class="input-group-prepend">
       <select class="form-select" id="${this.ID}-data_expiracao_mes" required>
@@ -103,9 +101,9 @@ export class DadosDoPagamentoCartaoDeCredito implements IFormulario {
   </div>
   <div class="invalid-feedback">Data de expiração é obrigatória.</div>
 </div>
-<div class="col-md-4 mb-3">
-  <label for="${this.ID}-codigo_verificacao">Código de Verificação</label>
-  <input type="text" class="form-control" id="${this.ID}-codigo_verificacao" placeholder="Código de Verificação" required maxlength="4">
+<div class="col-md-4 mb-1">
+  <label for="${this.ID}-codigo_verificacao" class="form-label mb-0">Código de Verificação</label>
+  <input type="text" class="form-control" id="${this.ID}-codigo_verificacao" required maxlength="4">
   <div class="invalid-feedback">Código de segurança é obrigatório.</div>
 </div>`;
         const total = this.carrinho.totalizador?.valor_total || 0;

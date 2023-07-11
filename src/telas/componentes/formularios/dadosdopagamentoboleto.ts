@@ -31,8 +31,8 @@ export class DadosDoPagamentoBoleto implements IFormulario {
         this.esconder();
         const div = criarElementoHtml('div', ['row'], [{nome: 'id', valor: this.ID}]);
         div.innerHTML = `<h3 class="h4 mb-1 mt-1 fw-normal">Boleto</h3>
-<div class="mb-3 col-12">
-    <label class="form-label" for="${this.ID}-parcelamento">Número de Parcelas</label>
+<div class="mb-1 col-12">
+    <label class="form-label mb-0" for="${this.ID}-parcelamento">Número de Parcelas</label>
     <select class="form-select" id="${this.ID}-parcelamento" required></select>
     <small class="text-muted">Número de Parcelas.</small>
 </div>`;
