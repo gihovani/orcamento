@@ -118,8 +118,12 @@ export abstract class TelaComPaginacao implements ITela {
             return;
         }
 
-        const nav = criarElementoHtml('nav', [], [{'nome': 'aria-label', 'valor': 'Page navigation example'}]);
-        const ul = criarElementoHtml('ul', ['pagination', 'justify-content-center']);
+        const span = criarElementoHtml('span', ['col-6', 'h4', 'col-md-5', 'offset-md-3', 'text-end']);
+        span.innerText = `Mostrando ${((this.numeroItensPorPagina * (this.paginaAtual-1)) + 1)} a ${this.paginaAtual * this.numeroItensPorPagina} de ${this.itens.length}`;
+        div.appendChild(span);
+
+        const nav = criarElementoHtml('nav', ['col-6', 'col-md-4'], [{'nome': 'aria-label', 'valor': 'Page navigation example'}]);
+        const ul = criarElementoHtml('ul', ['pagination']);
         ul.appendChild(this.htmlPaginacaoBotaoVoltar());
         ul.appendChild(this.htmlPaginacaoPorNumero());
         ul.appendChild(this.htmlPaginacaoBotaoAvancar());
