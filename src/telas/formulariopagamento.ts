@@ -36,22 +36,22 @@ export class FormularioPagamento implements ITela {
         main.appendChild(div);
         const row = criarElementoHtml('div', ['row']);
         row.innerHTML = `
-        <div class="col-md-4 order-md-2 mb-4">
-            <h4 class="d-flex justify-content-between align-items-center mb-3">
-                <span class="text-muted">Carrinho</span>
-                <span class="badge badge-secondary badge-pill">3</span>
-            </h4>
-            <div id="itens-do-carrinho"></div>
-            <form id="formulario-de-codigo-promocional" class="card p-2" onsubmit="alert('ainda nao disponivel!');return false" autocomplete="off">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Código Promocional" id="codigo-promocional">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-secondary">Aplicar</button>
-                    </div>
-                </div>
-            </form>
+<div class="col-md-4 order-md-2 mb-4">
+    <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted">Carrinho</span>
+        <span class="badge badge-secondary badge-pill">3</span>
+    </h4>
+    <div id="itens-do-carrinho"></div>
+    <form id="formulario-de-codigo-promocional" class="card p-2" onsubmit="alert('ainda nao disponivel!');return false" autocomplete="off">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Código Promocional" id="codigo-promocional">
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-secondary">Aplicar</button>
+            </div>
         </div>
-        <div class="col-md-8 order-md-1" id="formulario-de-pagamento"></div>`;
+    </form>
+</div>
+<div class="col-md-8 order-md-1" id="formulario-de-pagamento"></div>`;
         row.querySelector('#itens-do-carrinho').appendChild(this.htmlItensCarrinho());
         row.querySelector('#formulario-de-pagamento').appendChild(this.htmlFormularioDePagamento());
         main.appendChild(row);
@@ -61,10 +61,10 @@ export class FormularioPagamento implements ITela {
     private htmlItemCarrinho(item: ICarrinhoProduto): HTMLElement {
         const li = criarElementoHtml('li', ['list-group-item', 'd-flex', 'justify-content-between']);
         li.innerHTML = `<div>
-                        <h6 class="my-0">SKU: ${item.produto.id}</h6>
-                        <small class="text-muted">${item.produto.nome}</small>
-                    </div>
-                    <span class="text-muted text-end">${item.quantidade}x R$ ${formataNumeroEmDinheiro(item.preco_unitario)}</span>`
+    <h6 class="my-0">SKU: ${item.produto.id}</h6>
+    <small class="text-muted">${item.produto.nome}</small>
+</div>
+<span class="text-muted text-end">${item.quantidade}x R$ ${formataNumeroEmDinheiro(item.preco_unitario)}</span>`
         return li;
     }
 
@@ -76,10 +76,10 @@ export class FormularioPagamento implements ITela {
         }
 
         li.innerHTML = `<div class="text-success">
-                        <h6 class="my-0">Descontos</h6>
-                        <small>xxxx</small>
-                    </div>
-                    <span class="text-success">R$ ${formataNumeroEmDinheiro(this.carrinho.totalizador?.valor_desconto)}</span>`;
+    <h6 class="my-0">Descontos</h6>
+    <small>xxxx</small>
+</div>
+<span class="text-success">R$ ${formataNumeroEmDinheiro(this.carrinho.totalizador?.valor_desconto)}</span>`;
         return li;
     }
 
@@ -126,7 +126,12 @@ export class FormularioPagamento implements ITela {
             this.carregando.mostrar();
             try {
                 const cliente = dadosDoCliente.pegaDados();
-                // const entrega = dadosDasFormasDeEntrega.pegaDados();
+                const entrega = dadosDasFormasDeEntrega.pegaDados();
+                const pagamento = dadosDasFormasDePagamento.pegaDados();
+                const params = {
+                    cliente, entrega, pagamento
+                };
+                console.log(params);
 
                 this.apiCarrinho.totalizar().then(carrinho => {
                     const valor_total = carrinho.totalizador.valor_total;

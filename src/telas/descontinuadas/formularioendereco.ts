@@ -14,7 +14,7 @@ export class FormularioEndereco implements ITela {
     }
 
     conteudo(): HTMLElement {
-        const form = criarElementoHtml('form');
+        const form = criarElementoHtml('form', ['needs-validation']);
         form.setAttribute('autocomplete', 'off');
         const dadosDoEndereco = new DadosDoEndereco(form, this.apiCep, this.notificacao, this.carregando);
         dadosDoEndereco.mostrar();

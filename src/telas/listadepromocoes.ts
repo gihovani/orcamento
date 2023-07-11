@@ -13,12 +13,11 @@ export class ListaDePromocoes implements ITela {
         const produtos = this.carrinho.promocoes;
         produtos.map(regra => {
             const divProduto = criarElementoHtml('div', ['col-6', 'mb-3', 'regra', `${regra.promocao_aplicada ? 'regra-ativa' : 'inative'}`]);
-            divProduto.innerHTML = `
-            <div class="regra-texto">
-                <h4>${regra.nome}</h4>
-                <h5>${regra.descricao || ''}</h5>
-                ${regra.promocao_aplicada ? '<span>Promoção Ativada</span>' : ''}
-            </div>
+            divProduto.innerHTML = `<div class="regra-texto">
+    <h4>${regra.nome}</h4>
+    <h5>${regra.descricao || ''}</h5>
+    ${regra.promocao_aplicada ? '<span>Promoção Ativada</span>' : ''}
+</div>
             ${regra.imagem_desktop ? `<img src="${regra.imagem_desktop}" alt="${regra.nome}" title="${regra.promocao_aplicada ? 'Promoção Válida' : 'Promoção Inválida'}">` : ''}`;
             div.appendChild(divProduto);
         });

@@ -12,7 +12,7 @@ export class ApiBin implements IApiBin {
                 resolve('MASTERCARD');
                 return;
             }
-            reject('O Cep deve ser um número válido! Ex: 88100-000');
+            reject('A bandeira do cartão não pode ser encontrada!');
         });
     }
 }

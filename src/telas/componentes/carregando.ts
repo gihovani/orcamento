@@ -10,10 +10,8 @@ export class Carregando implements ICarregando {
     }
 
     mostrar() {
-        const div = criarElementoHtml('div', ['align-items-center', 'position-fixed', 'top-50', 'start-50', 'p-3'], [{
-            nome: 'id',
-            valor: this.ID
-        }]);
+        const div = criarElementoHtml('div', ['align-items-center', 'position-fixed', 'top-50', 'start-50', 'p-3']);
+        div.setAttribute('id', this.ID);
         div.innerHTML = `<strong>Carregando...</strong><div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>`;
         this.elemento.appendChild(div);
         this.temporizador = setTimeout(() => {

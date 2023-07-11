@@ -27,11 +27,7 @@ import {ICarrinho} from "../contratos/carrinho";
 import {ApiFormasDeEntregaMagento} from "../servicos/apiformasdeentrega";
 import {ApiCarrinhoMagento} from "../servicos/apicarrinho";
 import {ApiFormasDePagamentoMagento} from "../servicos/apiformasdepagamento";
-import {FormularioCliente} from "./descontinuadas/formulariocliente";
-import {FormularioEndereco} from "./descontinuadas/formularioendereco";
-import {FormularioPagamentoCartaoMaquineta} from "./descontinuadas/formulariopagamentocartaomaquineta";
-import {FormularioPagamentoCartaoDeCredito} from "./descontinuadas/formulariopagamentocartaodecredito";
-import {FormularioPagamentoBoletoParcelado} from "./descontinuadas/formulariopagamentoboletoparcelado";
+
 
 export class App extends ILayout {
     private _tela: ITela;
@@ -78,8 +74,6 @@ export class App extends ILayout {
         });
 
         document.addEventListener('autenticacao', (e: CustomEvent) => {
-            const ehAdministrador = this._apiVendedor.ehAdministrador();
-
             const apiCliente = new ApiClienteMock();
             const apiCep = new ApiCepViaCep();
             const apiBin = new ApiBin();
@@ -96,35 +90,43 @@ export class App extends ILayout {
             const listaDeCompras = new ListaDeCompras(this._carrinho, this._barraDeNavegacao, this._notificacao);
             const formularioPagamento = new FormularioPagamento(this._carrinho, apiCliente, apiCep, apiFormasDeEntrega, apiCarrinho, apiFormaDePagamento, apiBin, this._notificacao, this._carregando);
 
-            //Descontinuadas
-            const formularioCliente = new FormularioCliente(apiCliente, this._notificacao, this._carregando);
-            const formularioEndereco = new FormularioEndereco(apiCep, this._notificacao, this._carregando);
-            const formularioPagamentoCartaoDeCreditoMaquineta = new FormularioPagamentoCartaoMaquineta(this._carrinho, this._notificacao);
-            const formularioPagamentoCartaoDeCredito = new FormularioPagamentoCartaoDeCredito(this._carrinho, apiBin, this._notificacao);
-            const formularioPagamentoBoletoParcelado = new FormularioPagamentoBoletoParcelado(this._carrinho, this._notificacao);
+            /**
+             const ehAdministrador = this._apiVendedor.ehAdministrador();
+             //Descontinuadas
+             const formularioCliente = new FormularioCliente(apiCliente, this._notificacao, this._carregando);
+             const formularioEndereco = new FormularioEndereco(apiCep, this._notificacao, this._carregando);
+             const formularioPagamentoCartaoDeCreditoMaquineta = new FormularioPagamentoCartaoMaquineta(this._carrinho, this._notificacao);
+             const formularioPagamentoCartaoDeCredito = new FormularioPagamentoCartaoDeCredito(this._carrinho, apiBin, this._notificacao);
+             const formularioPagamentoBoletoParcelado = new FormularioPagamentoBoletoParcelado(this._carrinho, this._notificacao);
+             const formularioFormasDePagamento = new FormularioFormasDePagamento(this._carrinho, apiFormaDePagamento, apiBin, this._notificacao);
+
+             ehAdministrador && this._barraDeNavegacao.adicionaMenu('menu-cliente', 'Cliente', () => {
+                this.tela = formularioCliente;
+            });
+             ehAdministrador && this._barraDeNavegacao.adicionaMenu('menu-endereco', 'Endereço de Entrega', () => {
+                this.tela = formularioEndereco;
+            });
+             ehAdministrador && this._barraDeNavegacao.adicionaMenu('menu-cartao-de-credito-maquineta', 'CC Maquineta', () => {
+                this.tela = formularioPagamentoCartaoDeCreditoMaquineta;
+            });
+             ehAdministrador && this._barraDeNavegacao.adicionaMenu('menu-cartao-de-credito', 'CC', () => {
+                this.tela = formularioPagamentoCartaoDeCredito;
+            });
+             ehAdministrador && this._barraDeNavegacao.adicionaMenu('menu-boleto-parcelado', 'Boleto Parcelado', () => {
+                this.tela = formularioPagamentoBoletoParcelado;
+            });
+             ehAdministrador && this._barraDeNavegacao.adicionaMenu('menu-formas-pagamento', 'FP', () => {
+                this.tela = formularioFormasDePagamento;
+            });
+             **/
 
             this.tela = mensagemBoasVindas;
             this._barraDeNavegacao.adicionaMenu('menu-configuracoes', 'Configurações', () => {
                 this.tela = formularioConfiguracoes;
             });
-            ehAdministrador && this._barraDeNavegacao.adicionaMenu('menu-cliente', 'Cliente', () => {
-                this.tela = formularioCliente;
-            });
-            ehAdministrador && this._barraDeNavegacao.adicionaMenu('menu-endereco', 'Endereço de Entrega', () => {
-                this.tela = formularioEndereco;
-            });
             this._barraDeNavegacao.adicionaMenu('menu-lista-de-produtos', 'Lista de Produtos', () => {
                 listagemDeProdutos.pegaDadosDosProdutos();
                 this.tela = listagemDeProdutos;
-            });
-            ehAdministrador && this._barraDeNavegacao.adicionaMenu('menu-cartao-de-credito-maquineta', 'CC Maquineta', () => {
-                this.tela = formularioPagamentoCartaoDeCreditoMaquineta;
-            });
-            ehAdministrador && this._barraDeNavegacao.adicionaMenu('menu-cartao-de-credito', 'CC', () => {
-                this.tela = formularioPagamentoCartaoDeCredito;
-            });
-            ehAdministrador && this._barraDeNavegacao.adicionaMenu('menu-boleto-parcelado', 'Boleto Parcelado', () => {
-                this.tela = formularioPagamentoBoletoParcelado;
             });
             this._barraDeNavegacao.adicionaMenu('menu-pagamento', 'Promoções', () => {
                 this.tela = listaDePromocoes;

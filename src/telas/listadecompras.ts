@@ -53,20 +53,21 @@ export class ListaDeCompras implements ITela {
             const divProduto = criarElementoHtml('div', ['col-12', 'mb-2']);
             divProduto.setAttribute('id', `produto-id-${produto.id}`);
             divProduto.innerHTML = `<div class="card shadow-sm brinde">
-            <div class="row g-0">
-                <div class="col-sm-4 col-md-2">
-                    <img height="100" src="${produto.imagem}" alt="${produto.nome}" class="card-img-top img-fluid img-thumbnail" />
+    <div class="row g-0">
+        <div class="col-sm-4 col-md-2">
+            <img height="100" src="${produto.imagem}" alt="${produto.nome}" class="card-img-top img-fluid img-thumbnail" />
+        </div>
+        <div class="col-sm-8 col-md-10">
+            <div class="card-body">
+                <h2 class="card-title">${produto.nome}</h2>
+                <p class="card-text">${produto.descricao}</p>
+                <div class="card-footer">
+                    <h3 class="text-center">BRINDE</h3>
                 </div>
-                <div class="col-sm-8 col-md-10">
-                    <div class="card-body">
-                    <h2 class="card-title">${produto.nome}</h2>
-                    <p class="card-text">${produto.descricao}</p>
-                    <div class="card-footer">
-                        <h3 class="text-center">BRINDE</h3>
-                    </div>
-                    </div>
-                </div>
-            </div>`;
+            </div>
+        </div>
+    </div>
+</div>`;
             div.appendChild(divProduto);
         });
         return div;

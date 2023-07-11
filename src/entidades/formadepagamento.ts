@@ -106,9 +106,14 @@ export class CartaoDeCredito extends FormaDePagamento {
         if (!valor) {
             throw Error("Cartão de Crédito Inválido: a data de expiração é obrigatória!");
         }
-        if (valor.length !== 7) {
+        const [mes, ano] = valor.split('/');
+        if (valor.length !== 7 || !mes || !ano) {
             throw Error("Cartão de Crédito Inválido: a data de expiração deve ter 7 caracteres. Ex: 12/2040!");
         }
+        if (new Date(parseInt(ano), parseInt(mes) - 1, 31) < new Date()) {
+            throw Error("Cartão de Crédito Inválido: a data de expiração está vencida.");
+        }
+
         this._data_expiracao = valor;
     }
 

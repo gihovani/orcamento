@@ -13,7 +13,8 @@ export class BarraDeNavegacao implements ITela {
     adicionaMenu(id: string, titulo: string, callback: () => void): void {
         const a = criarElementoHtml('a', ['nav-link'], [{nome: 'href', valor: '#'}], titulo);
         this.adicionaEventoNoMenu(a, callback);
-        const li = criarElementoHtml('li', ['nav-item', `item-${id}`], [{nome: 'id', valor: id}]);
+        const li = criarElementoHtml('li', ['nav-item', `item-${id}`]);
+        li.setAttribute('id', id);
         li.appendChild(a);
         this.menus.push(li);
     };
@@ -30,16 +31,17 @@ export class BarraDeNavegacao implements ITela {
 
     conteudo(): HTMLElement {
         const titulo = ApiConfiguracoes.instancia().loja.titulo;
-        this.nav.innerHTML = `<div class="container">
-        <a class="navbar-brand" href="#" id="nome-da-loja">${titulo}</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="nav nav-underline nav-justified w-100"></ul>
-        </div>
-    </div>`;
+        this.nav.innerHTML = `
+<div class="container">
+  <a class="navbar-brand" href="#" id="nome-da-loja">${titulo}</a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
+  aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="nav nav-underline nav-justified w-100"></ul>
+  </div>
+</div>`;
         const ul = this.nav.querySelector('#navbarSupportedContent ul');
         for (const menu of this.menus) {
             ul.appendChild(menu);

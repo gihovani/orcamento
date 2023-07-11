@@ -15,47 +15,32 @@ export class DadosDoPagamentoBoleto implements IFormulario {
     }
 
     preencheDados(boleto: Boleto): void {
-        (this.elemento.querySelector('#parcelamento') as HTMLInputElement).value = String(boleto.parcelamento);
+        (this.elemento.querySelector(`#${this.ID}-parcelamento`) as HTMLInputElement).value = String(boleto.parcelamento);
     }
 
     pegaDados(): Boleto {
-        const parcelamento = (this.elemento.querySelector('#parcelamento') as HTMLInputElement)?.value;
+        const parcelamento = (this.elemento.querySelector(`#${this.ID}-parcelamento`) as HTMLInputElement)?.value;
         return new Boleto(parseInt(parcelamento));
     }
 
     mostrar(): void {
-        const main = criarElementoHtml('main', ['row']);
-        main.innerHTML = `<form class="p-5 rounded mt-3 mb-3 m-auto needs-validation" autocomplete="off">
-  <h1 class="h3 mb-3 fw-normal">Boleto Parcelado</h1>
-  <div class="row">
-    <div class="col-md-6 mb-3">
-      <label for="parcelamento">Número de Parcelas</label>
-      <select class="form-select" id="parcelamento" required></select>
-      <small class="text-muted">Número de Parcelas.</small>
-    </div>
-  </div>
-  <button type="submit" class="btn btn-primary">SALVAR</button>
-</form>`;
+        this.elemento.querySelector(`#${this.ID}`)?.remove();
+        const div = criarElementoHtml('div', ['row'], [{nome: 'id', valor: this.ID}]);
+        div.innerHTML = `<h3 class="h4 mb-3 fw-normal">Boleto Parcelados</h3>
+<div class="mb-3 col-12">
+    <label class="form-label" for="${this.ID}-parcelamento">Número de Parcelas</label>
+    <select class="form-select" id="${this.ID}-parcelamento" required></select>
+    <small class="text-muted">Número de Parcelas.</small>
+</div>`;
         const total = this.carrinho.totalizador?.valor_total || 0;
         const maximoParcelas = new Boleto().numeroParcelasDisponiveis(total);
-        const parcelamento = main.querySelector('#parcelamento');
+        const parcelamento = div.querySelector(`#${this.ID}-parcelamento`);
         for (let parcelas = 1; parcelas <= maximoParcelas; parcelas++) {
-            const options = criarElementoHtml('option', [], [{nome: 'value', valor: String(parcelas)}, {
-                nome: 'label',
-                valor: `${parcelas}x R$ ${formataNumeroEmDinheiro(total / parcelas)}`
-            }]);
+            const options = criarElementoHtml('option', []);
+            options.setAttribute('value', String(parcelas));
+            options.setAttribute('label', `${parcelas}x R$ ${formataNumeroEmDinheiro(total / parcelas)}`);
             parcelamento.appendChild(options)
         }
-        const form = main.querySelector('form') as HTMLFormElement;
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            try {
-                const boleto = this.pegaDados();
-                this.notificacao.mostrar('Sucesso', `Os Dados do (${boleto.tipo}) Foram Salvos!`);
-            } catch (error) {
-                this.notificacao.mostrar('Erro', error, 'danger');
-            }
-        });
-        this.elemento.appendChild(main);
+        this.elemento.appendChild(div);
     }
 }

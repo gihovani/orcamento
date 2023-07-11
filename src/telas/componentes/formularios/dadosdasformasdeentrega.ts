@@ -70,7 +70,6 @@ export class DadosDaFormasDeEntrega implements IFormulario {
         div.appendChild(criarElementoHtml('hr', ['mb-4']));
 
         const divFormasDeEntrega = criarElementoHtml('div');
-        divFormasDeEntrega.setAttribute('id', 'html-formas-de-entrega');
         div.appendChild(divFormasDeEntrega);
 
         button.addEventListener('click', async (e): Promise<void> => {

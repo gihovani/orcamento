@@ -8,23 +8,23 @@ export class FormularioLogin implements ITela {
 
     conteudo(): HTMLElement {
         const main = criarElementoHtml('main');
-        main.innerHTML = `<form class="bg-body-tertiary p-5 rounded mt-5 mb-5 m-auto text-center form-login needs-validation" autocomplete="off">
-    <h1 class="h3 mb-3 fw-normal">FAÇA O LOGIN</h1>
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="login" placeholder="Login">
-      <label for="login">Login</label>
-    </div>
-    <div class="form-floating mb-3">
-      <input type="password" class="form-control" id="senha" placeholder="Senha">
-      <label for="senha">Senha</label>
-    </div>
-
-    <div class="form-check text-start my-3">
-      <input class="form-check-input" type="checkbox" value="lembrar-senha" id="lembrar-senha">
-      <label class="form-check-label" for="lembrar-senha">Salvar senha</label>
-    </div>
-    <button class="btn btn-primary w-100 py-2" type="submit">ENTRAR</button>
-  </form>`;
+        main.innerHTML = `
+<form class="bg-body-tertiary p-5 rounded mt-5 mb-5 m-auto text-center form-login needs-validation" autocomplete="off">
+  <h1 class="h3 mb-3 fw-normal">FAÇA O LOGIN</h1>
+  <div class="form-floating mb-3">
+    <input type="text" class="form-control" id="login" placeholder="Login" value="gg2" required>
+    <label for="login">Login</label>
+  </div>
+  <div class="form-floating mb-3">
+    <input type="password" class="form-control" id="senha" placeholder="Senha" value="gg2" required>
+    <label for="senha">Senha</label>
+  </div>
+  <div class="form-check text-start my-3">
+    <input class="form-check-input" type="checkbox" value="lembrar-senha" id="lembrar-senha">
+    <label class="form-check-label" for="lembrar-senha">Salvar senha</label>
+  </div>
+  <button class="btn btn-primary w-100 py-2" type="submit">ENTRAR</button>
+</form>`;
         const form = main.querySelector('form') as HTMLFormElement;
         form.addEventListener('submit', (e) => {
             e.preventDefault();
