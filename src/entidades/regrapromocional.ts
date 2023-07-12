@@ -15,8 +15,7 @@ export class RegraPromocional implements IRegraPromocional {
         public condicoes: IRegraPromocionalCondicao[],
         public acao: IRegraPromocionalAcao,
         public descricao?: string,
-        public imagem_desktop?: string,
-        public imagem_mobile?: string
+        public imagem?: string
     ) {
     }
 
@@ -38,10 +37,11 @@ export class RegraPromocional implements IRegraPromocional {
             this.situacao = false;
             return false;
         }
+
+        this._carrinho_itens = produtos;
         if (this.condicoes.length === 0) {
             return this._carrinho_itens.length > 0;
         }
-        this._carrinho_itens = produtos;
         for (const condicao of this.condicoes) {
             if (['id', 'preco', 'categorias', 'marca'].indexOf(condicao.tipo) >= 0) {
                 this._carrinho_itens = this._carrinho_itens.filter(item => this.verificarCondicao(condicao, item.produto));
@@ -78,14 +78,20 @@ export class RegraPromocional implements IRegraPromocional {
         if (!item.hasOwnProperty(tipo)) {
             return false;
         }
+        let tmp = [];
         if (tipo === 'categorias') {
-            const existe = item['categorias'].toLowerCase().split(' > ').indexOf(valor.toLowerCase()) >= 0;
-            return (operacao === 'igual') ? existe : !existe;
+            tmp = item[tipo].toLowerCase().split(' > ');
         }
         switch (operacao) {
             case 'igual':
+                if (tmp.length) {
+                    return tmp.indexOf(valor.toLowerCase()) >= 0;
+                }
                 return item[tipo] == valor;
             case 'diferente':
+                if (tmp.length) {
+                    return tmp.indexOf(valor.toLowerCase()) < 0;
+                }
                 return item[tipo] != valor;
             case 'maior':
                 return item[tipo] > valor;
@@ -96,8 +102,16 @@ export class RegraPromocional implements IRegraPromocional {
             case 'menor_igual':
                 return item[tipo] <= valor;
             case 'e_um_dos':
+                if (tmp) {
+                    const filteredArray = valor.split(',').filter(value => tmp.includes(value));
+                    return filteredArray.length > 0;
+                }
                 return valor.split(',').includes(String(item[tipo]));
             case 'nao_e_um_dos':
+                if (tmp) {
+                    const filteredArray = valor.split(',').filter(value => tmp.includes(value));
+                    return filteredArray.length <= 0;
+                }
                 return !valor.split(',').includes(String(item[tipo]));
             default:
                 return false;
@@ -111,13 +125,13 @@ export class RegraPromocional implements IRegraPromocional {
         this._promocao_aplicada = true;
         switch (this.acao.tipo) {
             case 'desconto_porcentagem':
-                this.regraDescontoPorcentagem();
+                this.regraDescontoPorcentagem(carrinho);
                 break;
             case 'desconto_fixo':
-                // Implemente a lógica para adicionar um produto brinde com valor zerado
+                this.regraDescontoFixo(carrinho);
                 break;
             case 'valor_unitario':
-                // Implemente a lógica para adicionar um produto brinde com valor zerado
+                this.regraDescontoValorUnitario(carrinho);
                 break;
             case 'brinde_unico':
                 this.regraDeBrindeUnico(carrinho);
@@ -131,8 +145,34 @@ export class RegraPromocional implements IRegraPromocional {
         });
     }
 
-    private regraDescontoPorcentagem(): void {
-        this._carrinho_itens.map(produto => {
+    private regraDescontoFixo(carrinho: ICarrinho): void {
+        let itens = this._carrinho_itens;
+        if (this.acao.skus) {
+            itens = itens.filter(item => this.acao.skus.split(',').includes(item.produto.id));
+        }
+        itens.map(produto => {
+            const desconto = this.verificaValorMaximoDeDesconto(this.acao.valor);
+            this.atualizaValorUnitario(produto, desconto);
+        });
+    }
+
+    private regraDescontoValorUnitario(carrinho: ICarrinho): void {
+        let itens = this._carrinho_itens;
+        if (this.acao.skus) {
+            itens = itens.filter(item => this.acao.skus.split(',').includes(item.produto.id));
+        }
+        itens.map(produto => {
+            const desconto = this.verificaValorMaximoDeDesconto(this.acao.valor * produto.quantidade);
+            this.atualizaValorUnitario(produto, desconto);
+        });
+    }
+
+    private regraDescontoPorcentagem(carrinho: ICarrinho): void {
+        let itens = this._carrinho_itens;
+        if (this.acao.skus) {
+            itens = itens.filter(item => this.acao.skus.split(',').includes(item.produto.id));
+        }
+        itens.map(produto => {
             let desconto = (produto.preco_unitario * (this.acao.valor / 100));
             desconto = this.verificaValorMaximoDeDesconto(desconto * produto.quantidade);
             this.atualizaValorUnitario(produto, desconto);

@@ -37,7 +37,6 @@ const produto3 = new Produto(
     'GG',
     '1234567891',
 );
-const carrinho = new Carrinho();
 const regra1 = new RegraPromocional(
     '10% de desconto - Produtos SKU,SKU2',
     1,
@@ -74,9 +73,10 @@ const regra4 = new RegraPromocional(
     [],
     {'tipo': 'valor_unitario', 'valor': 4},
 );
+const carrinho = new Carrinho([regra1, regra2, regra3, regra4]);
+//
 console.log('\n\n-------------------------------------------');
 console.log('---------- Sacola / Carrinho --------------');
-carrinho.promocoes = [regra1, regra2, regra3, regra4];
 
 carrinho.adicionarProduto(produto1, 1);
 carrinho.adicionarProduto(produto2, 2);
@@ -84,17 +84,17 @@ carrinho.adicionarProduto(produto3, 3);
 
 console.log('Adicionar produtos [3 itens na lista]: ', carrinho.produtos.length === 3);
 console.log('Total em Quantidade [6 itens]: ', carrinho.totalizador.quantidade_produtos === 6);
-console.log('Total em Valor [135]: ', carrinho.totalizador.valor_total, carrinho.totalizador.valor_total === 135);
+console.log('Total em Valor [140]: ', carrinho.totalizador.valor_total, carrinho.totalizador.valor_total === 140);
 
 
 carrinho.adicionarProduto(produto3, 1, true);
 console.log('Atualizar quantidade de Produtos: ', carrinho.totalizador.quantidade_produtos, carrinho.totalizador.quantidade_produtos === 4);
-console.log('Valor total atualizado [75]: ', carrinho.totalizador.valor_total, carrinho.totalizador.valor_total === 75);
+console.log('Valor total atualizado [80]: ', carrinho.totalizador.valor_total, carrinho.totalizador.valor_total === 80);
 
 
 carrinho.removerProduto(produto2);
 console.log('Remover produto [2 itens na lista]: ', carrinho.produtos.length === 2);
 console.log('Atualizada quantidade de Produtos: ', carrinho.totalizador.quantidade_produtos === 2);
-console.log('Valor total atualizado [40]: ', carrinho.totalizador.valor_total, carrinho.totalizador.valor_total === 39);
+console.log('Valor total atualizado [40]: ', carrinho.totalizador.valor_total, carrinho.totalizador.valor_total === 40);
 console.log('-------------------------------------------');
 

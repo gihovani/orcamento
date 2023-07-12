@@ -33,6 +33,7 @@ export interface IRegraPromocionalAcao {
     valor: number;
     valor_maximo?: number;
     brindes?: IProduto[];
+    skus?: string;
 }
 
 export interface IRegraPromocional {
@@ -44,8 +45,7 @@ export interface IRegraPromocional {
     condicoes: IRegraPromocionalCondicao[];
     acao: IRegraPromocionalAcao;
     descricao?: string;
-    imagem_desktop?: string;
-    imagem_mobile?: string;
+    imagem?: string;
     promocao_aplicada: boolean;
     atendeCriteriosDaPromocao: (produtos: ICarrinhoProduto[]) => boolean;
     aplicarPromocao: (carrinho: ICarrinho) => void;

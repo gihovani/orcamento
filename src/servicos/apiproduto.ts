@@ -5,7 +5,7 @@ import {
     IApiProdutoFaixaPreco,
     IApiProdutoFiltro
 } from "../contratos/servicos/apiproduto";
-import {pegaDadosGoogleMerchant, pegaTextoDoElementoXml, transformaDinheiroEmNumero} from "../util/helper";
+import {lerArquivoApartirDeUmLink, pegaTextoDoElementoXml, transformaDinheiroEmNumero} from "../util/helper";
 import {Produto} from "../entidades/produto";
 import {ApiConfiguracoes} from "./apiconfiguracoes";
 
@@ -30,7 +30,7 @@ export class ApiProduto implements IApiProduto {
             }
             this._produtos = [];
             const config = ApiConfiguracoes.instancia().loja;
-            pegaDadosGoogleMerchant(config.google_merchant.url, (data) => {
+            lerArquivoApartirDeUmLink(config.google_merchant.url, (data) => {
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(data, 'text/xml');
                 Array.from(xmlDoc.querySelectorAll('item')).forEach(item => {

@@ -18,7 +18,7 @@ export class ListaDePromocoes implements ITela {
     <h5>${regra.descricao || ''}</h5>
     ${regra.promocao_aplicada ? '<span>Promoção Ativada</span>' : ''}
 </div>
-            ${regra.imagem_desktop ? `<img src="${regra.imagem_desktop}" alt="${regra.nome}" title="${regra.promocao_aplicada ? 'Promoção Válida' : 'Promoção Inválida'}">` : ''}`;
+<img width="515" height="215" src="${regra.imagem || 'dist/assets/img/banner-promocao.webp'}" alt="${regra.nome}" title="${regra.nome}" class="img-fluid" />`;
             div.appendChild(divProduto);
         });
         return div;
