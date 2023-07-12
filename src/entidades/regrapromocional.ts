@@ -102,13 +102,13 @@ export class RegraPromocional implements IRegraPromocional {
             case 'menor_igual':
                 return item[tipo] <= valor;
             case 'e_um_dos':
-                if (tmp) {
+                if (tmp.length) {
                     const filteredArray = valor.split(',').filter(value => tmp.includes(value));
                     return filteredArray.length > 0;
                 }
                 return valor.split(',').includes(String(item[tipo]));
             case 'nao_e_um_dos':
-                if (tmp) {
+                if (tmp.length) {
                     const filteredArray = valor.split(',').filter(value => tmp.includes(value));
                     return filteredArray.length <= 0;
                 }

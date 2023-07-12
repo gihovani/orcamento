@@ -85,6 +85,7 @@ export class ApiRegraPromocional implements IApiRegraPromocional {
                         this._regras.push(regra)
                     }
                 }
+                console.log(this._regras);
                 resolve(this._regras);
             });
         });
