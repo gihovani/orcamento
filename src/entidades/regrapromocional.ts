@@ -148,7 +148,7 @@ export class RegraPromocional implements IRegraPromocional {
     private regraDescontoFixo(carrinho: ICarrinho): void {
         let itens = this._carrinho_itens;
         if (this.acao.skus) {
-            itens = itens.filter(item => this.acao.skus.split(',').includes(item.produto.id));
+            itens = itens.filter(item => this.acao.skus.split(',').includes(item.produto.sku));
         }
         itens.map(produto => {
             const desconto = this.verificaValorMaximoDeDesconto(this.acao.valor);
@@ -159,7 +159,7 @@ export class RegraPromocional implements IRegraPromocional {
     private regraDescontoValorUnitario(carrinho: ICarrinho): void {
         let itens = this._carrinho_itens;
         if (this.acao.skus) {
-            itens = itens.filter(item => this.acao.skus.split(',').includes(item.produto.id));
+            itens = itens.filter(item => this.acao.skus.split(',').includes(item.produto.sku));
         }
         itens.map(produto => {
             const desconto = this.verificaValorMaximoDeDesconto(this.acao.valor * produto.quantidade);
@@ -170,7 +170,7 @@ export class RegraPromocional implements IRegraPromocional {
     private regraDescontoPorcentagem(carrinho: ICarrinho): void {
         let itens = this._carrinho_itens;
         if (this.acao.skus) {
-            itens = itens.filter(item => this.acao.skus.split(',').includes(item.produto.id));
+            itens = itens.filter(item => this.acao.skus.split(',').includes(item.produto.sku));
         }
         itens.map(produto => {
             let desconto = (produto.preco_unitario * (this.acao.valor / 100));

@@ -39,15 +39,15 @@ export class ApiProduto implements IApiProduto {
                     const produto = new Produto(
                         pegaTextoDoElementoXml(item, 'id'),
                         pegaTextoDoElementoXml(item, 'item_group_id'),
-                        pegaTextoDoElementoXml(item, 'title'),
+                        pegaTextoDoElementoXml(item, 'title').toUpperCase(),
                         transformaDinheiroEmNumero(price),
                         pegaTextoDoElementoXml(item, 'availability') === 'In Stock',
-                        pegaTextoDoElementoXml(item, 'title'),
+                        pegaTextoDoElementoXml(item, 'title').toUpperCase(),
                         transformaDinheiroEmNumero(sale_price),
                         pegaTextoDoElementoXml(item, 'image_link'),
                         pegaTextoDoElementoXml(item, 'link'),
-                        pegaTextoDoElementoXml(item, 'product_type').split(',')[0],
-                        pegaTextoDoElementoXml(item, 'brand'),
+                        pegaTextoDoElementoXml(item, 'product_type').toUpperCase().split(',')[0],
+                        pegaTextoDoElementoXml(item, 'brand').toUpperCase(),
                         pegaTextoDoElementoXml(item, 'gtin')
                     );
                     if (config.google_merchant.filtros) {
@@ -136,8 +136,8 @@ export class ApiProduto implements IApiProduto {
         return this.filtraProdutos('situacao', situacao, '===');
     }
 
-    consultar(id: string): IProduto | undefined {
-        return ApiProduto.CACHE.produtos.find(produto => produto.id === id);
+    consultar(sku: string): IProduto | undefined {
+        return ApiProduto.CACHE.produtos.find(produto => produto.sku === sku);
     }
 
     filtros(): IApiProdutoFiltro {

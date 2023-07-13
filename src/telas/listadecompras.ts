@@ -19,7 +19,7 @@ export class ListaDeCompras implements ITela {
         const produto = cartao.item.produto;
         const quantidade = cartao.pegaDados();
         this.carrinho.adicionarProduto(produto, quantidade, true);
-        this.notificacao.mostrar('Sucesso', `Produto ${produto.id} foi atualizado com sucesso!`, 'success');
+        this.notificacao.mostrar('Sucesso', `Produto ${produto.sku} foi atualizado com sucesso!`, 'success');
         this.htmlListaDeProdutos();
     }
 
@@ -27,7 +27,7 @@ export class ListaDeCompras implements ITela {
         const cartao = (event.detail as CartaoDoProdutoNoCarrinho);
         const produto = cartao.item.produto;
         this.carrinho.removerProduto(produto);
-        this.notificacao.mostrar('Sucesso', `Produto ${produto.id} foi removido com sucesso!`, 'success');
+        this.notificacao.mostrar('Sucesso', `Produto ${produto.sku} foi removido com sucesso!`, 'success');
         this.barraDeNavegacao.atualizarQuantidadeDeItensNoCarrinho();
         this.htmlListaDeProdutos();
     }
@@ -51,7 +51,7 @@ export class ListaDeCompras implements ITela {
         const produtos = this.carrinho.brindes;
         produtos.map(produto => {
             const divProduto = criarElementoHtml('div', ['col-12', 'mb-2']);
-            divProduto.setAttribute('id', `produto-id-${produto.id}`);
+            divProduto.setAttribute('id', `produto-id-${produto.sku}`);
             divProduto.innerHTML = `<div class="card shadow-sm brinde">
     <div class="row g-0">
         <div class="col-sm-4 col-md-2">

@@ -217,7 +217,7 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         }
 
         itens.map(produto => {
-            const produtoEstaNoCarrinho = this.carrinho.produtos.find((item) => item.produto.id === produto.id);
+            const produtoEstaNoCarrinho = this.carrinho.produtos.find((item) => item.produto.sku === produto.sku);
             const cartao = new CartaoDoProduto(div, produto, (event: CustomEvent) => {
                 this.adicionar(event);
             }, (event: CustomEvent) => {

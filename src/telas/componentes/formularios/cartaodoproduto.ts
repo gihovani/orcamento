@@ -15,16 +15,16 @@ export class CartaoDoProduto implements IFormulario {
 
     preencheDados(quantidade: number): void {
         const produto = this.produto;
-        const inputQuantidade = (this.elemento.querySelector(`#${this.ID}-quantidade-${produto.id}`) as HTMLInputElement);
+        const inputQuantidade = (this.elemento.querySelector(`#${this.ID}-quantidade-${produto.sku}`) as HTMLInputElement);
         inputQuantidade.value = String(quantidade ?? '1');
 
-        const divProduto = (this.elemento.querySelector(`#${this.ID}-${produto.id} .card`) as HTMLDivElement);
+        const divProduto = (this.elemento.querySelector(`#${this.ID}-${produto.sku} .card`) as HTMLDivElement);
         divProduto.querySelector('.label-item-adicionado')?.remove();
         divProduto.appendChild(this.seloProdutoAdicionado());
     }
 
     pegaDados(): number {
-        const inputQuantidade = (this.elemento.querySelector(`#${this.ID}-quantidade-${this.produto.id}`) as HTMLInputElement);
+        const inputQuantidade = (this.elemento.querySelector(`#${this.ID}-quantidade-${this.produto.sku}`) as HTMLInputElement);
         return parseInt(inputQuantidade.value);
     }
 
@@ -41,7 +41,7 @@ export class CartaoDoProduto implements IFormulario {
         const produto = this.produto;
         let precoFormatado = formataNumeroEmDinheiro(produto.preco);
         const div = criarElementoHtml('div', ['col']);
-        div.setAttribute('id', `${this.ID}-${produto.id}`);
+        div.setAttribute('id', `${this.ID}-${produto.sku}`);
         div.innerHTML = `
 <div class="card">
     <figure class="figure">
@@ -50,12 +50,12 @@ export class CartaoDoProduto implements IFormulario {
     </figure>
     <div class="card-body">
         <h2 class="card-title">${produto.nome}</h2>
-        <p class="card-text">SKU: ${produto.id}<br />${produto.descricao}</p>
+        <p class="card-text">SKU: ${produto.sku}<br />${produto.descricao}</p>
         <div class="card-footer">
             <h3 class="price text-end">R$ ${precoFormatado}</h3>
             <form class="row row-cols-lg-auto g-3 align-items-center needs-validation" autocomplete="off">
                 <div class="linha-acao mb-3">
-                    <input id="${this.ID}-quantidade-${produto.id}"
+                    <input id="${this.ID}-quantidade-${produto.sku}"
                     type="number" step="1" min="1" max="100"
                     aria-label="Quantidade" class="form-control ${produto.situacao ? '' : 'disabled'}"
                     value="1" required />

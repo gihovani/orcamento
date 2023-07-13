@@ -37,7 +37,7 @@ export class Carrinho implements ICarrinho {
         if (!quantidade || isNaN(quantidade)) {
             quantidade = 1;
         }
-        const item = this.produtos.find(item => item.produto.id === produto.id);
+        const item = this.produtos.find(item => item.produto.sku === produto.sku);
         if (item) {
             item.quantidade = (update) ? quantidade : item.quantidade + quantidade;
             if (personalizacao) {
@@ -56,7 +56,7 @@ export class Carrinho implements ICarrinho {
     }
 
     removerProduto(produto: IProduto): void {
-        this.produtos = this.produtos.filter(item => item.produto.id !== produto.id);
+        this.produtos = this.produtos.filter(item => item.produto.sku !== produto.sku);
         this.totalizar();
     }
 
@@ -98,7 +98,7 @@ export class Carrinho implements ICarrinho {
             this.totalizador.valor_total = arredondarValor(this.totalizador.valor_total + valor);
             this.totalizador.valor_desconto = arredondarValor(this.totalizador.valor_desconto + desconto);
             this.totalizador.detalhes_decontos.push([
-                item.produto.id,
+                item.produto.sku,
                 item.produto.preco,
                 item.quantidade,
                 item.preco_unitario,

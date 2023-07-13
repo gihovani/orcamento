@@ -61,7 +61,7 @@ export class FormularioPagamento implements ITela {
     private htmlItemCarrinho(item: ICarrinhoProduto): HTMLElement {
         const li = criarElementoHtml('li', ['list-group-item', 'd-flex', 'justify-content-between']);
         li.innerHTML = `<div>
-    <h6 class="my-0">SKU: ${item.produto.id}</h6>
+    <h6 class="my-0">SKU: ${item.produto.sku}</h6>
     <small class="text-muted">${item.produto.nome}</small>
 </div>
 <span class="text-muted text-end">${item.quantidade}x R$ ${formataNumeroEmDinheiro(item.preco_unitario)}</span>`

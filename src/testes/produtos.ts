@@ -26,7 +26,7 @@ listaDeProduto3.listar(true).then(() => {
 
 const listaDeProduto4 = new ApiProduto();
 listaDeProduto4.listar(true).then(() => {
-    console.log('Filtro por codigo de barra 7891153850191: [1 produto]: ', listaDeProduto4.filtrarPorCodigoBarra('7891153850191')[0].id === 'ACR10286A');
+    console.log('Filtro por codigo de barra 7891153850191: [1 produto]: ', listaDeProduto4.filtrarPorCodigoBarra('7891153850191')[0].sku === 'ACR10286A');
 });
 const listaDeProduto5 = new ApiProduto();
 listaDeProduto5.listar(true).then(() => {

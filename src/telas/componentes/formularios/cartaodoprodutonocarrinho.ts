@@ -15,13 +15,13 @@ export class CartaoDoProdutoNoCarrinho implements IFormulario {
 
     preencheDados(quantidade: number): void {
         const produto = this.item.produto;
-        const inputQuantidade = (this.elemento.querySelector(`#${this.ID}-quantidade-${produto.id}`) as HTMLInputElement);
+        const inputQuantidade = (this.elemento.querySelector(`#${this.ID}-quantidade-${produto.sku}`) as HTMLInputElement);
         inputQuantidade.value = String(quantidade ?? '1');
     }
 
     pegaDados(): number {
         const produto = this.item.produto;
-        const inputQuantidade = (this.elemento.querySelector(`#${this.ID}-quantidade-${produto.id}`) as HTMLInputElement);
+        const inputQuantidade = (this.elemento.querySelector(`#${this.ID}-quantidade-${produto.sku}`) as HTMLInputElement);
         return parseInt(inputQuantidade.value);
     }
 
@@ -35,7 +35,7 @@ export class CartaoDoProdutoNoCarrinho implements IFormulario {
         let precoDeFormatado = formataNumeroEmDinheiro(produto.preco);
         let precoPorFormatado = formataNumeroEmDinheiro(this.item.preco_unitario);
         const div = criarElementoHtml('div', ['col-12', 'mb-2']);
-        div.setAttribute('id', `${this.ID}-${produto.id}`);
+        div.setAttribute('id', `${this.ID}-${produto.sku}`);
         div.innerHTML = `
 <div class="card shadow-sm">
     <div class="row g-0">
@@ -49,7 +49,7 @@ export class CartaoDoProdutoNoCarrinho implements IFormulario {
             <div class="card-body">
                 <h2 class="card-title">${produto.nome}</h2>
                 <p class="card-text">
-                SKU: ${produto.id}<br/>
+                SKU: ${produto.sku}<br/>
                 ${produto.descricao}<br/>
                 ${this.item.personalizacao.replace(' | ', '<br/>')}
                 </p>
@@ -60,7 +60,7 @@ export class CartaoDoProdutoNoCarrinho implements IFormulario {
                                 ${(produto.preco > this.item.preco_unitario) ? 'De: R$ ' + precoDeFormatado + ' <br/>Por:' : ''} 
                                 R$ ${precoPorFormatado}
                             </h3>
-                            <input id="${this.ID}-quantidade-${produto.id}"
+                            <input id="${this.ID}-quantidade-${produto.sku}"
                             class="form-control" type="number"
                             step="1" min="1" max="100"
                             value="${this.item.quantidade}" aria-label="Quantidade" required />

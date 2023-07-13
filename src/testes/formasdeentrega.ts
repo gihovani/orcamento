@@ -20,7 +20,7 @@ listaDeProduto.listar().then(produtos => {
 
 listaDeProduto.listar().then(produtos => {
     const carrinho = new Carrinho();
-    produtos.map(produto => produto.id != 'ALP11420H' && carrinho.adicionarProduto(produto));
+    produtos.map(produto => produto.sku != 'ALP11420H' && carrinho.adicionarProduto(produto));
     apiFormasDeEntregaMagento.consultar(endereco, carrinho).then((formas) => {
         console.log(`Calcular Formas de Entrega Magento do Cep ${endereco.cep}:`, formas[0].titulo == 'Frete Normal');
     });

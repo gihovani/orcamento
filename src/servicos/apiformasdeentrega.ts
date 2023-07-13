@@ -54,7 +54,7 @@ export class ApiFormasDeEntregaMagento implements IApiFormasDeEntrega {
                 return;
             }
             const items = carrinho.produtos.map(item => {
-                return {sku: item.produto.id, qty: item.quantidade};
+                return {sku: item.produto.sku, qty: item.quantidade};
             });
 
             try {
