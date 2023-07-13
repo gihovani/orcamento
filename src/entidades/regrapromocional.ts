@@ -43,7 +43,7 @@ export class RegraPromocional implements IRegraPromocional {
             return this._carrinho_itens.length > 0;
         }
         for (const condicao of this.condicoes) {
-            if (['id', 'preco', 'categorias', 'marca'].indexOf(condicao.tipo) >= 0) {
+            if (['sku', 'preco', 'categorias', 'marca'].indexOf(condicao.tipo) >= 0) {
                 this._carrinho_itens = this._carrinho_itens.filter(item => this.verificarCondicao(condicao, item.produto));
             }
             if (['valor_itens', 'quantidade_itens'].indexOf(condicao.tipo) >= 0) {
@@ -75,7 +75,7 @@ export class RegraPromocional implements IRegraPromocional {
 
     private verificarCondicao(condicao: IRegraPromocionalCondicao, item: any): boolean {
         const {tipo, operacao, valor} = condicao;
-        if (!item.hasOwnProperty(tipo)) {
+        if (!(tipo in item)) {
             return false;
         }
         let tmp = [];

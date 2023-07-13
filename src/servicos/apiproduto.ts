@@ -121,7 +121,7 @@ export class ApiProduto implements IApiProduto {
     }
 
     filtrarPorSku(sku: string): IProduto[] {
-        return this.filtraProdutos('id', sku, 'contem');
+        return this.filtraProdutos('sku', sku, 'contem');
     }
 
     filtrarPorNome(nome: string): IProduto[] {

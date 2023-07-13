@@ -9,8 +9,8 @@ import {IProduto} from "../contratos/entidades/produto";
 
 export class Carrinho implements ICarrinho {
     private _produtos: ICarrinhoProduto[] = [];
+    private _promocoes: IRegraPromocional[] = [];
     brindes: IProduto[] = [];
-    promocoes: IRegraPromocional[] = [];
     totalizador: ICarrinhoTotalizador = {
         quantidade_produtos: 0,
         valor_total: 0,
@@ -20,9 +20,9 @@ export class Carrinho implements ICarrinho {
     };
 
     constructor(promocoes: IRegraPromocional[] = []) {
+        this.promocoes = promocoes;
         this.produtos = [];
         this.brindes = [];
-        this.promocoes = promocoes;
     }
 
     set produtos(produtos: ICarrinhoProduto[]) {
@@ -31,6 +31,15 @@ export class Carrinho implements ICarrinho {
 
     get produtos(): ICarrinhoProduto[] {
         return this._produtos;
+    }
+
+    set promocoes(promocoes: IRegraPromocional[]) {
+        promocoes.sort((a, b) => a.prioridade - b.prioridade);
+        this._promocoes = promocoes;
+    }
+
+    get promocoes(): IRegraPromocional[] {
+        return this._promocoes;
     }
 
     adicionarProduto(produto: IProduto, quantidade?: number, update: boolean = false, personalizacao: string = ''): void {
@@ -70,7 +79,6 @@ export class Carrinho implements ICarrinho {
 
     aplicarPromocoes(): void {
         this.limparPromocoesProdutos();
-        this.promocoes.sort((a, b) => a.prioridade - b.prioridade);
         for (const promocao of this.promocoes) {
             if (promocao.atendeCriteriosDaPromocao(this.produtos)) {
                 promocao.aplicarPromocao(this);

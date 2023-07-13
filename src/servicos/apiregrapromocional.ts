@@ -9,7 +9,7 @@ interface RegraCsv {
     prioridade: string;
     tipo_regra: 'desconto_porcentagem' | 'desconto_fixo' | 'valor_unitario' | 'brinde_unico';
     descricao: string;
-    atributo: 'id' | 'categorias' | 'marca';
+    atributo: 'sku' | 'categorias' | 'marca';
     operacao: 'igual' | 'diferente' | 'maior' | 'menor' | 'maior_igual' | 'menor_igual' | 'e_um_dos' | 'nao_e_um_dos';
     valor_atributo: string;
     valor_produtos: string;
@@ -55,7 +55,7 @@ export class ApiRegraPromocional implements IApiRegraPromocional {
                 {'tipo': objeto.atributo, 'operacao': objeto.operacao, 'valor': objeto.valor_atributo},
                 {'tipo': 'valor_itens', 'operacao': 'maior_igual', 'valor': String(transformaDinheiroEmNumero(objeto.valor_produtos))}
             ],
-            {'tipo': objeto.tipo_regra, 'valor': parseFloat(objeto.desconto_acao), 'skus': objeto.sku_acao},
+            {'tipo': objeto.tipo_regra, 'valor': transformaDinheiroEmNumero(objeto.desconto_acao), 'skus': objeto.sku_acao},
             '',
             objeto.promocao_imagem
         );
@@ -85,7 +85,6 @@ export class ApiRegraPromocional implements IApiRegraPromocional {
                         this._regras.push(regra)
                     }
                 }
-                console.log(this._regras);
                 resolve(this._regras);
             });
         });

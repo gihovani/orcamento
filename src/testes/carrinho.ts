@@ -2,6 +2,7 @@ import {Carrinho} from "../entidades/carrinho";
 import {Produto} from "../entidades/produto";
 import {RegraPromocional} from "../entidades/regrapromocional";
 import {ApiConfiguracoes} from "../servicos/apiconfiguracoes";
+import {ApiRegraPromocional} from "../servicos/apiregrapromocional";
 
 const configuracoes = ApiConfiguracoes.instancia();
 configuracoes.loja.google_merchant.url = 'xml/test.xml';
@@ -43,7 +44,7 @@ const regra1 = new RegraPromocional(
     true,
     new Date(2023, 4, 1),
     new Date(2023, 11, 31),
-    [{'tipo': 'id', 'operacao': 'e_um_dos', 'valor': 'SKU,SKU2'}],
+    [{'tipo': 'sku', 'operacao': 'e_um_dos', 'valor': 'SKU,SKU2'}],
     {'tipo': 'desconto_porcentagem', 'valor': 10, 'valor_maximo': 4},
 );
 const regra2 = new RegraPromocional(
@@ -98,3 +99,43 @@ console.log('Atualizada quantidade de Produtos: ', carrinho.totalizador.quantida
 console.log('Valor total atualizado [40]: ', carrinho.totalizador.valor_total, carrinho.totalizador.valor_total === 40);
 console.log('-------------------------------------------');
 
+
+const apiRegras = new ApiRegraPromocional();
+apiRegras.listar().then(regras => {
+
+    const produto4 = new Produto(
+        'DAT31487A', 'DAT31487A',
+        'Nome do Produto4',
+        2000,
+        false,
+        'Lorem Ipsum Descrição',
+        2000,
+        'https://gg2.com.br/img4.jpg',
+        'https://gg2.com.br/',
+        'Nome da Categoria',
+        'GG',
+        '1234567892',
+    );
+    const produto5 = new Produto(
+        'SPL3402A', '3402',
+        'Nome do Produto5 - LUVA',
+        24.9,
+        false,
+        'Lorem Ipsum Descrição',
+        17.99,
+        'https://gg2.com.br/img4.jpg',
+        'https://gg2.com.br/',
+        'Luvas',
+        'SUPERMAX',
+        '1234567893',
+    );
+    console.log('\n\n-------------------------------------------');
+    console.log('---------- ApiRegraPromocional --------------');
+    carrinho.promocoes = regras
+    carrinho.adicionarProduto(produto4, 2);
+    console.log('Teste Regra Ganha Brinde [1]: ', carrinho.brindes, carrinho.brindes.length === 1);
+
+    carrinho.adicionarProduto(produto5, 10);
+    console.log('Teste Regra Luva de 24,90 - 17.90  [desconto R$ 59,10]: ', carrinho.totalizador, carrinho.totalizador.valor_desconto === 59.1);
+    console.log('-------------------------------------------');
+});

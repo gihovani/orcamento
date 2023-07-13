@@ -23,7 +23,7 @@ import {IProduto} from "./entidades/produto";
  * --  !() : não é um dos
  */
 export interface IRegraPromocionalCondicao {
-    tipo: 'id' | 'preco' | 'categorias' | 'marca' | 'valor_itens' | 'valor_total' | 'quantidade_itens' | 'quantidade_total';
+    tipo: 'sku' | 'preco' | 'categorias' | 'marca' | 'valor_itens' | 'valor_total' | 'quantidade_itens' | 'quantidade_total';
     operacao: 'igual' | 'diferente' | 'maior' | 'menor' | 'maior_igual' | 'menor_igual' | 'e_um_dos' | 'nao_e_um_dos';
     valor: string;
 }
