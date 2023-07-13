@@ -7,8 +7,6 @@ import {BarraDeNavegacao} from "./barradenavegacao";
 import {CartaoDoProduto} from "./componentes/formularios/cartaodoproduto";
 
 export class ListagemDeProdutos extends TelaComPaginacao {
-    private _filtroAtraso = 500;
-
     constructor(
         public apiProduto: IApiProduto,
         public carrinho: ICarrinho,
@@ -115,7 +113,6 @@ export class ListagemDeProdutos extends TelaComPaginacao {
         );
         let timeoutId;
         input.addEventListener('input', (event) => {
-            event.preventDefault();
             event.preventDefault();
             if (timeoutId) {
                 clearTimeout(timeoutId);

@@ -2,7 +2,8 @@ import {criarElementoHtml} from "../util/helper";
 import {ITela} from "../contratos/tela";
 
 export abstract class TelaComPaginacao implements ITela {
-    public numeroItensPorPagina = 20;
+    protected _filtroAtraso = 500;
+    private _numeroItensPorPagina = 20;
     public paginaAtual = 1;
     public ultimaPagina = 1;
     public itens: any[] = [];
@@ -10,6 +11,20 @@ export abstract class TelaComPaginacao implements ITela {
 
     constructor() {
         this.elemento = criarElementoHtml('main', ['listagem-de-produtos', 'row']);
+    }
+
+    set numeroItensPorPagina(numero: number) {
+        if (isNaN(numero)) {
+            throw Error("Páginação inválida: o número de itens por página de ver um número!");
+        }
+        if (numero < 1 || numero > 100) {
+            throw Error("Páginação inválida: o número de itens por página deve ser um número entre 1 e 100!");
+        }
+        this._numeroItensPorPagina = numero;
+    }
+
+    get numeroItensPorPagina(): number {
+        return this._numeroItensPorPagina;
     }
 
     temProximaPagina(): boolean {
@@ -63,7 +78,7 @@ export abstract class TelaComPaginacao implements ITela {
         return paginacao;
     }
 
-    htmlPaginacaoBotaoVoltar(): HTMLElement {
+    private htmlPaginacaoBotaoVoltar(): HTMLElement {
         const li = criarElementoHtml('li', ['page-item', 'disabled']);
         const botao = criarElementoHtml('a', ['page-link'], [{nome: 'href', valor: '#'}], 'Voltar');
         if (this.temPaginaAnterior()) {
@@ -74,7 +89,7 @@ export abstract class TelaComPaginacao implements ITela {
         return li;
     }
 
-    htmlPaginacaoBotaoAvancar(): HTMLElement {
+    private htmlPaginacaoBotaoAvancar(): HTMLElement {
         const li = criarElementoHtml('li', ['page-item', 'disabled']);
         const botao = criarElementoHtml('a', ['page-link'], [{nome: 'href', valor: '#'}], 'Avançar');
         if (this.temProximaPagina()) {
@@ -85,7 +100,7 @@ export abstract class TelaComPaginacao implements ITela {
         return li;
     }
 
-    htmlPaginacaoPorNumero(): HTMLElement {
+    private htmlPaginacaoPorNumero(): HTMLElement {
         const li = criarElementoHtml('li', ['page-item']);
         if (this.ultimaPagina < 2) {
             return li;
@@ -105,6 +120,37 @@ export abstract class TelaComPaginacao implements ITela {
         return li;
     }
 
+    private htmlInformacoesDaPaginacao(): HTMLElement {
+        const div = criarElementoHtml('div', ['col-12', 'col-lg-6']);
+        const label = criarElementoHtml('div', ['input-group']);
+        label.innerHTML = `<span class="input-group-text">
+Mostrando ${((this.numeroItensPorPagina * (this.paginaAtual - 1)) + 1)} a ${this.paginaAtual * this.numeroItensPorPagina} de ${this.itens.length}
+</span>
+<label class="input-group-text" for="itens-por-pagina">Itens por página</label>`;
+        const input = criarElementoHtml('input', ['form-control']);
+        input.setAttribute('id', 'itens-por-pagina')
+        input.setAttribute('aria-label', 'Itens por página');
+        input.setAttribute('type', 'number');
+        input.setAttribute('step', '4');
+        input.setAttribute('min', '1');
+        input.setAttribute('max', '100');
+        input.setAttribute('value', String(this.numeroItensPorPagina));
+        let timeoutId;
+        input.addEventListener('keyup', (event) => {
+            event.preventDefault();
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+            timeoutId = setTimeout(() => {
+                this.numeroItensPorPagina = parseInt((event.target as HTMLInputElement).value);
+                this.atualizaHtmlItens(1);
+            }, this._filtroAtraso);
+        });
+        label.appendChild(input);
+        div.appendChild(label)
+        return div;
+    }
+
     htmlPaginacao(): void {
         let div = this.elemento.querySelector('#lista-de-produtos-paginacao');
         if (div) {
@@ -118,17 +164,15 @@ export abstract class TelaComPaginacao implements ITela {
             return;
         }
 
-        const span = criarElementoHtml('span', ['col-6', 'h4', 'col-md-5', 'offset-md-3', 'text-end']);
-        span.innerText = `Mostrando ${((this.numeroItensPorPagina * (this.paginaAtual-1)) + 1)} a ${this.paginaAtual * this.numeroItensPorPagina} de ${this.itens.length}`;
-        div.appendChild(span);
-
-        const nav = criarElementoHtml('nav', ['col-6', 'col-md-4'], [{'nome': 'aria-label', 'valor': 'Page navigation example'}]);
+        const nav = criarElementoHtml('nav', ['col-12', 'col-lg-3', 'offset-lg-3']);
+        nav.setAttribute('aria-label', 'Page navigation example');
         const ul = criarElementoHtml('ul', ['pagination']);
         ul.appendChild(this.htmlPaginacaoBotaoVoltar());
         ul.appendChild(this.htmlPaginacaoPorNumero());
         ul.appendChild(this.htmlPaginacaoBotaoAvancar());
         nav.appendChild(ul);
         div.appendChild(nav);
+        div.appendChild(this.htmlInformacoesDaPaginacao());
     }
 
     abstract htmlItens(): void;

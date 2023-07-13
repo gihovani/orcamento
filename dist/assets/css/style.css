@@ -196,6 +196,10 @@ input[type=number]::-webkit-outer-spin-button {
     font-size: 0.9rem;
 }
 
+.listagem-de-produtos .lista-de-produtos-paginacao select {
+    height: 2.375rem;
+}
+
 .form-login {
     width: 100%;
 }
