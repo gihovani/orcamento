@@ -227,10 +227,6 @@ input[type=number]::-webkit-outer-spin-button {
     display: flex;
 }
 
-.lista-de-compras .brinde {
-    margin-bottom: 1.75rem;
-}
-
 .lista-de-compras .card form {
     justify-content: flex-end;
 }

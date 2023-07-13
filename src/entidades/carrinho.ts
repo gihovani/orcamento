@@ -10,7 +10,7 @@ import {IProduto} from "../contratos/entidades/produto";
 export class Carrinho implements ICarrinho {
     private _produtos: ICarrinhoProduto[] = [];
     private _promocoes: IRegraPromocional[] = [];
-    brindes: IProduto[] = [];
+    brindes: ICarrinhoProduto[] = [];
     totalizador: ICarrinhoTotalizador = {
         quantidade_produtos: 0,
         valor_total: 0,
@@ -67,6 +67,22 @@ export class Carrinho implements ICarrinho {
     removerProduto(produto: IProduto): void {
         this.produtos = this.produtos.filter(item => item.produto.sku !== produto.sku);
         this.totalizar();
+    }
+
+    adicionarBrinde(produto: IProduto, quantidade?: number): void {
+        if (!quantidade || isNaN(quantidade)) {
+            quantidade = 1;
+        }
+        this.brindes.push({
+            quantidade,
+            preco_unitario: produto.preco,
+            desconto: 0,
+            produto,
+        });
+    }
+
+    removerBrinde(produto: IProduto): void {
+        this.brindes = this.brindes.filter(item => item.produto.sku !== produto.sku);
     }
 
     limparPromocoesProdutos(): void {

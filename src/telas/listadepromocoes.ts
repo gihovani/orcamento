@@ -14,8 +14,8 @@ export class ListaDePromocoes implements ITela {
         produtos.map(regra => {
             const divProduto = criarElementoHtml('div', ['col-6', 'mb-3', 'regra', `${regra.promocao_aplicada ? 'regra-ativa' : 'inative'}`]);
             divProduto.innerHTML = `<div class="regra-texto">
-    <h4>${regra.nome}</h4>
-    <h5>${regra.descricao || ''}</h5>
+    <h4 class="fs-6">${regra.nome}</h4>
+    <h5 class="fs-6 fw-light">${regra.descricao || ''}</h5>
     ${regra.promocao_aplicada ? '<span>Promoção Ativada</span>' : ''}
 </div>
 <img width="515" height="215" src="${regra.imagem || 'dist/assets/img/banner-promocao.webp'}" alt="${regra.nome}" title="${regra.nome}" class="img-fluid" />`;

@@ -19,11 +19,13 @@ export interface ICarrinhoProduto {
 
 export interface ICarrinho {
     produtos: ICarrinhoProduto[];
-    brindes: IProduto[];
+    brindes: ICarrinhoProduto[];
     promocoes: IRegraPromocional[];
     totalizador: ICarrinhoTotalizador;
     adicionarProduto: (produto: IProduto, quantidade?: number, update?: boolean, personalizacao?: string) => void;
     removerProduto: (produto: IProduto) => void;
+    adicionarBrinde: (produto: IProduto, quantidade?: number) => void;
+    removerBrinde: (produto: IProduto) => void;
     aplicarPromocoes: () => void;
     totalizar: () => void;
 }

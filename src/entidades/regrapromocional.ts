@@ -140,9 +140,7 @@ export class RegraPromocional implements IRegraPromocional {
     }
 
     private regraDeBrindeUnico(carrinho: ICarrinho): void {
-        this.acao.brindes.map(brinde => {
-            carrinho.brindes.push(brinde);
-        });
+        this.acao.brindes.map(brinde => carrinho.adicionarBrinde(brinde));
     }
 
     private regraDescontoFixo(carrinho: ICarrinho): void {

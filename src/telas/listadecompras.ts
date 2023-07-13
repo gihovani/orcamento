@@ -5,6 +5,7 @@ import {INotificacao} from "../contratos/componentes/notificacao";
 import {BarraDeNavegacao} from "./barradenavegacao";
 import {TituloEDescricaoDaPagina} from "./componentes/tituloedescricaodapagina";
 import {CartaoDoProdutoNoCarrinho} from "./componentes/formularios/cartaodoprodutonocarrinho";
+import {CartaoDeBrindeNoCarrinho} from "./componentes/formularios/cartaodebrindenocarrinho";
 
 export class ListaDeCompras implements ITela {
     constructor(
@@ -49,26 +50,9 @@ export class ListaDeCompras implements ITela {
     private htmlListaDeProdutosBrindes(): HTMLElement {
         const div = criarElementoHtml('div');
         const produtos = this.carrinho.brindes;
-        produtos.map(produto => {
-            const divProduto = criarElementoHtml('div', ['col-12', 'mb-2']);
-            divProduto.setAttribute('id', `produto-id-${produto.sku}`);
-            divProduto.innerHTML = `<div class="card shadow-sm brinde">
-    <div class="row g-0">
-        <div class="col-sm-4 col-md-2">
-            <img height="100" src="${produto.imagem}" alt="${produto.nome}" class="card-img-top img-fluid img-thumbnail" />
-        </div>
-        <div class="col-sm-8 col-md-10">
-            <div class="card-body">
-                <h2 class="card-title">${produto.nome}</h2>
-                <p class="card-text">${produto.descricao}</p>
-                <div class="card-footer">
-                    <h3 class="text-center">BRINDE</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>`;
-            div.appendChild(divProduto);
+        produtos.map(item => {
+            const cartao = new CartaoDeBrindeNoCarrinho(div, item);
+            cartao.mostrar();
         });
         return div;
     }
