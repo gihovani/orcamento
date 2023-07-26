@@ -33,6 +33,15 @@ export class ApiConfiguracoes implements IApiConfiguracoes {
                 filtros: null
             }
         }, {
+            nome: 'kathavento',
+            titulo: 'Kathavento',
+            url_base: 'https://lojista.kathavento.com.br/',
+            estilos: 'tema-kathavento.css',
+            google_merchant: {
+                url: 'https://lojista.kathavento.com.br/lojistas/xml/google_merchant',
+                filtros: null
+            }
+        }, {
             nome: 'uc',
             titulo: 'Utilidades Clínicas',
             url_base: 'https://www.utilidadesclinicas.com.br/',

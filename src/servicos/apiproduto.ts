@@ -36,12 +36,13 @@ export class ApiProduto implements IApiProduto {
                 Array.from(xmlDoc.querySelectorAll('item')).forEach(item => {
                     const price = pegaTextoDoElementoXml(item, 'price');
                     const sale_price = pegaTextoDoElementoXml(item, 'sale_price');
+                    const in_stock = ['in stock', 'in_stock'].includes(pegaTextoDoElementoXml(item, 'availability').toLowerCase());
                     const produto = new Produto(
                         pegaTextoDoElementoXml(item, 'id'),
                         pegaTextoDoElementoXml(item, 'item_group_id'),
                         pegaTextoDoElementoXml(item, 'title').toUpperCase(),
                         transformaDinheiroEmNumero(price),
-                        pegaTextoDoElementoXml(item, 'availability') === 'In Stock',
+                        in_stock,
                         pegaTextoDoElementoXml(item, 'title').toUpperCase(),
                         transformaDinheiroEmNumero(sale_price),
                         pegaTextoDoElementoXml(item, 'image_link'),
